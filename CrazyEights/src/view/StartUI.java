@@ -98,11 +98,8 @@ public class StartUI extends JFrame {
                 int aantalSpelers = cboSpelers.getSelectedIndex() + 2;
 
                 //doorgeven aan model
-                Spelbord test = new Spelbord();
-                test.setAantalSpelers(aantalSpelers);
-                System.out.println("Aantal spelers: " + aantalSpelers);
                 dispose();
-                new SpelBordUI();
+                new SpelbordUI();
             }
         });
     }
