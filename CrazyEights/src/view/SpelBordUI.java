@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SpelBordUI extends JFrame{
+    //GIT TEST!!
     private JLabel lblTrekstapel;
     private JLabel lblAflegstapel;
     private JLabel[] lblSpelers = new JLabel[4]; //dynamisch maken
