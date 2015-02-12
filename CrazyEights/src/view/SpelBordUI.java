@@ -41,13 +41,18 @@ public class SpelBordUI extends JFrame{
 
     public void maakLayout(){
 
-        //stapels in het midden plaatsen
         JPanel stapelContainer = new JPanel();
         stapelContainer.setLayout(new GridBagLayout());
-        stapelContainer.add(lblTrekstapel);
-        stapelContainer.add(lblAflegstapel);
-        lblTrekstapel.setHorizontalAlignment(SwingConstants.CENTER);
-        lblAflegstapel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JPanel trekstapelContainer = new JPanel();
+        JPanel aflegstapelContainer = new JPanel();
+        trekstapelContainer.add(lblTrekstapel);
+        aflegstapelContainer.add(lblAflegstapel);
+        trekstapelContainer.setBorder(new EmptyBorder(0, 0, 0, 10));
+        aflegstapelContainer.setBorder(new EmptyBorder(0, 10, 0, 0));
+
+        stapelContainer.add(trekstapelContainer);
+        stapelContainer.add(aflegstapelContainer);
         super.add(stapelContainer, BorderLayout.CENTER);
 
         //spelers en kaarten op positie plaatsen

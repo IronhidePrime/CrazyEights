@@ -10,16 +10,24 @@ import java.awt.event.ActionListener;
 
 public class StartUI extends JFrame {
     private JLabel lblTitel;
+    private JLabel lblCrazyLogo;
+
     private JComboBox cboSpelers;
-    //logo toe te voegen
+
     private JCheckBox chkComputer;
+
     private JButton btnDeal;
+    private JButton btnHighscores;
+    private JButton btnInfo;
+    private JButton btnSpelregels;
+
+
     private int aantalSpelers;
 
     public StartUI(){
         super("Crazy Eights");
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        super.setSize(300,200);
+        super.setSize(600,600);
         super.setLocationRelativeTo(null);
         maakComponenten();
         maakLayout();
@@ -29,29 +37,57 @@ public class StartUI extends JFrame {
 
     public void maakComponenten(){
         lblTitel = new JLabel("Crazy Eights");
+        lblCrazyLogo = new JLabel();
+
         cboSpelers = new JComboBox();
         cboSpelers.addItem(2);
         cboSpelers.addItem(3);
         cboSpelers.addItem(4);
         cboSpelers.setToolTipText("Aantal spelers?");
-        btnDeal = new JButton("Deal");
+
         chkComputer = new JCheckBox("Computer?");
+
+        btnDeal = new JButton("Start");
+        btnHighscores = new JButton("Highscores");
+        btnInfo = new JButton("Info");
+        btnSpelregels = new JButton("Spelregels");
     }
 
     public void maakLayout(){
-        super.setLayout(new BorderLayout());
         super.add(lblTitel, BorderLayout.NORTH);
         lblTitel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JPanel pnlPlayerContainer = new JPanel();
-        pnlPlayerContainer.setLayout(new GridLayout(3,1,10,10));
-        pnlPlayerContainer.add(cboSpelers);
-        pnlPlayerContainer.add(chkComputer);
-        pnlPlayerContainer.add(btnDeal);
-        pnlPlayerContainer.setBorder(new EmptyBorder(0,0,0,10));
-        super.add(pnlPlayerContainer, BorderLayout.EAST);
+        JPanel pnlLogo = new JPanel();
+        pnlLogo.setLayout(new BorderLayout());
+        lblCrazyLogo.setSize(50,50);
+        lblCrazyLogo.setBackground(Color.WHITE);
+        lblCrazyLogo.setOpaque(true);
+        //lblCrazyLogo.setVerticalAlignment(SwingConstants.CENTER);
+        pnlLogo.add(lblCrazyLogo, BorderLayout.CENTER);
+        pnlLogo.setBorder(new EmptyBorder(20,20,20,20));
+        super.add(pnlLogo, BorderLayout.CENTER);
 
+        cboSpelers.setPreferredSize(new Dimension(10,10));
+        cboSpelers.setMaximumSize(new Dimension(10,10));
 
+        JPanel pnlSpelerContainer = new JPanel();
+        pnlSpelerContainer.setMaximumSize(new Dimension(50,50));
+        pnlSpelerContainer.setLayout(new GridLayout(4,1,10,10));
+        pnlSpelerContainer.add(cboSpelers);
+        pnlSpelerContainer.add(chkComputer);
+        pnlSpelerContainer.add(new JLabel());
+        pnlSpelerContainer.add(btnDeal);
+        pnlSpelerContainer.setBorder(new EmptyBorder(0, 0, 0, 10));
+        super.add(pnlSpelerContainer, BorderLayout.EAST);
+
+        JPanel pnlBottomContainer = new JPanel();
+        btnHighscores.setMinimumSize(new Dimension(10,10));
+        pnlBottomContainer.add(btnHighscores);
+        btnInfo.setMaximumSize(new Dimension(200, 200));
+        pnlBottomContainer.add(btnInfo);
+        btnSpelregels.setPreferredSize(new Dimension(40,20));
+        pnlBottomContainer.add(btnSpelregels);
+        super.add(pnlBottomContainer, BorderLayout.SOUTH);
     }
 
     public void behandelEvents() {
