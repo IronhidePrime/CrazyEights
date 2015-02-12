@@ -6,14 +6,14 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SpelBordUI extends JFrame{
+public class SpelbordUI extends JFrame{
     //GIT TEST!!
     private JLabel lblTrekstapel;
     private JLabel lblAflegstapel;
     private JLabel[] lblSpelers = new JLabel[4]; //dynamisch maken
     private JLabel lblKaart;
 
-    public SpelBordUI(){
+    public SpelbordUI(){
         super("Crazy Eights");
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         super.setSize(1000,700);
