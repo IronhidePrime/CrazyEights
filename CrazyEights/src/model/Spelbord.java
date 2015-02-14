@@ -20,6 +20,10 @@ public class Spelbord {
         this.aantalSpelers = aantalSpelers;
     }
 
+    public int getAantalSpelers() {
+        return aantalSpelers;
+    }
+
     public void kaartenUitdelen() {
         int aantalKaarten;
         if (spelers.length == 1) {

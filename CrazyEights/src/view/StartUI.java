@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class StartUI extends JFrame {
     //TODO: afwerking StartUI (logo, fonts, ...)
@@ -26,7 +28,9 @@ public class StartUI extends JFrame {
     private JButton btnInfo;
     private JButton btnSpelregels;
 
-    public StartUI(){
+    private CrazyEightsController controller;
+
+    public StartUI(CrazyEightsController controller){
         super("Crazy Eights v1.0");
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         super.setSize(600,600);
@@ -35,6 +39,7 @@ public class StartUI extends JFrame {
         maakLayout();
         behandelEvents();
         super.setVisible(true);
+        this.controller = controller;
     }
 
     public void maakComponenten(){
@@ -96,11 +101,6 @@ public class StartUI extends JFrame {
          * Panel voor spelregels, info en highscores ondereen weer te geven
          */
         JPanel pnlBottomContainer = new JPanel();
-        /**
-         * @Sander -> gridlayout omdat een flowlayout niet mee stretcht als ge de frame groter/kleiner maakt
-         * gelezen? verwijdert deze commentaar dan
-         * homo xxx
-         */
         pnlBottomContainer.setLayout(new GridLayout(1,3,10,0));
         pnlBottomContainer.setBorder(new EmptyBorder(20, 20, 20, 20));
         btnSpelregels.setPreferredSize(new Dimension(0,50));
@@ -111,21 +111,16 @@ public class StartUI extends JFrame {
     }
 
     public void behandelEvents() {
-        /**
-         * Doorgeven van het aantal spelers aan het Spelbord
-         */
         btnDeal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //index start bij 0 -> aantal spelers = index + 2
-                Spelbord spelbord = new Spelbord();
-                int aantalSpelers = cboSpelers.getSelectedIndex() + 2;
-                spelbord.setAantalSpelers(aantalSpelers);
-
+                controller.zetAantalSpelersSpelbord(cboSpelers.getSelectedIndex() + 2);
                 //doorgeven aan model
                 dispose();
-                new SpelbordUI(new CrazyEightsController());
+                new SpelbordUI(controller);
             }
         });
     }
 }
+
