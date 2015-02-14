@@ -1,5 +1,6 @@
 package view;
 
+import controller.CrazyEightsController;
 import model.Spelbord;
 
 import javax.swing.*;
@@ -9,8 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class StartUI extends JFrame {
+    //TODO: afwerking StartUI (logo, fonts, ...)
+    //TODO: keuze multiplayer doorsturen
+    //TODO: spelregels/info/highscores toevoegen
     private JLabel lblTitel;
     private JLabel lblCrazyLogo;
+    private JLabel lblAantalSpelers;
 
     private JComboBox cboSpelers;
 
@@ -21,11 +26,8 @@ public class StartUI extends JFrame {
     private JButton btnInfo;
     private JButton btnSpelregels;
 
-
-    private int aantalSpelers;
-
     public StartUI(){
-        super("Crazy Eights");
+        super("Crazy Eights v1.0");
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         super.setSize(600,600);
         super.setLocationRelativeTo(null);
@@ -37,7 +39,8 @@ public class StartUI extends JFrame {
 
     public void maakComponenten(){
         lblTitel = new JLabel("Crazy Eights");
-        lblCrazyLogo = new JLabel();
+        lblCrazyLogo = new JLabel("Logo");
+        lblAantalSpelers = new JLabel("Aantal spelers:");
 
         cboSpelers = new JComboBox();
         cboSpelers.addItem(2);
@@ -45,7 +48,7 @@ public class StartUI extends JFrame {
         cboSpelers.addItem(4);
         cboSpelers.setToolTipText("Aantal spelers?");
 
-        chkComputer = new JCheckBox("Computer?");
+        chkComputer = new JCheckBox("Multiplayer");
 
         btnDeal = new JButton("Start");
         btnHighscores = new JButton("Highscores");
@@ -54,52 +57,74 @@ public class StartUI extends JFrame {
     }
 
     public void maakLayout(){
-        super.add(lblTitel, BorderLayout.NORTH);
+        /**
+         * Panel voor de titel vanboven weer te geven
+         */
+        JPanel pnlTitel = new JPanel();
+        pnlTitel.setBorder(new EmptyBorder(20,0,0,0));
         lblTitel.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitel.setFont(new Font("Arial", Font.BOLD, 30));
+        pnlTitel.add(lblTitel);
+        super.add(pnlTitel, BorderLayout.NORTH);
 
-        JPanel pnlLogo = new JPanel();
-        pnlLogo.setLayout(new BorderLayout());
-        lblCrazyLogo.setSize(50,50);
+        /**
+         * Panel voor logo en combobox/checkbox, start mooi in het midden weer te geven
+         */
+        JPanel pnlCenter = new JPanel();
+        pnlCenter.setLayout(new GridLayout(1, 2, 30, 0));
         lblCrazyLogo.setBackground(Color.WHITE);
         lblCrazyLogo.setOpaque(true);
-        //lblCrazyLogo.setVerticalAlignment(SwingConstants.CENTER);
-        pnlLogo.add(lblCrazyLogo, BorderLayout.CENTER);
-        pnlLogo.setBorder(new EmptyBorder(20,20,20,20));
-        super.add(pnlLogo, BorderLayout.CENTER);
-
-        cboSpelers.setPreferredSize(new Dimension(10,10));
-        cboSpelers.setMaximumSize(new Dimension(10,10));
+        pnlCenter.add(lblCrazyLogo);
 
         JPanel pnlSpelerContainer = new JPanel();
-        pnlSpelerContainer.setMaximumSize(new Dimension(50,50));
-        pnlSpelerContainer.setLayout(new GridLayout(4,1,10,10));
+        pnlSpelerContainer.setLayout(new GridLayout(4,2,10,10));
+        pnlSpelerContainer.setBorder(new EmptyBorder(50,0,0,0));
+        pnlSpelerContainer.add(lblAantalSpelers);
         pnlSpelerContainer.add(cboSpelers);
+        pnlSpelerContainer.add(new JLabel());
         pnlSpelerContainer.add(chkComputer);
         pnlSpelerContainer.add(new JLabel());
+        pnlSpelerContainer.add(new JLabel());
+        pnlSpelerContainer.add(new JLabel());
         pnlSpelerContainer.add(btnDeal);
-        pnlSpelerContainer.setBorder(new EmptyBorder(0, 0, 0, 10));
-        super.add(pnlSpelerContainer, BorderLayout.EAST);
+        pnlCenter.add(pnlSpelerContainer);
 
+        pnlCenter.setBorder(new EmptyBorder(20,20,20,20));
+        super.add(pnlCenter, BorderLayout.CENTER);
+
+        /**
+         * Panel voor spelregels, info en highscores ondereen weer te geven
+         */
         JPanel pnlBottomContainer = new JPanel();
-        btnHighscores.setMinimumSize(new Dimension(10,10));
-        pnlBottomContainer.add(btnHighscores);
-        btnInfo.setMaximumSize(new Dimension(200, 200));
-        pnlBottomContainer.add(btnInfo);
-        btnSpelregels.setPreferredSize(new Dimension(40,20));
+        /**
+         * @Sander -> gridlayout omdat een flowlayout niet mee stretcht als ge de frame groter/kleiner maakt
+         * gelezen? verwijdert deze commentaar dan
+         * homo xxx
+         */
+        pnlBottomContainer.setLayout(new GridLayout(1,3,10,0));
+        pnlBottomContainer.setBorder(new EmptyBorder(20, 20, 20, 20));
+        btnSpelregels.setPreferredSize(new Dimension(0,50));
         pnlBottomContainer.add(btnSpelregels);
+        pnlBottomContainer.add(btnInfo);
+        pnlBottomContainer.add(btnHighscores);
         super.add(pnlBottomContainer, BorderLayout.SOUTH);
     }
 
     public void behandelEvents() {
+        /**
+         * Doorgeven van het aantal spelers aan het Spelbord
+         */
         btnDeal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //index start bij 0 -> aantal spelers = index + 2
+                Spelbord spelbord = new Spelbord();
                 int aantalSpelers = cboSpelers.getSelectedIndex() + 2;
+                spelbord.setAantalSpelers(aantalSpelers);
 
                 //doorgeven aan model
                 dispose();
-                new SpelbordUI();
+                new SpelbordUI(new CrazyEightsController());
             }
         });
     }

@@ -1,5 +1,7 @@
 package view;
 
+import controller.CrazyEightsController;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -7,13 +9,14 @@ import java.awt.*;
 //TODO: REFACTOR!
 
 public class SpelbordUI extends JFrame{
+    private CrazyEightsController controller;
     private JLabel lblTrekstapel;
     private JLabel lblAflegstapel;
     private JLabel[] lblSpelers = new JLabel[4]; //TODO: dynamish aanpassen, halen uit StartUI
     private JLabel[] lblKaarten = new JLabel[7]; //TODO: als aantal spelers 2 is 7 kaarten, meerdere spelers 5
     //TODO: x aantam keer kaarten labels aanmaken, x is aantal spelers
 
-    public SpelbordUI(){
+    public SpelbordUI(CrazyEightsController controller){
         super("Crazy Eights");
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         super.setSize(1000,700);
@@ -22,6 +25,8 @@ public class SpelbordUI extends JFrame{
         maakLayout();
         behandelEvents();
         super.setVisible(true);
+
+        this.controller = controller;
     }
 
     public void maakComponenten(){

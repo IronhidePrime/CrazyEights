@@ -13,7 +13,7 @@ public class Spelbord {
         trekstapel = new Trekstapel();
 
         //test voor 2 spelers (7 kaarten)
-        spelers = new Speler[aantalSpelers];  //grootte van array wordt bepaald door keuze in de UI
+        spelers = new Speler[aantalSpelers];
     }
 
     public void setAantalSpelers(int aantalSpelers) {
