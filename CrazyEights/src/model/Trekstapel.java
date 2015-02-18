@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Trekstapel  {
-    /*
+    /**
      Hierin zitten alle beginkaarten (52), na het uitdelen wordt dit de stapel waarvan kaarten kunnen genomen worden (trekstapel)
     */
 
@@ -21,11 +21,25 @@ public class Trekstapel  {
         schudStapel();
     }
 
+    /**
+     * Stapel schudden voor het spel te starten
+     */
     private void schudStapel(){
         Collections.shuffle(kaarten);
     }
 
-    //test methode
+    /**
+     * Kaart nemen van de stapel en deze 'verwijderen' uit de stapel
+     */
+    public Kaart neemKaart() {
+        Kaart kaart = kaarten.get(0);
+        kaarten.remove(kaart);
+        return kaart;
+    }
+
+    /**
+     * TEST METHODE
+     */
     public List<Kaart> getKaarten() {
         return kaarten;
     }

@@ -1,78 +1,64 @@
 package model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Spelbord {
+    //constanten
+    private static final int KAARTEN_2_SPELERS = 7;
+    private static final int KAARTEN_MEER_SPELERS = 5;
+
     private Aflegstapel aflegstapel;
     private Trekstapel trekstapel;
-    private Speler[] spelers;
+    private List<Speler> spelers;
 
-    //overige attributen
-    private int aantalSpelers;
 
     public Spelbord() {
         aflegstapel = new Aflegstapel();
         trekstapel = new Trekstapel();
 
-        //test voor 2 spelers (7 kaarten)
-        spelers = new Speler[aantalSpelers];
+        spelers = new LinkedList<>();
     }
 
-    public void setAantalSpelers(int aantalSpelers) {
-        this.aantalSpelers = aantalSpelers;
-    }
-
+    /**
+     * speler toevoegen en getter voor het aantal spelers
+     */
     public int getAantalSpelers() {
-        return aantalSpelers;
+        return spelers.size();
     }
 
+    public void voegSpelerToe(String naam) {
+        spelers.add(new Speler(naam));
+    }
+
+    /**
+     * 2 spelers? -> 7 kaarten
+     * 3 of 4 spelers? -> 5 kaarten
+     */
     public void kaartenUitdelen() {
         int aantalKaarten;
-        if (spelers.length == 1) {
-            aantalKaarten = 7;
+        if (spelers.size() == 2) {
+            aantalKaarten = KAARTEN_2_SPELERS;
         } else {
-            aantalKaarten = 5;
+            aantalKaarten = KAARTEN_MEER_SPELERS;
         }
 
-        for (int i = 0; i < spelers.length; i++) {
+        for (int i = 0; i < spelers.size(); i++) {
             for (int j = 0; j < aantalKaarten; j++) {
-                spelers[i].trekKaart(trekstapel.getKaarten().get(j));
-                trekstapel.getKaarten().remove(j);
+                spelers.get(i).voegKaartToe(trekstapel.neemKaart());
             }
         }
     }
 
-
-    public void beginSpel() {
-        //bovenste kaart van de trekstapel omdraaien op de aflegstapel
-        Kaart beginkaart = trekstapel.getKaarten().get(0);
-        trekstapel.getKaarten().remove(beginkaart);
-        beginkaart.setBeeldKant(true);
-        aflegstapel.legKaart(beginkaart);
-
-        //eerste speler aan de beurt bij het begin van het spel
-        spelers[0].setAanBeurt(true);
+    public Trekstapel getTrekstapel() {
+        return trekstapel;
     }
-
-    //TODO!!
-    public void speelSpel() {
-        Kaart aflegKaart = aflegstapel.getKaarten().get(aflegstapel.getKaarten().size() - 1);
-        for (int i = 0; i < spelers.length; i++) {
-            if (spelers[i].getAanBeurt()) {
-                for (int j = 0; j < spelers[i].getKaarten().size(); j++) {
-                    Kaart spelerKaart = spelers[i].getKaarten().get(j);
-                    if (aflegKaart.getWaarde() == spelerKaart.getWaarde()) {
-                        spelers[i].speelKaart(spelerKaart);
-                    }
-                }
-            }
-        }
-    }
-
 
     public Aflegstapel getAflegstapel() {
         return aflegstapel;
     }
 
-    public Trekstapel getTrekstapel() {
-        return trekstapel;
+    public List<Speler> getSpelers() {
+        return spelers;
     }
 }

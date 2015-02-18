@@ -1,15 +1,14 @@
 package view;
 
-import controller.CrazyEightsController;
-import model.Spelbord;
+import controller.Controller;
+
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+
 
 public class StartUI extends JFrame {
     //TODO: afwerking StartUI (logo, fonts, ...)
@@ -28,9 +27,9 @@ public class StartUI extends JFrame {
     private JButton btnInfo;
     private JButton btnSpelregels;
 
-    private CrazyEightsController controller;
+    private Controller controller;
 
-    public StartUI(CrazyEightsController controller){
+    public StartUI(){
         super("Crazy Eights v1.0");
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         super.setSize(600,600);
@@ -39,7 +38,7 @@ public class StartUI extends JFrame {
         maakLayout();
         behandelEvents();
         super.setVisible(true);
-        this.controller = controller;
+        this.controller = new Controller();
     }
 
     public void maakComponenten(){
@@ -114,10 +113,18 @@ public class StartUI extends JFrame {
         btnDeal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //index start bij 0 -> aantal spelers = index + 2
-                controller.zetAantalSpelersSpelbord(cboSpelers.getSelectedIndex() + 2);
-                //doorgeven aan model
                 dispose();
+
+                /**
+                 * Namen van de spelers opvragen
+                 * Doorgeven aan controller -> spelbord
+                 */
+                int aantalSpelers = cboSpelers.getSelectedIndex() + 2;
+                for (int i=0; i<aantalSpelers; i++) {
+                    String spelersNaam = JOptionPane.showInputDialog(null, "Geef de naam van speler " + (i + 1), "Naam");
+                    controller.maakSpeler(spelersNaam);
+
+                }
                 new SpelbordUI(controller);
             }
         });

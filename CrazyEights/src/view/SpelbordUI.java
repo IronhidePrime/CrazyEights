@@ -1,51 +1,55 @@
 package view;
 
-import controller.CrazyEightsController;
+import controller.Controller;
+
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.List;
+import java.util.LinkedList;
 
 //TODO: REFACTOR!
 
 public class SpelbordUI extends JFrame{
-    private CrazyEightsController controller;
+    private Controller controller;
     private TrekStapelLabel lblTrekstapel;
-    private AftrekStapelLabel lblAflegstapel;
-    private SpelerLabel[] lblSpelers; //TODO: dynamish aanpassen, halen uit StartUI
-    private JLabel[] lblKaarten; //TODO: als aantal spelers 2 is 7 kaarten, meerdere spelers 5
-    //TODO: x aantam keer kaarten labels aanmaken, x is aantal spelers
+    private AflegStapelLabel lblAflegstapel;
+    private SpelerLabel[] lblSpelers;
+    private List<JLabel> lblKaarten;
     private JTextArea txtBeurt;
 
-    public SpelbordUI(CrazyEightsController controller){
+    public SpelbordUI(Controller controller){
         super("Crazy Eights");
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         super.setSize(1000,700);
         super.setLocationRelativeTo(null);
+
+        this.controller = controller;
+        controller.startSpel();
+
         maakComponenten();
         maakLayout();
         behandelEvents();
         super.setVisible(true);
 
-        this.controller = controller;
+
     }
 
     public void maakComponenten(){
-        lblAflegstapel = new AftrekStapelLabel();
+        lblAflegstapel = new AflegStapelLabel();
         lblAflegstapel.setPreferredSize(new Dimension(150,250));
         lblTrekstapel = new TrekStapelLabel();
         lblTrekstapel.setPreferredSize(new Dimension(150,250));
-        lblSpelers = new SpelerLabel[4];
+        lblSpelers = new SpelerLabel[controller.getAantalSpelers()];
         for(int i=0;i<lblSpelers.length;i++){
             lblSpelers[i] = new SpelerLabel();
             lblSpelers[i].setPreferredSize(new Dimension(50,50));
         }
 
 
-        lblKaarten = new JLabel[7];
-        for(int i=0;i<lblKaarten.length;i++){
-            lblKaarten[i] = new JLabel("Kaart " + i);
-        }
+        lblKaarten = new LinkedList<JLabel>();
+
         txtBeurt = new JTextArea("Speler X is aan de beurt");
     }
 
@@ -66,7 +70,7 @@ public class SpelbordUI extends JFrame{
         //
 
         //2 containers aanmaken, 1 voor elke speler
-        JPanel[] pnlSpelerKaartContainer = new JPanel[2]; //TODO: dynamisch maken aan het aantal spelers, haal uit UI
+        JPanel[] pnlSpelerKaartContainer = new JPanel[controller.getAantalSpelers()];
         JLabel test = new JLabel();
         JLabel test2 = new JLabel();
         for(int i=0; i<pnlSpelerKaartContainer.length;i++){

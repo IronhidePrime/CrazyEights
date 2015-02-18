@@ -9,9 +9,8 @@ public class Speler {
     private List<Kaart> kaarten;
     private boolean isAanBeurt;
 
-    public Speler(String naam, boolean isAanBeurt) {
+    public Speler(String naam) {
         this.naam = naam;
-        this.isAanBeurt = isAanBeurt;
         kaarten = new LinkedList<>();
     }
 
@@ -31,7 +30,7 @@ public class Speler {
         kaarten.remove(kaart);
     }
 
-    public void trekKaart(Kaart kaart) {
+    public void voegKaartToe(Kaart kaart) {
         kaarten.add(kaart);
     }
 
