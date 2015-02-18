@@ -38,13 +38,12 @@ public class SpelbordUI extends JFrame{
 
     public void maakComponenten(){
         lblAflegstapel = new AflegStapelLabel();
-        lblAflegstapel.setPreferredSize(new Dimension(150,250));
+        lblAflegstapel.setPreferredSize(new Dimension(140,200));
         lblTrekstapel = new TrekStapelLabel();
-        lblTrekstapel.setPreferredSize(new Dimension(150,250));
+        lblTrekstapel.setPreferredSize(new Dimension(140,200));
         lblSpelers = new SpelerLabel[controller.getAantalSpelers()];
         for(int i=0;i<lblSpelers.length;i++){
             lblSpelers[i] = new SpelerLabel();
-            lblSpelers[i].setPreferredSize(new Dimension(50,50));
         }
 
 
@@ -69,20 +68,27 @@ public class SpelbordUI extends JFrame{
         super.add(stapelContainer, BorderLayout.CENTER);
         //
 
-        //2 containers aanmaken, 1 voor elke speler
+        //x aantal containers aanmaken, 1 voor elke speler
+        //x is aantal spelers
         JPanel[] pnlSpelerKaartContainer = new JPanel[controller.getAantalSpelers()];
-        JLabel test = new JLabel();
-        JLabel test2 = new JLabel();
         for(int i=0; i<pnlSpelerKaartContainer.length;i++){
             pnlSpelerKaartContainer[i] = new JPanel();
-            pnlSpelerKaartContainer[i].setLayout(new GridLayout(1,1));
-            pnlSpelerKaartContainer[i].setPreferredSize(new Dimension(400, 100));
-            pnlSpelerKaartContainer[i].add(lblSpelers[i]); //TODO: Speler label centreren
+            pnlSpelerKaartContainer[i].setLayout(new BorderLayout());
+            pnlSpelerKaartContainer[i].add(lblSpelers[i], BorderLayout.CENTER);
+            pnlSpelerKaartContainer[i].setPreferredSize(new Dimension(100, 100));
 
         }
 
+
+        //gaat speler label op 1 kant plaatsen, er zijn altijd minstens 2 spelers als het er 3 zij komt er een label east bij, bij 4 spelers komt er een label east en west
         super.add(pnlSpelerKaartContainer[0], BorderLayout.SOUTH);
         super.add(pnlSpelerKaartContainer[1], BorderLayout.NORTH);
+        if (pnlSpelerKaartContainer.length == 3){
+            super.add(pnlSpelerKaartContainer[2], BorderLayout.EAST);
+        } else {
+            super.add(pnlSpelerKaartContainer[2], BorderLayout.EAST);
+            super.add(pnlSpelerKaartContainer[3], BorderLayout.WEST);
+        }
     }
 
 

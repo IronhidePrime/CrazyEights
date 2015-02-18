@@ -8,7 +8,8 @@ public class SpelerLabel extends JLabel {
         ImageIcon imageIcon = new ImageIcon(getClass().getResource("/view/images/spelerIcon.png"));
         Image image = imageIcon.getImage();
         super.paintComponent(g);
-        g.drawImage(image, 0, 0, 85, 85, 0, 0,
-                image.getWidth(this), image.getHeight(this), this);
+        int x = (this.getWidth() - image.getWidth(null)) / 2;
+        int y = (this.getHeight() - image.getHeight(null)) / 2;
+        g.drawImage(image, x, y, null);
     }
 }
