@@ -75,24 +75,40 @@ public class SpelbordUI extends JFrame{
             pnlSpelerKaartContainer[i] = new JPanel();
             pnlSpelerKaartContainer[i].setLayout(new BorderLayout());
             pnlSpelerKaartContainer[i].add(lblSpelers[i], BorderLayout.CENTER);
-            pnlSpelerKaartContainer[i].setPreferredSize(new Dimension(100, 100));
+            pnlSpelerKaartContainer[i].setPreferredSize(new Dimension(115, 100));
 
         }
 
+        //speler label aanmaken en naam van de ingegeven speler toevoegen
+        JLabel[] lblSpelerNaam = new JLabel[controller.getAantalSpelers()];
+        for (int i=0; i<controller.getAantalSpelers(); i++){
+            lblSpelerNaam[i] = new JLabel();
+            lblSpelerNaam[i].setText(controller.getSpelerNaam(i));
+            lblSpelerNaam[i].setHorizontalAlignment(SwingConstants.CENTER);
+        }
 
         //gaat speler label op 1 kant plaatsen, er zijn altijd minstens 2 spelers als het er 3 zij komt er een label east bij, bij 4 spelers komt er een label east en west
         if(pnlSpelerKaartContainer.length == 2){
             super.add(pnlSpelerKaartContainer[0], BorderLayout.SOUTH);
+            pnlSpelerKaartContainer[0].add(lblSpelerNaam[0], BorderLayout.SOUTH);
             super.add(pnlSpelerKaartContainer[1], BorderLayout.NORTH);
+            pnlSpelerKaartContainer[1].add(lblSpelerNaam[1], BorderLayout.NORTH);
         } else if (pnlSpelerKaartContainer.length == 3) {
             super.add(pnlSpelerKaartContainer[0], BorderLayout.SOUTH);
+            pnlSpelerKaartContainer[0].add(lblSpelerNaam[0], BorderLayout.SOUTH);
             super.add(pnlSpelerKaartContainer[1], BorderLayout.NORTH);
+            pnlSpelerKaartContainer[1].add(lblSpelerNaam[1], BorderLayout.NORTH);
             super.add(pnlSpelerKaartContainer[2], BorderLayout.EAST);
+            pnlSpelerKaartContainer[2].add(lblSpelerNaam[2], BorderLayout.EAST);
         } else {
             super.add(pnlSpelerKaartContainer[0], BorderLayout.SOUTH);
+            pnlSpelerKaartContainer[0].add(lblSpelerNaam[0], BorderLayout.SOUTH);
             super.add(pnlSpelerKaartContainer[1], BorderLayout.NORTH);
+            pnlSpelerKaartContainer[1].add(lblSpelerNaam[1], BorderLayout.NORTH);
             super.add(pnlSpelerKaartContainer[2], BorderLayout.EAST);
+            pnlSpelerKaartContainer[2].add(lblSpelerNaam[2], BorderLayout.EAST);
             super.add(pnlSpelerKaartContainer[3], BorderLayout.WEST);
+            pnlSpelerKaartContainer[3].add(lblSpelerNaam[3], BorderLayout.WEST);
         }
     }
     public void behandelEvents(){

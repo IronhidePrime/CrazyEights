@@ -2,11 +2,6 @@ package controller;
 
 import model.Kaart;
 import model.Spelbord;
-import model.Speler;
-import view.StartUI;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class Controller {
     private Spelbord spelbord;
@@ -21,6 +16,10 @@ public class Controller {
 
     public void maakSpeler (String naam) {
         spelbord.voegSpelerToe(naam);
+    }
+
+    public String getSpelerNaam(int spelerNr){
+        return spelbord.getSpelers().get(spelerNr).getNaam();
     }
 
     /**

@@ -31,6 +31,8 @@ public class Spelbord {
         spelers.add(new Speler(naam));
     }
 
+
+
     /**
      * 2 spelers? -> 7 kaarten
      * 3 of 4 spelers? -> 5 kaarten

@@ -123,7 +123,6 @@ public class StartUI extends JFrame {
                 for (int i=0; i<aantalSpelers; i++) {
                     String spelersNaam = JOptionPane.showInputDialog(null, "Geef de naam van speler " + (i + 1), "Naam");
                     controller.maakSpeler(spelersNaam);
-
                 }
                 new SpelbordUI(controller);
             }
