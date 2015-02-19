@@ -81,18 +81,20 @@ public class SpelbordUI extends JFrame{
 
 
         //gaat speler label op 1 kant plaatsen, er zijn altijd minstens 2 spelers als het er 3 zij komt er een label east bij, bij 4 spelers komt er een label east en west
-        super.add(pnlSpelerKaartContainer[0], BorderLayout.SOUTH);
-        super.add(pnlSpelerKaartContainer[1], BorderLayout.NORTH);
-        if (pnlSpelerKaartContainer.length == 3){
+        if(pnlSpelerKaartContainer.length == 2){
+            super.add(pnlSpelerKaartContainer[0], BorderLayout.SOUTH);
+            super.add(pnlSpelerKaartContainer[1], BorderLayout.NORTH);
+        } else if (pnlSpelerKaartContainer.length == 3) {
+            super.add(pnlSpelerKaartContainer[0], BorderLayout.SOUTH);
+            super.add(pnlSpelerKaartContainer[1], BorderLayout.NORTH);
             super.add(pnlSpelerKaartContainer[2], BorderLayout.EAST);
         } else {
+            super.add(pnlSpelerKaartContainer[0], BorderLayout.SOUTH);
+            super.add(pnlSpelerKaartContainer[1], BorderLayout.NORTH);
             super.add(pnlSpelerKaartContainer[2], BorderLayout.EAST);
             super.add(pnlSpelerKaartContainer[3], BorderLayout.WEST);
         }
     }
-
-
-
     public void behandelEvents(){
 
     }
