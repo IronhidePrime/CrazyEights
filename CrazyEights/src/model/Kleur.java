@@ -5,6 +5,6 @@ package model;
  */
 
 public enum Kleur {
-    Harten, Ruiten, Klavers, Schoppen
+    harten, ruiten, klaveren, schoppen
 }
 

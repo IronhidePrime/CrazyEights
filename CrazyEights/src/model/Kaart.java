@@ -4,10 +4,12 @@ public class Kaart {
     private int waarde;
     private boolean isBeeldKant;
     private Kleur kleur;
+    private String imageString;
 
-    public Kaart(int waarde,Kleur kleur){
+    public Kaart(int waarde,Kleur kleur, String imageString){
         this.waarde = waarde;
         this.kleur = kleur;
+        this.imageString = imageString;
         this.isBeeldKant = false;
     }
 
@@ -21,6 +23,10 @@ public class Kaart {
 
     public Kleur getKleur() {
         return kleur;
+    }
+
+    public String getImageString() {
+        return imageString;
     }
 
 

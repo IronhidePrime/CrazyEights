@@ -2,7 +2,6 @@ package view;
 
 import controller.Controller;
 
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -14,16 +13,19 @@ import java.util.List;
 
 
 //TODO: REFACTOR!
+//TODO: rekening houden met resizen...
 
 public class SpelbordUI extends JFrame{
     private Controller controller;
     private TrekStapelLabel lblTrekstapel;
     private AflegStapelLabel lblAflegstapel;
     private SpelerLabel[] lblSpelers;
+
+    //TODO: array of map van List<KaartLabel> maken
     private List<KaartLabel> kaartenSpeler1;
     private List<KaartLabel> kaartenSpeler2;
 
-    public SpelbordUI(Controller controller){
+    public SpelbordUI(Controller controller) throws HeadlessException {
         super("Crazy Eights");
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         super.setSize(1000,700);
@@ -36,8 +38,6 @@ public class SpelbordUI extends JFrame{
         maakLayout();
         behandelEvents();
         super.setVisible(true);
-
-
     }
 
     public void maakComponenten(){
@@ -50,17 +50,21 @@ public class SpelbordUI extends JFrame{
             lblSpelers[i] = new SpelerLabel();
         }
 
+        //kaartenSpeler = new LinkedList<>
+
         kaartenSpeler1 = new ArrayList<KaartLabel>();
         kaartenSpeler2 = new ArrayList<KaartLabel>();
         for (int i=0; i<7; i++){
-            kaartenSpeler1.add(new KaartLabel());
-            kaartenSpeler2.add(new KaartLabel());
+            kaartenSpeler1.add(new KaartLabel(controller.getSpelerKaarten(0).get(i).getImageString()));
+            kaartenSpeler2.add(new KaartLabel(controller.getSpelerKaarten(1).get(i).getImageString()));
         }
     }
 
     public void maakLayout(){
-
-        //Container voor de 2 stapels aanmaken en aftrek + legstapel toevoegen
+        /**
+         * Container voor de 2 stapels aanmaken
+         * Aftrek + legstapel toevoegen
+        */
         JPanel stapelContainer = new JPanel();
         stapelContainer.setLayout(new GridBagLayout());
         JPanel trekstapelContainer = new JPanel();
@@ -72,10 +76,10 @@ public class SpelbordUI extends JFrame{
         stapelContainer.add(trekstapelContainer);
         stapelContainer.add(aflegstapelContainer);
         super.add(stapelContainer, BorderLayout.CENTER);
-        //
 
-        //x aantal containers aanmaken, 1 voor elke speler
-        //x is aantal spelers
+        /**
+         * x aantal containers aanmaken, 1 voor elke speler
+         */
         JPanel[] pnlSpelerKaartContainer = new JPanel[controller.getAantalSpelers()];
         for(int i=0; i<pnlSpelerKaartContainer.length;i++){
             pnlSpelerKaartContainer[i] = new JPanel();
@@ -84,7 +88,9 @@ public class SpelbordUI extends JFrame{
             pnlSpelerKaartContainer[i].setPreferredSize(new Dimension(150, 200));
         }
 
-        //speler label aanmaken en naam van de ingegeven speler toevoegen
+        /**
+         * speler label aanmaken en naam van de ingegeven speler toevoegen
+         */
         JLabel[] lblSpelerNaam = new JLabel[controller.getAantalSpelers()];
         for (int i=0; i<controller.getAantalSpelers(); i++){
             lblSpelerNaam[i] = new JLabel();
@@ -92,7 +98,9 @@ public class SpelbordUI extends JFrame{
             lblSpelerNaam[i].setHorizontalAlignment(SwingConstants.CENTER);
         }
 
-        //gaat speler label op 1 kant plaatsen, elke speler label krijgt 7 kaart labels
+        /**
+         * gaat speler label op 1 kant plaatsen, elke speler label krijgt 7 kaart labels
+         */
         int x = super.getWidth();
         int minus = 50;
         JLayeredPane[] lpnlkaartContainer = new JLayeredPane[controller.getAantalSpelers()];
@@ -156,7 +164,7 @@ public class SpelbordUI extends JFrame{
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     super.mouseReleased(e);
-                    System.out.println("kaart " + finalI+1 + " van speler 1 is geklikt");
+                    System.out.println("kaart " + finalI +1 + " van speler 1 is geklikt");
                 }
             });
             kaartenSpeler2.get(i).addMouseListener(new MouseAdapter() {
