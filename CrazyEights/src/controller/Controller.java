@@ -8,12 +8,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Controller {
+    /**
+     * Constanten die gebruikt worden
+     */
     private static final int KAARTEN_2_SPELERS = 7;
     private static final int KAARTEN_MEER_SPELERS = 5;
-
-    /**
-     * maakspeler, getspelernaam, ... verwijderd in spelbord en naar controller verplaatst zodat de view deze gegevens kan opvragen
-    */
 
     private Spelbord spelbord;
     private List<Speler> spelers;
@@ -23,6 +22,12 @@ public class Controller {
         this.spelers = new LinkedList<>();
     }
 
+    /**
+     * maken speler
+     * spelersnaam opvragen
+     * de speler zijn kaarten opvragen
+     * aantal spelers opvragen
+     */
     public void maakSpeler (String naam) {
         spelers.add(new Speler(naam));
     }
@@ -37,6 +42,10 @@ public class Controller {
 
     public int getAantalSpelers() {
         return spelers.size();
+    }
+
+    public Spelbord getSpelbord() {
+        return spelbord;
     }
 
     /**

@@ -41,7 +41,7 @@ public class SpelbordUI extends JFrame{
     }
 
     public void maakComponenten(){
-        lblAflegstapel = new AflegStapelLabel();
+        lblAflegstapel = new AflegStapelLabel(controller.getSpelbord().getAflegstapel().getBovensteKaart().getImageString());
         lblAflegstapel.setPreferredSize(new Dimension(100,140));
         lblTrekstapel = new TrekStapelLabel();
         lblTrekstapel.setPreferredSize(new Dimension(100,140));
@@ -164,14 +164,14 @@ public class SpelbordUI extends JFrame{
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     super.mouseReleased(e);
-                    System.out.println("kaart " + finalI +1 + " van speler 1 is geklikt");
+                    System.out.println("kaart " + (finalI + 1) + " van speler 1 is geklikt");
                 }
             });
             kaartenSpeler2.get(i).addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     super.mouseReleased(e);
-                    System.out.println("kaart " + finalI + "van speler 2 is geklikt");
+                    System.out.println("kaart " + (finalI + 1) + " van speler 2 is geklikt");
                 }
             });
         }
