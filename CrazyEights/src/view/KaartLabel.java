@@ -17,4 +17,8 @@ public class KaartLabel extends JLabel{
         super.paintComponent(g);
         g.drawImage(image, 20, 10, getWidth(), getHeight(), this);
     }
+
+    public String getImageString() {
+        return imageString;
+    }
 }

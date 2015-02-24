@@ -1,6 +1,7 @@
 package view;
 
 import controller.Controller;
+import model.Kaart;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -20,6 +21,7 @@ public class SpelbordUI extends JFrame{
     private TrekStapelLabel lblTrekstapel;
     private AflegStapelLabel lblAflegstapel;
     private SpelerLabel[] lblSpelers;
+    private JLayeredPane[] lpnlkaartContainer = new JLayeredPane[2]; //test
 
     //TODO: array of map van List<KaartLabel> maken
     private List<KaartLabel> kaartenSpeler1;
@@ -103,7 +105,6 @@ public class SpelbordUI extends JFrame{
          */
         int x = super.getWidth();
         int minus = 50;
-        JLayeredPane[] lpnlkaartContainer = new JLayeredPane[controller.getAantalSpelers()];
         for (int i=0; i<lpnlkaartContainer.length;i++){
             lpnlkaartContainer[i] = new JLayeredPane();
             lpnlkaartContainer[i].setPreferredSize(new Dimension(80,100));
@@ -163,15 +164,31 @@ public class SpelbordUI extends JFrame{
             kaartenSpeler1.get(i).addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
+                    KaartLabel geklikteKaart;
+                    String imageStringGeklikteKaart;
                     super.mouseReleased(e);
                     System.out.println("kaart " + (finalI + 1) + " van speler 1 is geklikt");
+                    geklikteKaart = kaartenSpeler1.get(finalI);
+                    lpnlkaartContainer[0].remove(geklikteKaart);//gaat geklikte kaart label verwijderen
+                    imageStringGeklikteKaart = geklikteKaart.getImageString();
+                    lblAflegstapel.setImageString(imageStringGeklikteKaart);
+                    revalidate();
+                    repaint();
                 }
             });
             kaartenSpeler2.get(i).addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
+                    KaartLabel geklikteKaart;
+                    String imageStringGeklikteKaart;
                     super.mouseReleased(e);
-                    System.out.println("kaart " + (finalI + 1) + " van speler 2 is geklikt");
+                    System.out.println("kaart " + (finalI + 1) + " van speler 1 is geklikt");
+                    geklikteKaart = kaartenSpeler2.get(finalI);
+                    lpnlkaartContainer[1].remove(geklikteKaart);//gaat geklikte kaart label verwijderen
+                    imageStringGeklikteKaart = geklikteKaart.getImageString();
+                    lblAflegstapel.setImageString(imageStringGeklikteKaart);
+                    revalidate();
+                    repaint();
                 }
             });
         }
