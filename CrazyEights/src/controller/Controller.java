@@ -1,6 +1,7 @@
 package controller;
 
 import model.Kaart;
+import model.Kleur;
 import model.Spelbord;
 import model.Speler;
 
@@ -88,5 +89,23 @@ public class Controller {
         beginkaart.setBeeldKant(true);
         spelbord.getAflegstapel().legKaart(beginkaart);
     }
+
+    /**
+     * methoden die kunnen voorkomen waneer een speler aan beurt is
+     */
+
+    public void speelKaart(Kaart kaart,int spelerNr){
+        spelers.get(spelerNr).speelKaart(kaart);
+        spelbord.getAflegstapel().legKaart(kaart);
+    }
+
+    public boolean speelKaartMogelijk(Kaart kaart){
+        if (kaart.getKleur() == spelbord.getAflegstapel().getBovensteKaart().getKleur()){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
+
 

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class Speler {
 
     public Speler(String naam) {
         this.naam = naam;
-        kaarten = new LinkedList<>();
+        kaarten = new ArrayList<>();
     }
 
     public void setAanBeurt(boolean isAanBeurt) {
