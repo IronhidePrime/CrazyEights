@@ -100,7 +100,8 @@ public class Controller {
     }
 
     public boolean speelKaartMogelijk(Kaart kaart){
-        if (kaart.getKleur() == spelbord.getAflegstapel().getBovensteKaart().getKleur()){
+        Kaart aflegkaart = spelbord.getAflegstapel().getBovensteKaart();
+        if (kaart.getKleur() == aflegkaart.getKleur()|| kaart.getWaarde() == aflegkaart.getWaarde() || kaart.getWaarde() == 8){
             return true;
         } else {
             return false;
