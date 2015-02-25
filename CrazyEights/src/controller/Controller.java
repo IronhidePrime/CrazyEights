@@ -27,6 +27,7 @@ public class Controller {
      * maken speler
      * spelersnaam opvragen
      * de speler zijn kaarten opvragen
+     * alle spelers opvragen
      * aantal spelers opvragen
      */
     public void maakSpeler (String naam) {
@@ -39,6 +40,10 @@ public class Controller {
 
     public List<Kaart> getSpelerKaarten (int spelerNr) {
         return spelers.get(spelerNr).getKaarten();
+    }
+
+    public List<Speler> getSpelers() {
+        return spelers;
     }
 
     public int getAantalSpelers() {
@@ -82,8 +87,24 @@ public class Controller {
         beginKaart();
 
         //3
-        spelers.get(0).setAanBeurt(true);
+        getSpelers().get(0).setAanBeurt(true);
     }
+
+    /**
+     * spel is ten einde wanneer een van de spelers erin slaagt om al zijn kaarten te hebben afgelegd
+     */
+    public boolean eindeSpel() {
+        for (Speler speler : spelers) {
+            if (speler.getKaarten().size() == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * kaart van de aflegstapel waarop men de eerste kaart moet leggen wanneer het spel begint
+     */
     public void beginKaart() {
         Kaart beginkaart = spelbord.getTrekstapel().neemKaart();
         beginkaart.setBeeldKant(true);
@@ -91,20 +112,44 @@ public class Controller {
     }
 
     /**
-     * methoden die kunnen voorkomen waneer een speler aan beurt is
+     * speler speelt zijn kaart -> kaart wordt verwijderd bij speler
+     * deze kaart komt op de aflegstapel -> op deze kaart wordt voortgespeeld
      */
-
-    public void speelKaart(Kaart kaart,int spelerNr){
+    public void speelKaart(Kaart kaart, int spelerNr){
         spelers.get(spelerNr).speelKaart(kaart);
         spelbord.getAflegstapel().legKaart(kaart);
     }
 
+    /**
+     * nagaan of men een kaart kan spelen
+     * voor een kaart te kunnen spelen moet waarde of kleur gelijk zijn, men kan ook de 8 spelen (zie spelregels)
+     */
     public boolean speelKaartMogelijk(Kaart kaart){
         Kaart aflegkaart = spelbord.getAflegstapel().getBovensteKaart();
         if (kaart.getKleur() == aflegkaart.getKleur()|| kaart.getWaarde() == aflegkaart.getWaarde() || kaart.getWaarde() == 8){
             return true;
         } else {
             return false;
+        }
+    }
+
+    public Speler getSpelerAanBeurt() {
+        Speler speler = null;
+        for (Speler s : spelers) {
+            if (s.getAanBeurt()) {
+                speler = s;
+            }
+        }
+        return speler;
+    }
+
+    public void setSpelerAanBeurt (int spelerNr) {
+        getSpelers().get(spelerNr).setAanBeurt(true);
+    }
+
+    public void speelSpel() {
+        while (!eindeSpel()) {
+                 //setSpelerAanBeurt(INDEX VAN getSpelerAanBeurt());
         }
     }
 }

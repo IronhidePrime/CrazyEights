@@ -166,16 +166,16 @@ public class SpelbordUI extends JFrame {
                     KaartLabel lblGeklikteKaart = kaartenSpeler1.get(finalI); //kaart label van de geklikte kaart in variable steken
                     String imageStringGeklikteKaart = lblGeklikteKaart.getImageString(); //image string van de geklikte kaart label in een variable steken
                     Kaart geklikteKaart = controller.getSpelerKaarten(0).get(finalI);
-                    if (controller.speelKaartMogelijk(geklikteKaart)){
-                        super.mouseReleased(e);
-                        lpnlkaartContainer[0].remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
-                        lblAflegstapel.setImageString(imageStringGeklikteKaart); // image string van de aflgegstapel vervangen door de image string van de geklikte kaart
-                        revalidate();
-                        repaint();
-                        controller.speelKaart(geklikteKaart,0);
-                        controller.getSpelerKaarten(0).add(finalI,null);//leeg object toevoegen aan de list van kaart objecten van de speler om te voorkomen dat het laatste kaart object in de list buiten de index ligt
+                    if (controller.speelKaartMogelijk(geklikteKaart)) {
+                            super.mouseReleased(e);
+                            lpnlkaartContainer[0].remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
+                            lblAflegstapel.setImageString(imageStringGeklikteKaart); // image string van de aflgegstapel vervangen door de image string van de geklikte kaart
+                            revalidate();
+                            repaint();
+                            controller.speelKaart(geklikteKaart, 0);
+                            controller.getSpelerKaarten(0).add(finalI, null);//leeg object toevoegen aan de list van kaart objecten van de speler om te voorkomen dat het laatste kaart object in de list buiten de index ligt
+                        }
                     }
-                }
             });
             kaartenSpeler2.get(i).addMouseListener(new MouseAdapter() {
                 @Override
@@ -196,5 +196,4 @@ public class SpelbordUI extends JFrame {
             });
         }
     }
-
 }
