@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 //TODO: REFACTOR!
@@ -21,9 +22,11 @@ public class SpelbordUI extends JFrame {
     private TrekStapelLabel lblTrekstapel;
     private AflegStapelLabel lblAflegstapel;
     private SpelerLabel[] lblSpelers;
-    private JLayeredPane[] lpnlkaartContainer = new JLayeredPane[2]; //test
+    private JLayeredPane[] lpnlkaartContainer;
 
-    //TODO: array of map van List<KaartLabel> maken
+    JPanel[] pnlSpelerKaartContainer;
+    JLabel[] lblSpelerNaam;
+
     private List<KaartLabel> kaartenSpeler1;
     private List<KaartLabel> kaartenSpeler2;
 
@@ -52,7 +55,11 @@ public class SpelbordUI extends JFrame {
             lblSpelers[i] = new SpelerLabel();
         }
 
-        //kaartenSpeler = new LinkedList<>
+        lpnlkaartContainer = new JLayeredPane[controller.getAantalSpelers()];
+
+        pnlSpelerKaartContainer = new JPanel[controller.getAantalSpelers()];
+        lblSpelerNaam = new JLabel[controller.getAantalSpelers()];
+
 
         kaartenSpeler1 = new ArrayList<KaartLabel>();
         kaartenSpeler2 = new ArrayList<KaartLabel>();
@@ -82,7 +89,6 @@ public class SpelbordUI extends JFrame {
         /**
          * x aantal containers aanmaken, 1 voor elke speler
          */
-        JPanel[] pnlSpelerKaartContainer = new JPanel[controller.getAantalSpelers()];
         for (int i = 0; i < pnlSpelerKaartContainer.length; i++) {
             pnlSpelerKaartContainer[i] = new JPanel();
             pnlSpelerKaartContainer[i].setLayout(new BorderLayout());
@@ -93,7 +99,6 @@ public class SpelbordUI extends JFrame {
         /**
          * speler label aanmaken en naam van de ingegeven speler toevoegen
          */
-        JLabel[] lblSpelerNaam = new JLabel[controller.getAantalSpelers()];
         for (int i = 0; i < controller.getAantalSpelers(); i++) {
             lblSpelerNaam[i] = new JLabel();
             lblSpelerNaam[i].setText(controller.getSpelerNaam(i));
@@ -110,7 +115,6 @@ public class SpelbordUI extends JFrame {
             lpnlkaartContainer[i].setPreferredSize(new Dimension(80, 100));
         }
 
-
         for (int i = 0; i < controller.getAantalSpelers(); i++) {
             for (int j = 0; j < 7; j++) {
                 kaartenSpeler1.get(j).setBounds(x - minus, 0, 70, 100);
@@ -119,63 +123,54 @@ public class SpelbordUI extends JFrame {
                 if (pnlSpelerKaartContainer.length == 2) {
                     lpnlkaartContainer[0].add(kaartenSpeler1.get(j), new Integer(j), 0);
                     lpnlkaartContainer[1].add(kaartenSpeler2.get(j), new Integer(j), 0);
-
-                    super.add(pnlSpelerKaartContainer[0], BorderLayout.SOUTH);
-                    pnlSpelerKaartContainer[0].add(lblSpelerNaam[0], BorderLayout.SOUTH);
-                    pnlSpelerKaartContainer[0].add(lpnlkaartContainer[0], BorderLayout.NORTH);
-
-                    super.add(pnlSpelerKaartContainer[1], BorderLayout.NORTH);
-                    pnlSpelerKaartContainer[1].add(lblSpelerNaam[1], BorderLayout.NORTH);
-                    pnlSpelerKaartContainer[1].add(lpnlkaartContainer[1], BorderLayout.SOUTH);
-
+                    tweeSpelersContainerLayOut();
                 } else if (pnlSpelerKaartContainer.length == 3) {
-                    super.add(pnlSpelerKaartContainer[0], BorderLayout.SOUTH);
-                    pnlSpelerKaartContainer[0].add(lblSpelerNaam[0], BorderLayout.SOUTH);
-                    pnlSpelerKaartContainer[0].add(lpnlkaartContainer[0], BorderLayout.NORTH);
-
-                    super.add(pnlSpelerKaartContainer[1], BorderLayout.NORTH);
-                    pnlSpelerKaartContainer[1].add(lblSpelerNaam[1], BorderLayout.NORTH);
-                    pnlSpelerKaartContainer[1].add(lpnlkaartContainer[1], BorderLayout.SOUTH);
-
-                    super.add(pnlSpelerKaartContainer[2], BorderLayout.EAST);
-                    pnlSpelerKaartContainer[2].add(lblSpelerNaam[2], BorderLayout.EAST);
-                    pnlSpelerKaartContainer[2].add(lpnlkaartContainer[2], BorderLayout.WEST);
+                    tweeSpelersContainerLayOut();
+                    derdeSpelerContainerLayOut();
                 } else {
-                    super.add(pnlSpelerKaartContainer[0], BorderLayout.SOUTH);
-                    pnlSpelerKaartContainer[0].add(lblSpelerNaam[0], BorderLayout.SOUTH);
-
-                    super.add(pnlSpelerKaartContainer[1], BorderLayout.NORTH);
-                    pnlSpelerKaartContainer[1].add(lblSpelerNaam[1], BorderLayout.NORTH);
-
-                    super.add(pnlSpelerKaartContainer[2], BorderLayout.EAST);
-                    pnlSpelerKaartContainer[2].add(lblSpelerNaam[2], BorderLayout.EAST);
-
-                    super.add(pnlSpelerKaartContainer[3], BorderLayout.WEST);
-                    pnlSpelerKaartContainer[3].add(lblSpelerNaam[3], BorderLayout.WEST);
+                    tweeSpelersContainerLayOut();
+                    derdeSpelerContainerLayOut();
+                    vierdeSpelerContainerLayOut();
                 }
             }
         }
     }
 
     public void behandelEvents() {
+        /**
+         * wanneer men op de trekstapel klikt krijgt de speler een nieuwe kaart
+         */
+        lblTrekstapel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                Kaart nieuweKaart = controller.getSpelbord().getTrekstapel().neemKaart();
+                //TODO: werkt niet omdat de kaart niet op de juiste plaats wordt getekend
+                lpnlkaartContainer[0].add(new KaartLabel(nieuweKaart.getImageString()));
+                revalidate();
+                repaint();
+                controller.getSpelers().get(0).voegKaartToe(nieuweKaart);
+            }
+        });
+
         for (int i = 0; i < kaartenSpeler1.size(); i++) {
             final int finalI = i;
             kaartenSpeler1.get(i).addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
+                    super.mouseReleased(e);
                     KaartLabel lblGeklikteKaart = kaartenSpeler1.get(finalI); //kaart label van de geklikte kaart in variable steken
                     String imageStringGeklikteKaart = lblGeklikteKaart.getImageString(); //image string van de geklikte kaart label in een variable steken
                     Kaart geklikteKaart = controller.getSpelerKaarten(0).get(finalI);
                     if (controller.speelKaartMogelijk(geklikteKaart)) {
-                            super.mouseReleased(e);
-                            lpnlkaartContainer[0].remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
-                            lblAflegstapel.setImageString(imageStringGeklikteKaart); // image string van de aflgegstapel vervangen door de image string van de geklikte kaart
-                            revalidate();
-                            repaint();
-                            controller.speelKaart(geklikteKaart, 0);
-                            controller.getSpelerKaarten(0).add(finalI, null);//leeg object toevoegen aan de list van kaart objecten van de speler om te voorkomen dat het laatste kaart object in de list buiten de index ligt
-                        }
+                        lpnlkaartContainer[0].remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
+                        lblAflegstapel.setImageString(imageStringGeklikteKaart); // image string van de aflgegstapel vervangen door de image string van de geklikte kaart
+                        revalidate();
+                        repaint();
+                        controller.speelKaart(geklikteKaart, 0);
+                        controller.getSpelerKaarten(0).add(finalI, null);//leeg object toevoegen aan de list van kaart objecten van de speler om te voorkomen dat het laatste kaart object in de list buiten de index ligt
                     }
+                }
             });
             kaartenSpeler2.get(i).addMouseListener(new MouseAdapter() {
                 @Override
@@ -183,17 +178,46 @@ public class SpelbordUI extends JFrame {
                     KaartLabel lblGeklikteKaart = kaartenSpeler2.get(finalI); //kaart label van de geklikte kaart in variable steken
                     String imageStringGeklikteKaart = lblGeklikteKaart.getImageString(); //image string van de geklikte kaart label in een variable steken
                     Kaart geklikteKaart = controller.getSpelerKaarten(1).get(finalI);
-                    if (controller.speelKaartMogelijk(geklikteKaart)){
+                    if (controller.speelKaartMogelijk(geklikteKaart)) {
                         super.mouseReleased(e);
                         lpnlkaartContainer[1].remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
                         lblAflegstapel.setImageString(imageStringGeklikteKaart); // image string van de aflgegstapel vervangen door de image string van de geklikte kaart
                         revalidate();
                         repaint();
-                        controller.speelKaart(geklikteKaart,1);
-                        controller.getSpelerKaarten(1).add(finalI,null);//leeg object toevoegen aan de list van kaart objecten van de speler om te voorkomen dat het laatste kaart object in de list buiten de index ligt
+                        controller.speelKaart(geklikteKaart, 1);
+                        controller.getSpelerKaarten(1).add(finalI, null);//leeg object toevoegen aan de list van kaart objecten van de speler om te voorkomen dat het laatste kaart object in de list buiten de index ligt
                     }
                 }
             });
         }
+    }
+
+    /**
+     * containers worden toegevoegd afhankelijk van het aantal spelers op de aangegeven positie
+     */
+    public void tweeSpelersContainerLayOut() {
+        super.add(pnlSpelerKaartContainer[0], BorderLayout.SOUTH);
+        pnlSpelerKaartContainer[0].add(lblSpelerNaam[0], BorderLayout.SOUTH);
+        pnlSpelerKaartContainer[0].add(lpnlkaartContainer[0], BorderLayout.NORTH);
+
+        super.add(pnlSpelerKaartContainer[1], BorderLayout.NORTH);
+        pnlSpelerKaartContainer[1].add(lblSpelerNaam[1], BorderLayout.NORTH);
+        pnlSpelerKaartContainer[1].add(lpnlkaartContainer[1], BorderLayout.SOUTH);
+    }
+
+    public void derdeSpelerContainerLayOut() {
+        super.add(pnlSpelerKaartContainer[2], BorderLayout.EAST);
+        pnlSpelerKaartContainer[2].add(lblSpelerNaam[2], BorderLayout.EAST);
+        pnlSpelerKaartContainer[2].add(lpnlkaartContainer[1], BorderLayout.WEST);
+    }
+
+    public void vierdeSpelerContainerLayOut() {
+        super.add(pnlSpelerKaartContainer[3], BorderLayout.WEST);
+        pnlSpelerKaartContainer[3].add(lblSpelerNaam[3], BorderLayout.WEST);
+        pnlSpelerKaartContainer[3].add(lpnlkaartContainer[1], BorderLayout.EAST);
+    }
+
+    public void geklikteKaart() {
+
     }
 }

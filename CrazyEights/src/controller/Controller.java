@@ -133,25 +133,35 @@ public class Controller {
         }
     }
 
-    public Speler getSpelerAanBeurt() {
-        Speler speler = null;
+    /* BRAINSTORM OVER BEURT -> speelspel zeker fout
+
+    public int getSpelerAanBeurt() {
+        int spelerNr=0;
+        int i=0;
         for (Speler s : spelers) {
             if (s.getAanBeurt()) {
-                speler = s;
+                spelerNr = i;
             }
+            i++;
         }
-        return speler;
+        return spelerNr;
     }
 
     public void setSpelerAanBeurt (int spelerNr) {
         getSpelers().get(spelerNr).setAanBeurt(true);
     }
 
+
     public void speelSpel() {
         while (!eindeSpel()) {
-                 //setSpelerAanBeurt(INDEX VAN getSpelerAanBeurt());
+            if (getSpelerAanBeurt() == getSpelers().size()) {
+                setSpelerAanBeurt(0);
+            } else {
+                setSpelerAanBeurt(getSpelerAanBeurt()+1);
+            }
         }
-    }
+    }*/
+
 }
 
 

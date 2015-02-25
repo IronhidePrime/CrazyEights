@@ -25,6 +25,6 @@ public class Aflegstapel {
      * kaart die als laatste werd toegevoegd (kaart ligt vanboven en op deze kaart wordt voortgespeeld) opvragen
      */
     public Kaart getBovensteKaart() {
-        return kaarten.get(kaarten.size()-1);
+        return getKaarten().get(kaarten.size()-1);
     }
 }
