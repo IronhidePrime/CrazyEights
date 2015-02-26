@@ -29,6 +29,7 @@ public class StartUI extends JFrame {
 
     private Controller controller;
 
+
     public StartUI(){
         super("Crazy Eights v1.0");
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

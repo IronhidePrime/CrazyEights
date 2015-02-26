@@ -73,6 +73,10 @@ public class Controller {
         }
     }
 
+    public void speelKaart(int kaartIndex, int spelerIndex){
+        spelers.get(0).getKaarten().remove(kaartIndex);
+    }
+
     /**
      * START SPEL
      *  1. kaarten uitdelen
@@ -162,6 +166,13 @@ public class Controller {
         }
     }*/
 
+    public int getAantalKaartenSpeler(){
+        if(getAantalSpelers()==2){
+            return KAARTEN_2_SPELERS;
+        } else {
+            return KAARTEN_MEER_SPELERS;
+        }
+    }
 }
 
 
