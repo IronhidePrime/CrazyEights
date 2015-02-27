@@ -44,7 +44,7 @@ public class StartUI extends JFrame {
 
     public void maakComponenten(){
         lblTitel = new JLabel("Crazy Eights");
-        lblCrazyLogo = new JLabel("Logo");
+        lblCrazyLogo = new LogoLabel();
         lblAantalSpelers = new JLabel("Aantal spelers:");
 
         cboSpelers = new JComboBox();
@@ -77,8 +77,6 @@ public class StartUI extends JFrame {
          */
         JPanel pnlCenter = new JPanel();
         pnlCenter.setLayout(new GridLayout(1, 2, 30, 0));
-        lblCrazyLogo.setBackground(Color.WHITE);
-        lblCrazyLogo.setOpaque(true);
         pnlCenter.add(lblCrazyLogo);
 
         JPanel pnlSpelerContainer = new JPanel();
