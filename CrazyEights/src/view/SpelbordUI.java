@@ -17,13 +17,17 @@ import java.util.List;
 
 public class SpelbordUI extends JFrame {
     private Controller controller;
+
     private TrekStapelLabel lblTrekstapel;
     private AflegStapelLabel lblAflegstapel;
-    private SpelerLabel[] lblSpelersAfbeelding;
+
+    private SpelerLabelAfbeelding[] lblSpelersAfbeelding;
+
+    private JPanel pnlKaartContainer[];
     private JLayeredPane[] lpnlkaartContainer;
 
-    JPanel[] pnlSpelerKaartContainer;
-    JLabel[] lblSpelerNaam;
+    private JPanel[] pnlSpelerContainer;
+    private JLabel[] lblSpelerNaam;
 
     private List<KaartLabel> kaartenSpeler1;
     private List<KaartLabel> kaartenSpeler2;
@@ -33,7 +37,8 @@ public class SpelbordUI extends JFrame {
     private final int AANTAL_KAARTEN_2_SPELERS = 7;
     private final int AANTAL_KAARTEN_MEERDERE_SPELERS = 5;
 
-    private JPanel pnlKaartContainer[];
+    private int kaartBreedte = 70;
+
 
     public SpelbordUI(Controller controller) throws HeadlessException {
         super("Crazy Eights");
@@ -55,32 +60,24 @@ public class SpelbordUI extends JFrame {
         lblAflegstapel.setPreferredSize(new Dimension(100, 140));
         lblTrekstapel = new TrekStapelLabel();
         lblTrekstapel.setPreferredSize(new Dimension(100, 140));
-        lblSpelersAfbeelding = new SpelerLabel[controller.getAantalSpelers()];
-        for (int i = 0; i < controller.getAantalSpelers(); i++) {
-            lblSpelersAfbeelding[i] = new SpelerLabel();
-        }
 
-        lpnlkaartContainer = new JLayeredPane[controller.getAantalSpelers()];
-
-        pnlSpelerKaartContainer = new JPanel[controller.getAantalSpelers()];
         lblSpelerNaam = new JLabel[controller.getAantalSpelers()];
-        pnlKaartContainer = new JPanel[controller.getAantalSpelers()];
+        lblSpelersAfbeelding = new SpelerLabelAfbeelding[controller.getAantalSpelers()];
 
+        pnlSpelerContainer = new JPanel[controller.getAantalSpelers()];
+        pnlKaartContainer = new JPanel[controller.getAantalSpelers()];
+        lpnlkaartContainer = new JLayeredPane[controller.getAantalSpelers()];
 
         kaartenSpeler1 = new ArrayList<KaartLabel>();
         kaartenSpeler2 = new ArrayList<KaartLabel>();
         kaartenSpeler3 = new ArrayList<KaartLabel>();
         kaartenSpeler4 = new ArrayList<KaartLabel>();
         for (int i = 0; i < controller.getAantalKaartenSpeler(); i++) {
-            kaartenSpeler1.add(new KaartLabel(controller.getSpelerKaarten(0).get(i).getImageString(),controller));
-            kaartenSpeler2.add(new KaartLabel(controller.getSpelerKaarten(1).get(i).getImageString(),controller));
-            if (controller.getAantalSpelers() == 3){
                 kaartenSpeler1.add(new KaartLabel(controller.getSpelerKaarten(0).get(i).getImageString(),controller));
                 kaartenSpeler2.add(new KaartLabel(controller.getSpelerKaarten(1).get(i).getImageString(),controller));
+            if (controller.getAantalSpelers() == 3){
                 kaartenSpeler3.add(new KaartLabel(controller.getSpelerKaarten(2).get(i).getImageString(),controller));
             } else if(controller.getAantalSpelers() ==4){
-                kaartenSpeler1.add(new KaartLabel(controller.getSpelerKaarten(0).get(i).getImageString(),controller));
-                kaartenSpeler2.add(new KaartLabel(controller.getSpelerKaarten(1).get(i).getImageString(),controller));
                 kaartenSpeler3.add(new KaartLabel(controller.getSpelerKaarten(2).get(i).getImageString(),controller));
                 kaartenSpeler4.add(new KaartLabel(controller.getSpelerKaarten(3).get(i).getImageString(),controller));
             }
@@ -104,68 +101,88 @@ public class SpelbordUI extends JFrame {
         stapelContainer.add(aflegstapelContainer);
         super.add(stapelContainer, BorderLayout.CENTER);
 
-        /**
-         * x aantal containers aanmaken, 1 voor elke speler
+       /**
+         * 1. speler label aanmaken en naam van de ingegeven speler toevoegen
+         * 2. x aantal containers aanmaken, 1 voor elke speler
+         * 3. voor elke speler panel met zijn kaarten aanmaken
          */
         for (int i = 0; i < controller.getAantalSpelers(); i++) {
-            pnlSpelerKaartContainer[i] = new JPanel();
-            pnlSpelerKaartContainer[i].setLayout(new BorderLayout());
-            pnlSpelerKaartContainer[i].add(lblSpelersAfbeelding[i], BorderLayout.CENTER);
-            pnlSpelerKaartContainer[i].setPreferredSize(new Dimension(200, 200));
-            pnlSpelerKaartContainer[i].setBackground(Color.RED);
-            pnlSpelerKaartContainer[i].setOpaque(true);
-        }
-
-        /**
-         * speler label aanmaken en naam van de ingegeven speler toevoegen
-         */
-        for (int i = 0; i < controller.getAantalSpelers(); i++) {
+            //1
             lblSpelerNaam[i] = new JLabel();
             lblSpelerNaam[i].setText(controller.getSpelerNaam(i));
             lblSpelerNaam[i].setHorizontalAlignment(SwingConstants.CENTER);
+
+            lblSpelersAfbeelding[i] = new SpelerLabelAfbeelding();
+            lblSpelersAfbeelding[i].setPreferredSize(new Dimension(200,100));
+
+            //2
+            pnlSpelerContainer[i] = new JPanel();
+            pnlSpelerContainer[i].setLayout(new BorderLayout());
+            pnlSpelerContainer[i].add(lblSpelersAfbeelding[i], BorderLayout.CENTER);
+            pnlSpelerContainer[i].setBackground(Color.RED);
+            pnlSpelerContainer[i].setOpaque(true);
+
+            //3
+            lpnlkaartContainer[i] = new JLayeredPane();
+            lpnlkaartContainer[i].setPreferredSize(new Dimension(kaartBreedte*controller.getAantalKaartenSpeler(), 100));
+            pnlKaartContainer[i] = new JPanel();
+            pnlKaartContainer[i].add(lpnlkaartContainer[i]);
         }
 
         /**
          * gaat speler label op 1 kant plaatsen, elke speler label krijgt 7 kaart labels
          */
-        int kaartBreedte = 70;
         int minus = 40;
-
-        for (int i = 0; i < controller.getAantalSpelers(); i++) {
-            lpnlkaartContainer[i] = new JLayeredPane();
-            lpnlkaartContainer[i].setPreferredSize(new Dimension(kaartBreedte*controller.getAantalKaartenSpeler(), 100));
-            pnlKaartContainer[i] = new JPanel();
-            pnlKaartContainer[i].setLayout(new FlowLayout());
-            pnlKaartContainer[i].add(lpnlkaartContainer[i]);
-        }
 
         for (int j = 0; j < controller.getAantalKaartenSpeler(); j++) {
             kaartenSpeler1.get(j).setBounds(minus, 0, kaartBreedte, 100);
             kaartenSpeler2.get(j).setBounds(minus, 0, kaartBreedte, 100);
-            minus += 50;
-            if (pnlSpelerKaartContainer.length == 2) {
-                lpnlkaartContainer[0].add(kaartenSpeler1.get(j), j);
-                lpnlkaartContainer[1].add(kaartenSpeler2.get(j), j);
+            minus += 40;
+            lpnlkaartContainer[0].add(kaartenSpeler1.get(kaartenSpeler1.size() - j - 1));
+            lpnlkaartContainer[1].add(kaartenSpeler2.get(kaartenSpeler2.size() - j - 1));
+
+            if (pnlSpelerContainer.length == 2) {
                 tweeSpelersContainerLayOut();
-            } else if (pnlSpelerKaartContainer.length == 3) {
+            } else if (pnlSpelerContainer.length == 3) {
                 kaartenSpeler3.get(j).setBounds(minus, 0, kaartBreedte, 100);
-                lpnlkaartContainer[0].add(kaartenSpeler1.get(j), 0);
-                lpnlkaartContainer[1].add(kaartenSpeler2.get(j), 0);
-                lpnlkaartContainer[2].add(kaartenSpeler3.get(j), 0);
+                lpnlkaartContainer[2].add(kaartenSpeler3.get(kaartenSpeler3.size() - j - 1));
                 tweeSpelersContainerLayOut();
                 derdeSpelerContainerLayOut();
             } else {
                 kaartenSpeler3.get(j).setBounds(minus, 0, kaartBreedte, 100);
                 kaartenSpeler4.get(j).setBounds(minus, 0, kaartBreedte, 100);
-                lpnlkaartContainer[0].add(kaartenSpeler1.get(j), 0);
-                lpnlkaartContainer[1].add(kaartenSpeler2.get(j), 0);
-                lpnlkaartContainer[2].add(kaartenSpeler3.get(j), 0);
-                lpnlkaartContainer[3].add(kaartenSpeler4.get(j), 0);
+                lpnlkaartContainer[2].add(kaartenSpeler3.get(kaartenSpeler3.size() - j - 1));
+                lpnlkaartContainer[3].add(kaartenSpeler4.get(kaartenSpeler4.size() - j - 1));
                 tweeSpelersContainerLayOut();
                 derdeSpelerContainerLayOut();
                 vierdeSpelerContainerLayOut();
             }
         }
+    }
+
+    /**
+     * containers worden toegevoegd afhankelijk van het aantal spelers op de aangegeven positie
+     */
+    public void tweeSpelersContainerLayOut() {
+        super.add(pnlSpelerContainer[0], BorderLayout.SOUTH);
+        pnlSpelerContainer[0].add(lblSpelerNaam[0], BorderLayout.SOUTH);
+        pnlSpelerContainer[0].add(pnlKaartContainer[0], BorderLayout.NORTH);
+
+        super.add(pnlSpelerContainer[1], BorderLayout.NORTH);
+        pnlSpelerContainer[1].add(lblSpelerNaam[1], BorderLayout.NORTH);
+        pnlSpelerContainer[1].add(pnlKaartContainer[1], BorderLayout.SOUTH);
+    }
+
+    public void derdeSpelerContainerLayOut() {
+        super.add(pnlSpelerContainer[2], BorderLayout.EAST);
+        pnlSpelerContainer[2].add(lblSpelerNaam[2], BorderLayout.EAST);
+        pnlSpelerContainer[2].add(pnlKaartContainer[2], BorderLayout.WEST);
+    }
+
+    public void vierdeSpelerContainerLayOut() {
+        super.add(pnlSpelerContainer[3], BorderLayout.WEST);
+        pnlSpelerContainer[3].add(lblSpelerNaam[3], BorderLayout.WEST);
+        pnlSpelerContainer[3].add(lpnlkaartContainer[3], BorderLayout.EAST);
     }
 
     public void behandelEvents() {
@@ -224,31 +241,6 @@ public class SpelbordUI extends JFrame {
                 }
             });
         }
-    }
-
-    /**
-     * containers worden toegevoegd afhankelijk van het aantal spelers op de aangegeven positie
-     */
-    public void tweeSpelersContainerLayOut() {
-        super.add(pnlSpelerKaartContainer[0], BorderLayout.SOUTH);
-        pnlSpelerKaartContainer[0].add(lblSpelerNaam[0], BorderLayout.SOUTH);
-        pnlSpelerKaartContainer[0].add(pnlKaartContainer[0], BorderLayout.NORTH);
-
-        super.add(pnlSpelerKaartContainer[1], BorderLayout.NORTH);
-        pnlSpelerKaartContainer[1].add(lblSpelerNaam[1], BorderLayout.NORTH);
-        pnlSpelerKaartContainer[1].add(pnlKaartContainer[1], BorderLayout.SOUTH);
-    }
-
-    public void derdeSpelerContainerLayOut() {
-        super.add(pnlSpelerKaartContainer[2], BorderLayout.EAST);
-        pnlSpelerKaartContainer[2].add(lblSpelerNaam[2], BorderLayout.EAST);
-        pnlSpelerKaartContainer[2].add(pnlKaartContainer[2], BorderLayout.WEST);
-    }
-
-    public void vierdeSpelerContainerLayOut() {
-        super.add(pnlSpelerKaartContainer[3], BorderLayout.WEST);
-        pnlSpelerKaartContainer[3].add(lblSpelerNaam[3], BorderLayout.WEST);
-        pnlSpelerKaartContainer[3].add(lpnlkaartContainer[3], BorderLayout.EAST);
     }
 
     public void geklikteKaart() {
