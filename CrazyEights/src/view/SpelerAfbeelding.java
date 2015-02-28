@@ -9,6 +9,7 @@ public class SpelerAfbeelding extends JLabel {
         Image image = imageIcon.getImage();
         super.paintComponent(g);
         int width = (this.getWidth() - image.getWidth(null)) / 2;
-        g.drawImage(image, width, 0, null);
+        int height = (this.getHeight() - image.getHeight(null)) / 2;
+        g.drawImage(image, width, height, null);
     }
 }
