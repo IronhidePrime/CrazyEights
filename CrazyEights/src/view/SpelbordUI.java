@@ -21,7 +21,7 @@ public class SpelbordUI extends JFrame {
     private TrekStapelLabel lblTrekstapel;
     private AflegStapelLabel lblAflegstapel;
 
-    private SpelerLabelAfbeelding[] lblSpelersAfbeelding;
+    private SpelerAfbeelding[] lblSpelersAfbeelding;
 
     private JPanel pnlKaartContainer[];
     private JLayeredPane[] lpnlkaartContainer;
@@ -62,7 +62,7 @@ public class SpelbordUI extends JFrame {
         lblTrekstapel.setPreferredSize(new Dimension(100, 140));
 
         lblSpelerNaam = new JLabel[controller.getAantalSpelers()];
-        lblSpelersAfbeelding = new SpelerLabelAfbeelding[controller.getAantalSpelers()];
+        lblSpelersAfbeelding = new SpelerAfbeelding[controller.getAantalSpelers()];
 
         pnlSpelerContainer = new JPanel[controller.getAantalSpelers()];
         pnlKaartContainer = new JPanel[controller.getAantalSpelers()];
@@ -112,7 +112,7 @@ public class SpelbordUI extends JFrame {
             lblSpelerNaam[i].setText(controller.getSpelerNaam(i));
             lblSpelerNaam[i].setHorizontalAlignment(SwingConstants.CENTER);
 
-            lblSpelersAfbeelding[i] = new SpelerLabelAfbeelding();
+            lblSpelersAfbeelding[i] = new SpelerAfbeelding();
             lblSpelersAfbeelding[i].setPreferredSize(new Dimension(200,100));
 
             //2
