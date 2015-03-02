@@ -25,8 +25,4 @@ public class KaartLabel extends JLabel{
     public String getImageString() {
         return imageString;
     }
-
-    public void setImageString(String imageString) {
-        this.imageString = imageString;
-    }
 }

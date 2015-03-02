@@ -73,10 +73,6 @@ public class Controller {
         }
     }
 
-    public void speelKaart(int kaartIndex, int spelerIndex){
-        spelers.get(0).getKaarten().remove(kaartIndex);
-    }
-
     /**
      * START SPEL
      *  1. kaarten uitdelen

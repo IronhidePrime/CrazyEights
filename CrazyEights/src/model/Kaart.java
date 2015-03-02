@@ -4,13 +4,14 @@ public class Kaart {
     private int waarde;
     private boolean isBeeldKant;
     private Kleur kleur;
-    private String imageString;
+    private String horizontaleImageString;
+    private String verticaleImageString;
 
-    public Kaart(int waarde,Kleur kleur, String imageString){
+    public Kaart(int waarde,Kleur kleur, String HorizontaleImageString, String VerticaleImageString){
         this.waarde = waarde;
         this.kleur = kleur;
-        this.imageString = imageString;
-        this.isBeeldKant = false;
+        this.horizontaleImageString = HorizontaleImageString;
+        this.verticaleImageString = VerticaleImageString;
     }
 
     public int getWaarde() {
@@ -25,10 +26,13 @@ public class Kaart {
         return kleur;
     }
 
-    public String getImageString() {
-        return imageString;
+    public String getHorizontaleImageString() {
+        return horizontaleImageString;
     }
 
+    public String getVerticaleImageString() {
+        return verticaleImageString;
+    }
 
     @Override
     public String toString() {
