@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -68,7 +69,7 @@ public class SpelbordUI extends JFrame {
         pnlKaartContainer = new JPanel[controller.getAantalSpelers()];
         lpnlkaartContainer = new JLayeredPane[controller.getAantalSpelers()];
 
-        kaartenSpeler1 = new ArrayList<KaartLabel>();
+        kaartenSpeler1 = new LinkedList<>();
         kaartenSpeler2 = new ArrayList<KaartLabel>();
         kaartenSpeler3 = new ArrayList<KaartLabel>();
         kaartenSpeler4 = new ArrayList<KaartLabel>();
@@ -152,8 +153,8 @@ public class SpelbordUI extends JFrame {
             kaartenSpeler1.get(j).setBounds(minus, 0, kaartBreedte, 100);
             kaartenSpeler2.get(j).setBounds(minus, 0, kaartBreedte, 100);
             minus += 40;
-            lpnlkaartContainer[0].add(kaartenSpeler1.get(kaartenSpeler1.size() - j - 1));
-            lpnlkaartContainer[1].add(kaartenSpeler2.get(kaartenSpeler2.size() - j - 1));
+            lpnlkaartContainer[0].add(kaartenSpeler1.get(j), j);
+            lpnlkaartContainer[1].add(kaartenSpeler2.get(j), new Integer(j));
 
 
             if (pnlSpelerContainer.length == 2) {
@@ -230,9 +231,21 @@ public class SpelbordUI extends JFrame {
                     String imageStringGeklikteKaart = lblGeklikteKaart.getImageString(); //image string van de geklikte kaart label in een variable steken
                     Kaart geklikteKaart = controller.getSpelerKaarten(0).get(finalI);
                     if (controller.speelKaartMogelijk(geklikteKaart)) {
-                        lpnlkaartContainer[0].remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
-                        lblAflegstapel.setImageString(imageStringGeklikteKaart); // image string van de aflgegstapel vervangen door de image string van de geklikte kaart
+                        kaartenSpeler1.remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
+                        lpnlkaartContainer[0].removeAll();
+
+                        int minus = 40;
+                        for (KaartLabel k : kaartenSpeler1) {
+                            k.setBounds(minus, 0, kaartBreedte, 100);
+                            minus+=40;
+                            lpnlkaartContainer[0].add(k);
+                        }
+                        revalidate();
+                        repaint();
+
                         controller.speelKaart(geklikteKaart, 0);
+                        lblAflegstapel.setImageString(imageStringGeklikteKaart); // image string van de aflgegstapel vervangen door de image string van de geklikte kaart
+
                         controller.getSpelerKaarten(0).add(finalI, null);//leeg object toevoegen aan de list van kaart objecten van de speler om te voorkomen dat het laatste kaart object in de list buiten de index ligt
                         revalidate();
                         repaint();

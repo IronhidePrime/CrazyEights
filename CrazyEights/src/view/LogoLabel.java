@@ -3,9 +3,6 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Created by sander on 27/02/2015.
- */
 public class LogoLabel extends JLabel {
     @Override
     protected void paintComponent(Graphics g) {
