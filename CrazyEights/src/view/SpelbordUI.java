@@ -211,7 +211,6 @@ public class SpelbordUI extends JFrame {
                 super.mouseReleased(e);
                 Kaart bovensteKaart = controller.getSpelbord().getTrekstapel().neemKaart();
                 String imageString = bovensteKaart.getHorizontaleImageString();
-
                 KaartLabel nieuweKaart = new KaartLabel(imageString, controller);
                 nieuweKaart.setBounds(50,50,kaartBreedte,100);
                 kaartenSpeler0.add(nieuweKaart);
@@ -223,12 +222,50 @@ public class SpelbordUI extends JFrame {
             kaartLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
+                    //hierin gaat komen het index getal van de kaart die uit kaartobjecten moeten worden verwijderd
+                    int index = 0;
+                    //
                     super.mouseReleased(e);
-                    kaartenSpeler0.remove(kaartLabel);
                     String imageString = kaartLabel.getImageString();
-                    lpnlkaartContainer[0].remove(kaartLabel);
-                    lblAflegstapel.setImageString(imageString);
+                    //DEBUG//
+                    System.out.println("image string clickedCard label is" + imageString);
+                    //
 
+                    //deze loop gaat de imgstring van het geklikte kaartlabel vergelijken met de image string, als het dezelfde is dan hebben we de index van de kaart die we moeten verwijderen
+                    for (int i=0; i<controller.getSpelerKaarten(0).size();i++){
+                        if (controller.getSpelerKaarten(0).get(i).getHorizontaleImageString().equals(imageString)){
+                            index = i;
+                            //DEBUG//
+                            System.out.println("imageString cardObject is " + controller.getSpelerKaarten(0).get(i).getHorizontaleImageString());
+                            System.out.println("index is " + index);
+                            //
+                            break;
+                        }
+                    }
+
+                    //DEBUG//
+                    System.out.println("kaart die check krijgt van methode speelKaartMogelijk() is" + controller.getSpelerKaarten(0).get(index).getHorizontaleImageString());
+                    System.out.println("deze kaart wordt vergeleken met " + controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
+                    //
+                    if (controller.speelKaartMogelijk(controller.getSpelerKaarten(0).get(index))) {
+                        kaartenSpeler0.remove(kaartLabel);
+                        lpnlkaartContainer[0].remove(kaartLabel);
+                        controller.speelKaart(controller.getSpelerKaarten(0).get(index),0);
+                        lpnlkaartContainer[0].removeAll();
+                        lblAflegstapel.setImageString(imageString);
+
+                        int minus = 40;
+                        for (KaartLabel k : kaartenSpeler0) {
+                            k.setBounds(minus, 0, kaartBreedte, 100);
+                            minus += 40;
+                            lpnlkaartContainer[0].add(k);
+                        }
+                        //DEBUG//
+                        System.out.println("size of cardLabels after removal of a card" + kaartenSpeler0.size());
+                        System.out.println("size of cardObjects after removal of a card" + controller.getSpelerKaarten(0).size());
+                        System.out.println("de aflegstapel heeft na het spelen van een kaart" + controller.getSpelbord().getAflegstapel().getKaarten().size());
+                        //
+                    }
                     revalidate();
                     repaint();
                 }
