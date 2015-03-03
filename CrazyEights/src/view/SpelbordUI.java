@@ -142,11 +142,12 @@ public class SpelbordUI extends JFrame {
         }
 
         if (controller.getAantalSpelers() >= 3) {
-            lpnlkaartContainer[2].setPreferredSize(new Dimension(100,kaartOverlap  * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte));
+            lpnlkaartContainer[2].setPreferredSize(new Dimension(100, kaartOverlap * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte));
             derdeSpelerContainerLayOut();
 
         } else if (controller.getAantalSpelers() == 4) {
-            lpnlkaartContainer[3].setPreferredSize(new Dimension(100, 350));
+            lpnlkaartContainer[3].setPreferredSize(new Dimension(100, kaartOverlap * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte));
+            vierdeSpelerContainerLayOut();
         }
 
         /**
@@ -160,17 +161,14 @@ public class SpelbordUI extends JFrame {
             kaartenSpeler1.get(j).setBounds(kaartOverlap, 0, kaartBreedte, 100);
             lpnlkaartContainer[0].add(kaartenSpeler0.get(j), new Integer(j));
             lpnlkaartContainer[1].add(kaartenSpeler1.get(j), new Integer(j));
-            kaartOverlap += 40;
-
             if (pnlSpelerContainer.length >= 3) {
                 kaartenSpeler2.get(j).setBounds(0, kaartOverlap, 100, kaartBreedte);
                 lpnlkaartContainer[2].add(kaartenSpeler2.get(j), new Integer(j));
-                derdeSpelerContainerLayOut();
             } else if (pnlSpelerContainer.length == 4) {
                 kaartenSpeler3.get(j).setBounds(0, kaartOverlap, 100, kaartBreedte);
                 lpnlkaartContainer[3].add(kaartenSpeler3.get(j), new Integer(j));
-                vierdeSpelerContainerLayOut();
             }
+            kaartOverlap += 40;
         }
 
     }
@@ -207,6 +205,37 @@ public class SpelbordUI extends JFrame {
         /**
          * wanneer men op de trekstapel klikt krijgt de speler een nieuwe kaart
          */
+        lblTrekstapel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                Kaart bovensteKaart = controller.getSpelbord().getTrekstapel().neemKaart();
+                String imageString = bovensteKaart.getHorizontaleImageString();
+
+                KaartLabel nieuweKaart = new KaartLabel(imageString, controller);
+                nieuweKaart.setBounds(50,50,kaartBreedte,100);
+                kaartenSpeler0.add(nieuweKaart);
+                lpnlkaartContainer[0].add(nieuweKaart);
+            }
+        });
+
+        for (KaartLabel kaartLabel : kaartenSpeler0) {
+            kaartLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    super.mouseReleased(e);
+                    kaartenSpeler0.remove(kaartLabel);
+                    String imageString = kaartLabel.getImageString();
+                    lpnlkaartContainer[0].remove(kaartLabel);
+                    lblAflegstapel.setImageString(imageString);
+
+                    revalidate();
+                    repaint();
+                }
+            });
+        }
+
+        /*
         lblTrekstapel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -287,7 +316,7 @@ public class SpelbordUI extends JFrame {
                 }
             });
 
-            if (controller.getAantalSpelers() >= 3) {
+            if (controller.getAantalSpelers() == 3) {
                 kaartenSpeler2.get(i).addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseReleased(MouseEvent e) {
@@ -318,7 +347,7 @@ public class SpelbordUI extends JFrame {
                 });
             }
 
-            if (controller.getAantalSpelers() == 4) {
+            if (controller.getAantalSpelers() >= 4) {
                 kaartenSpeler3.get(i).addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseReleased(MouseEvent e) {
@@ -348,6 +377,6 @@ public class SpelbordUI extends JFrame {
                     }
                 });
             }
-        }
+        }*/
     }
 }
