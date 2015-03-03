@@ -261,11 +261,11 @@ public class SpelbordUI extends JFrame {
                     System.out.println("deze kaart wordt vergeleken met " + controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
                     //
                     if (controller.speelKaartMogelijk(spelerKaarten.get(index))) {
+                        String horizontaleImageString = spelerKaarten.get(index).getHorizontaleImageString();
                         spelerKaartLabels.remove(kaartLabel);
                         lpnlkaartContainer[lpnlContainer].remove(kaartLabel);
                         controller.speelKaart(spelerKaarten.get(index),0);
                         lpnlkaartContainer[lpnlContainer].removeAll();
-                        lblAflegstapel.setImageString(imageString);
 
 
                         if (lpnlContainer == 0 || lpnlContainer == 1){
@@ -274,6 +274,7 @@ public class SpelbordUI extends JFrame {
                                 k.setBounds(minus, 0, kaartBreedte, 100);
                                 minus += 40;
                                 lpnlkaartContainer[lpnlContainer].add(k);
+                                lblAflegstapel.setImageString(imageString);
                             }
                         } else if (lpnlContainer == 2 || lpnlContainer == 3){
                             int minus = 40;
@@ -281,6 +282,7 @@ public class SpelbordUI extends JFrame {
                                 k.setBounds(0, minus, 100, kaartBreedte);
                                 minus += 40;
                                 lpnlkaartContainer[lpnlContainer].add(k);
+                                lblAflegstapel.setImageString(horizontaleImageString);
                             }
                         }
 
