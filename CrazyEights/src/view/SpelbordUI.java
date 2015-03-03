@@ -11,10 +11,6 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-
-//TODO: REFACTOR!
-//TODO: rekening houden met resizen...
-
 public class SpelbordUI extends JFrame {
     private Controller controller;
 
@@ -29,16 +25,13 @@ public class SpelbordUI extends JFrame {
     private JPanel[] pnlSpelerContainer;
     private JLabel[] lblSpelerNaam;
 
+    private List<KaartLabel> kaartenSpeler0;
     private List<KaartLabel> kaartenSpeler1;
     private List<KaartLabel> kaartenSpeler2;
     private List<KaartLabel> kaartenSpeler3;
-    private List<KaartLabel> kaartenSpeler4;
-
-    private final int AANTAL_KAARTEN_2_SPELERS = 7;
-    private final int AANTAL_KAARTEN_MEERDERE_SPELERS = 5;
 
     private int kaartBreedte = 70;
-    private int kaartBreedteVerticaal = 100;
+    private int kaartOverlap = 40;
 
     public SpelbordUI(Controller controller) throws HeadlessException {
         super("Crazy Eights");
@@ -56,38 +49,53 @@ public class SpelbordUI extends JFrame {
     }
 
     public void maakComponenten() {
-        lblAflegstapel = new AflegStapelLabel(controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
+        /**
+         * bovenste kaart van de aflegstapel tonen
+         */
+        Kaart aflegKaart = controller.getSpelbord().getAflegstapel().getBovensteKaart();
+        lblAflegstapel = new AflegStapelLabel(aflegKaart.getHorizontaleImageString());
         lblAflegstapel.setPreferredSize(new Dimension(100, 140));
+
+        /**
+         * trekstapel omgedraaid label
+         */
         lblTrekstapel = new TrekStapelLabel();
         lblTrekstapel.setPreferredSize(new Dimension(100, 140));
 
         lblSpelerNaam = new JLabel[controller.getAantalSpelers()];
         lblSpelersAfbeelding = new SpelerAfbeelding[controller.getAantalSpelers()];
 
+        /**
+         * spelerContainer met een kaartContainer waarin een LayeredPane zit om kaarten over elkaar te tekenen
+         */
         pnlSpelerContainer = new JPanel[controller.getAantalSpelers()];
         pnlKaartContainer = new JPanel[controller.getAantalSpelers()];
         lpnlkaartContainer = new JLayeredPane[controller.getAantalSpelers()];
 
+        /**
+         * voor elke speler een lijst met JLabels voor zijn kaarten
+         * de lijsten opvullen adhv het aantal spelers
+         */
+        kaartenSpeler0 = new LinkedList<>();
         kaartenSpeler1 = new LinkedList<>();
         kaartenSpeler2 = new LinkedList<>();
         kaartenSpeler3 = new LinkedList<>();
-        kaartenSpeler4 = new LinkedList<>();
         for (int i = 0; i < controller.getAantalKaartenSpeler(); i++) {
-            kaartenSpeler1.add(new KaartLabel(controller.getSpelerKaarten(0).get(i).getHorizontaleImageString(), controller));
-            kaartenSpeler2.add(new KaartLabel(controller.getSpelerKaarten(1).get(i).getHorizontaleImageString(), controller));
-            if (controller.getAantalSpelers() == 3) {
-                kaartenSpeler3.add(new KaartLabel(controller.getSpelerKaarten(2).get(i).getVerticaleImageString(), controller));
+            kaartenSpeler0.add(new KaartLabel(controller.getSpelerKaarten(0).get(i).getHorizontaleImageString(), controller));
+            kaartenSpeler1.add(new KaartLabel(controller.getSpelerKaarten(1).get(i).getHorizontaleImageString(), controller));
+            if (controller.getAantalSpelers() >= 3) {
+                kaartenSpeler2.add(new KaartLabel(controller.getSpelerKaarten(2).get(i).getVerticaleImageString(), controller));
             } else if (controller.getAantalSpelers() == 4) {
-                kaartenSpeler3.add(new KaartLabel(controller.getSpelerKaarten(2).get(i).getVerticaleImageString(), controller));
-                kaartenSpeler4.add(new KaartLabel(controller.getSpelerKaarten(3).get(i).getVerticaleImageString(), controller));
+                kaartenSpeler3.add(new KaartLabel(controller.getSpelerKaarten(3).get(i).getVerticaleImageString(), controller));
             }
         }
     }
 
     public void maakLayout() {
         /**
-         * Container voor de 2 stapels aanmaken
-         * Aftrek + legstapel toevoegen
+         * container voor de 2 stapels (trek- & aflegstapel) aanmaken
+         * aftrek + legstapel toevoegen
+         * in het midden van ons frame plaatsen
          */
         JPanel stapelContainer = new JPanel();
         stapelContainer.setLayout(new GridBagLayout());
@@ -104,7 +112,8 @@ public class SpelbordUI extends JFrame {
         /**
          * 1. speler label aanmaken en naam van de ingegeven speler toevoegen
          * 2. x aantal containers aanmaken, 1 voor elke speler -> speler afbeelding in het midden plaatsen
-         * 3. voor elke speler panel met zijn kaarten aanmaken
+         * 3. voor elke speler panel met zijn kaarten aanmaken (layerdPane in Panel steken)
+         *    voor 3 & 4 spelers (verticaal) is de preferredSize van de layeredPane verschillend van speler 1 & 2 (horizontaal)
          */
         for (int i = 0; i < controller.getAantalSpelers(); i++) {
             //1
@@ -122,49 +131,48 @@ public class SpelbordUI extends JFrame {
 
             //3
             lpnlkaartContainer[i] = new JLayeredPane();
-            lpnlkaartContainer[i].setPreferredSize(new Dimension(kaartBreedte * controller.getAantalKaartenSpeler() - 80, 100));
+            lpnlkaartContainer[i].setPreferredSize(new Dimension(kaartOverlap  * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte, 100));
             pnlKaartContainer[i] = new JPanel();
-            //lpnlkaartContainer[i].setBackground(Color.BLUE);
+            lpnlkaartContainer[i].setBackground(Color.BLUE);
             lpnlkaartContainer[i].setOpaque(true);
             pnlKaartContainer[i].add(lpnlkaartContainer[i]);
         }
+        if (controller.getAantalSpelers() >= 2) {
+            tweeSpelersContainerLayOut();
+        }
 
-        if (controller.getAantalSpelers() == 3) {
-            lpnlkaartContainer[2].setPreferredSize(new Dimension(100, 350));
+        if (controller.getAantalSpelers() >= 3) {
+            lpnlkaartContainer[2].setPreferredSize(new Dimension(100,kaartOverlap  * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte));
+            derdeSpelerContainerLayOut();
 
         } else if (controller.getAantalSpelers() == 4) {
-            lpnlkaartContainer[2].setPreferredSize(new Dimension(100, 350));
             lpnlkaartContainer[3].setPreferredSize(new Dimension(100, 350));
         }
 
         /**
-         * gaat speler label op 1 kant plaatsen, elke speler label krijgt 7 kaart labels
+         * elke speler zijn kaartenlijst opvullen met JLabels met een image van zijn overeenkomstige kaarten
+         * aantal kaarten per speler hangt af van het aantal spelers (2 spelers -> 7 kaarten, 3 of 4 spelers -> 5 kaarten)
          */
-        int minus = 40;
 
+        kaartOverlap = 0;
         for (int j = 0; j < controller.getAantalKaartenSpeler(); j++) {
-            kaartenSpeler1.get(j).setBounds(minus, 0, kaartBreedte, 100);
-            kaartenSpeler2.get(j).setBounds(minus, 0, kaartBreedte, 100);
-            minus += 40;
-            lpnlkaartContainer[0].add(kaartenSpeler1.get(j), new Integer(j));
-            lpnlkaartContainer[1].add(kaartenSpeler2.get(j), new Integer(j));
-            if (pnlSpelerContainer.length == 2) {
-                tweeSpelersContainerLayOut();
-            } else if (pnlSpelerContainer.length == 3) {
-                kaartenSpeler3.get(j).setBounds(0, minus, 100, kaartBreedte);
-                lpnlkaartContainer[2].add(kaartenSpeler3.get(j), new Integer(j));
-                tweeSpelersContainerLayOut();
+            kaartenSpeler0.get(j).setBounds(kaartOverlap, 0, kaartBreedte, 100);
+            kaartenSpeler1.get(j).setBounds(kaartOverlap, 0, kaartBreedte, 100);
+            lpnlkaartContainer[0].add(kaartenSpeler0.get(j), new Integer(j));
+            lpnlkaartContainer[1].add(kaartenSpeler1.get(j), new Integer(j));
+            kaartOverlap += 40;
+
+            if (pnlSpelerContainer.length >= 3) {
+                kaartenSpeler2.get(j).setBounds(0, kaartOverlap, 100, kaartBreedte);
+                lpnlkaartContainer[2].add(kaartenSpeler2.get(j), new Integer(j));
                 derdeSpelerContainerLayOut();
-            } else {
-                kaartenSpeler3.get(j).setBounds(0, minus, 100, kaartBreedte);
-                kaartenSpeler4.get(j).setBounds(0, minus, 100, kaartBreedte);
-                lpnlkaartContainer[2].add(kaartenSpeler3.get(j), new Integer(j));
-                lpnlkaartContainer[3].add(kaartenSpeler4.get(j), new Integer(j));
-                tweeSpelersContainerLayOut();
-                derdeSpelerContainerLayOut();
+            } else if (pnlSpelerContainer.length == 4) {
+                kaartenSpeler3.get(j).setBounds(0, kaartOverlap, 100, kaartBreedte);
+                lpnlkaartContainer[3].add(kaartenSpeler3.get(j), new Integer(j));
                 vierdeSpelerContainerLayOut();
             }
         }
+
     }
 
     /**
@@ -199,40 +207,47 @@ public class SpelbordUI extends JFrame {
         /**
          * wanneer men op de trekstapel klikt krijgt de speler een nieuwe kaart
          */
-        /*lblTrekstapel.addMouseListener(new MouseAdapter() {
+        lblTrekstapel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
                 Kaart nieuweKaart = controller.getSpelbord().getTrekstapel().neemKaart();
-                //TODO: werkt niet omdat de kaart niet op de juiste plaats wordt getekend
-                lpnlkaartContainer[0].add(new KaartLabel(nieuweKaart.getHorizontaleImageString(), controller));
+                KaartLabel nieuwLabel = new KaartLabel(nieuweKaart.getHorizontaleImageString(), controller);
+                kaartenSpeler0.add(nieuwLabel);
+                int minus = 40;
+                for (KaartLabel k : kaartenSpeler0) {
+                    k.setBounds(minus, 0, kaartBreedte, 100);
+                    minus += 40;
+                    lpnlkaartContainer[0].add(k);
+                }
+                lpnlkaartContainer[0].setPreferredSize(new Dimension(kaartBreedte * kaartenSpeler0.size() - 80, 100));
+                controller.getSpelers().get(0).voegKaartToe(nieuweKaart);
                 revalidate();
                 repaint();
-                controller.getSpelers().get(0).voegKaartToe(nieuweKaart);
             }
-        });*/
+        });
 
 
         for (int i = 0; i < controller.getAantalKaartenSpeler(); i++) {
             final int finalI = i;
 
-            kaartenSpeler1.get(i).addMouseListener(new MouseAdapter() {
+            kaartenSpeler0.get(i).addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     super.mouseReleased(e);
-                    KaartLabel lblGeklikteKaart = kaartenSpeler1.get(finalI); //kaart label van de geklikte kaart in variable steken
+                    KaartLabel lblGeklikteKaart = kaartenSpeler0.get(finalI); //kaart label van de geklikte kaart in variable steken
                     Kaart geklikteKaart = controller.getSpelerKaarten(0).get(finalI);
                     String imageStringGeklikteKaart = geklikteKaart.getHorizontaleImageString();
                     if (controller.speelKaartMogelijk(geklikteKaart)) {
-                        kaartenSpeler1.remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
+                        kaartenSpeler0.remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
                         lpnlkaartContainer[0].removeAll();
                         int minus = 40;
-                        for (KaartLabel k : kaartenSpeler1) {
+                        for (KaartLabel k : kaartenSpeler0) {
                             k.setBounds(minus, 0, kaartBreedte, 100);
                             minus += 40;
                             lpnlkaartContainer[0].add(k);
                         }
-                        lpnlkaartContainer[0].setPreferredSize(new Dimension(kaartBreedte * kaartenSpeler1.size() - 80, 100));
+                        lpnlkaartContainer[0].setPreferredSize(new Dimension(kaartBreedte * kaartenSpeler0.size() - 80, 100));
                         revalidate();
                         repaint();
 
@@ -244,23 +259,23 @@ public class SpelbordUI extends JFrame {
                 }
             });
 
-            kaartenSpeler2.get(i).addMouseListener(new MouseAdapter() {
+            kaartenSpeler1.get(i).addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     super.mouseReleased(e);
-                    KaartLabel lblGeklikteKaart = kaartenSpeler2.get(finalI); //kaart label van de geklikte kaart in variable steken
+                    KaartLabel lblGeklikteKaart = kaartenSpeler1.get(finalI); //kaart label van de geklikte kaart in variable steken
                     String imageStringGeklikteKaart = lblGeklikteKaart.getImageString(); //image string van de geklikte kaart label in een variable steken
                     Kaart geklikteKaart = controller.getSpelerKaarten(1).get(finalI);
                     if (controller.speelKaartMogelijk(geklikteKaart)) {
-                        kaartenSpeler2.remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
+                        kaartenSpeler1.remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
                         lpnlkaartContainer[1].removeAll();
                         int minus = 40;
-                        for (KaartLabel k : kaartenSpeler2) {
+                        for (KaartLabel k : kaartenSpeler1) {
                             k.setBounds(minus, 0, 100, kaartBreedte);
                             minus += 40;
                             lpnlkaartContainer[1].add(k);
                         }
-                        lpnlkaartContainer[1].setPreferredSize(new Dimension(kaartBreedte * kaartenSpeler2.size() - 80, 100));
+                        lpnlkaartContainer[1].setPreferredSize(new Dimension(kaartBreedte * kaartenSpeler1.size() - 80, 100));
                         revalidate();
                         repaint();
 
@@ -272,25 +287,25 @@ public class SpelbordUI extends JFrame {
                 }
             });
 
-            if (controller.getAantalSpelers() >= 3 ) {
-                kaartenSpeler3.get(i).addMouseListener(new MouseAdapter() {
+            if (controller.getAantalSpelers() >= 3) {
+                kaartenSpeler2.get(i).addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseReleased(MouseEvent e) {
                         super.mouseReleased(e);
-                        KaartLabel lblGeklikteKaart = kaartenSpeler3.get(finalI); //kaart label van de geklikte kaart in variable steken
+                        KaartLabel lblGeklikteKaart = kaartenSpeler2.get(finalI); //kaart label van de geklikte kaart in variable steken
                         //image string van de geklikte kaart label in een variable steken
                         Kaart geklikteKaart = controller.getSpelerKaarten(2).get(finalI);
                         String imageStringGeklikteKaart = geklikteKaart.getHorizontaleImageString();
                         if (controller.speelKaartMogelijk(geklikteKaart)) {
-                            kaartenSpeler3.remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
+                            kaartenSpeler2.remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
                             lpnlkaartContainer[2].removeAll();
                             int minus = 40;
-                            for (KaartLabel k : kaartenSpeler3) {
+                            for (KaartLabel k : kaartenSpeler2) {
                                 k.setBounds(minus, 0, kaartBreedte, 100);
                                 minus += 40;
                                 lpnlkaartContainer[2].add(k);
                             }
-                            lpnlkaartContainer[2].setPreferredSize(new Dimension(kaartBreedte * kaartenSpeler3.size() - 80, 100));
+                            lpnlkaartContainer[2].setPreferredSize(new Dimension(kaartBreedte * kaartenSpeler2.size() - 80, 100));
                             revalidate();
                             repaint();
 
@@ -303,25 +318,25 @@ public class SpelbordUI extends JFrame {
                 });
             }
 
-            if (controller.getAantalSpelers() == 4 ) {
-                kaartenSpeler4.get(i).addMouseListener(new MouseAdapter() {
+            if (controller.getAantalSpelers() == 4) {
+                kaartenSpeler3.get(i).addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseReleased(MouseEvent e) {
                         super.mouseReleased(e);
-                        KaartLabel lblGeklikteKaart = kaartenSpeler4.get(finalI); //kaart label van de geklikte kaart in variable steken
+                        KaartLabel lblGeklikteKaart = kaartenSpeler3.get(finalI); //kaart label van de geklikte kaart in variable steken
                         //image string van de geklikte kaart label in een variable steken
                         Kaart geklikteKaart = controller.getSpelerKaarten(3).get(finalI);
                         String imageStringGeklikteKaart = geklikteKaart.getHorizontaleImageString();
                         if (controller.speelKaartMogelijk(geklikteKaart)) {
-                            kaartenSpeler4.remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
+                            kaartenSpeler3.remove(lblGeklikteKaart);//gaat geklikte kaart label verwijderen
                             lpnlkaartContainer[3].removeAll();
                             int minus = 40;
-                            for (KaartLabel k : kaartenSpeler4) {
+                            for (KaartLabel k : kaartenSpeler3) {
                                 k.setBounds(minus, 0, kaartBreedte, 100);
                                 minus += 40;
                                 lpnlkaartContainer[3].add(k);
                             }
-                            lpnlkaartContainer[3].setPreferredSize(new Dimension(kaartBreedte * kaartenSpeler4.size() - 80, 100));
+                            lpnlkaartContainer[3].setPreferredSize(new Dimension(kaartBreedte * kaartenSpeler3.size() - 80, 100));
                             revalidate();
                             repaint();
 
@@ -334,10 +349,5 @@ public class SpelbordUI extends JFrame {
                 });
             }
         }
-    }
-
-
-    public void geklikteKaart() {
-
     }
 }

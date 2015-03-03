@@ -59,15 +59,8 @@ public class Controller {
      * 3 of 4 spelers? -> 5 kaarten
      */
     public void kaartenUitdelen() {
-        int aantalKaarten;
-        if (spelers.size() == 2) {
-            aantalKaarten = KAARTEN_2_SPELERS;
-        } else {
-            aantalKaarten = KAARTEN_MEER_SPELERS;
-        }
-
         for (int i = 0; i < spelers.size(); i++) {
-            for (int j = 0; j < aantalKaarten; j++) {
+            for (int j = 0; j < getAantalKaartenSpeler(); j++) {
                 spelers.get(i).voegKaartToe(spelbord.getTrekstapel().neemKaart());
             }
         }
