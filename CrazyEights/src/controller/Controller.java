@@ -166,6 +166,9 @@ public class Controller {
     public boolean checkBeurt(int spelerNr){
         return getSpelers().get(spelerNr).getAanBeurt();
     }
+
+
 }
+
 
 
