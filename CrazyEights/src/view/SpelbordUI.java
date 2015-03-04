@@ -38,7 +38,7 @@ public class SpelbordUI extends JFrame {
     public SpelbordUI(Controller controller) throws HeadlessException {
         super("Crazy Eights");
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        super.setSize(1000, 900);
+        super.setSize(1100, 900);
         super.setLocationRelativeTo(null);
 
         this.controller = controller;
@@ -87,7 +87,8 @@ public class SpelbordUI extends JFrame {
             kaartenSpeler1.add(new KaartLabel(controller.getSpelerKaarten(1).get(i).getHorizontaleImageString(), controller));
             if (controller.getAantalSpelers() >= 3) {
                 kaartenSpeler2.add(new KaartLabel(controller.getSpelerKaarten(2).get(i).getVerticaleImageString(), controller));
-            } else if (controller.getAantalSpelers() == 4) {
+            }
+            if (controller.getAantalSpelers() == 4) {
                 kaartenSpeler3.add(new KaartLabel(controller.getSpelerKaarten(3).get(i).getVerticaleImageString(), controller));
             }
         }
@@ -146,8 +147,9 @@ public class SpelbordUI extends JFrame {
         if (controller.getAantalSpelers() >= 3) {
             lpnlkaartContainer[2].setPreferredSize(new Dimension(100, kaartOverlap * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte));
             derdeSpelerContainerLayOut();
+        }
 
-        } else if (controller.getAantalSpelers() == 4) {
+        if (controller.getAantalSpelers() == 4){
             lpnlkaartContainer[3].setPreferredSize(new Dimension(100, kaartOverlap * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte));
             vierdeSpelerContainerLayOut();
         }
@@ -166,7 +168,8 @@ public class SpelbordUI extends JFrame {
             if (pnlSpelerContainer.length >= 3) {
                 kaartenSpeler2.get(j).setBounds(0, kaartOverlap, 100, kaartBreedte);
                 lpnlkaartContainer[2].add(kaartenSpeler2.get(j), new Integer(j));
-            } else if (pnlSpelerContainer.length == 4) {
+            }
+            if (pnlSpelerContainer.length == 4) {
                 kaartenSpeler3.get(j).setBounds(0, kaartOverlap, 100, kaartBreedte);
                 lpnlkaartContainer[3].add(kaartenSpeler3.get(j), new Integer(j));
             }
@@ -191,8 +194,9 @@ public class SpelbordUI extends JFrame {
     public void derdeSpelerContainerLayOut() {
         JPanel pnlLegeSpeler = new JPanel();
         pnlLegeSpeler.setPreferredSize(new Dimension(250, 100));
-        super.add(pnlSpelerContainer[2], BorderLayout.EAST);
+
         super.add(pnlLegeSpeler, BorderLayout.WEST);
+        super.add(pnlSpelerContainer[2], BorderLayout.EAST);
         pnlSpelerContainer[2].add(lblSpelerNaam[2], BorderLayout.EAST);
         pnlSpelerContainer[2].add(pnlKaartContainer[2], BorderLayout.WEST);
     }
