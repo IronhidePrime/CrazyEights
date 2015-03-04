@@ -219,6 +219,7 @@ public class SpelbordUI extends JFrame {
         /**
          * wanneer men op de trekstapel klikt krijgt de speler een nieuwe kaart
          */
+        //
 
         herschikKaartenNaTrekken(kaartenSpeler0,controller.getSpelerKaarten(0),0);
 
