@@ -1,7 +1,10 @@
 package view;
 
 import controller.Controller;
+import model.Computer;
 import model.Kaart;
+import model.Mens;
+import model.Speler;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -94,6 +97,8 @@ public class SpelbordUI extends JFrame {
         /**
          * voor elke speler een lijst met JLabels voor zijn kaarten
          * de lijsten opvullen adhv het aantal spelers
+         * de menselijke spelers hun kaarten zijn met de beeldkant naar BOVEN
+         * de computerspelers hun kaarten zijn met de beeldkant naar BENEDEN
          */
         kaartenSpeler0 = new LinkedList<>();
         kaartenSpeler1 = new LinkedList<>();
@@ -101,12 +106,22 @@ public class SpelbordUI extends JFrame {
         kaartenSpeler3 = new LinkedList<>();
         for (int i = 0; i < controller.getAantalKaartenSpeler(); i++) {
             kaartenSpeler0.add(new KaartLabel(controller.getSpelerKaarten(0).get(i).getHorizontaleImageString(), controller));
-            kaartenSpeler1.add(new KaartLabel(controller.getSpelerKaarten(1).get(i).getHorizontaleImageString(), controller));
-            if (controller.getAantalSpelers() >= 3) {
-                kaartenSpeler2.add(new KaartLabel(controller.getSpelerKaarten(2).get(i).getVerticaleImageString(), controller));
-            }
-            if (controller.getAantalSpelers() == 4) {
-                kaartenSpeler3.add(new KaartLabel(controller.getSpelerKaarten(3).get(i).getVerticaleImageString(), controller));
+            if (controller.getSpelers().get(0) instanceof Mens) {
+                kaartenSpeler1.add(new KaartLabel(controller.getSpelerKaarten(1).get(i).getHorizontaleImageString(), controller));
+                if (controller.getAantalSpelers() >= 3) {
+                    kaartenSpeler2.add(new KaartLabel(controller.getSpelerKaarten(2).get(i).getVerticaleImageString(), controller));
+                }
+                if (controller.getAantalSpelers() == 4) {
+                    kaartenSpeler3.add(new KaartLabel(controller.getSpelerKaarten(3).get(i).getVerticaleImageString(), controller));
+                }
+            } else if (controller.getSpelers().get(0) instanceof Computer) {
+                kaartenSpeler1.add(new KaartLabel(controller.getSpelerKaarten(1).get(i).getOmgekeerdeImageString(), controller));
+                if (controller.getAantalSpelers() >= 3) {
+                    kaartenSpeler2.add(new KaartLabel(controller.getSpelerKaarten(2).get(i).getOmgekeerdeImageString(), controller));
+                }
+                if (controller.getAantalSpelers() == 4) {
+                    kaartenSpeler3.add(new KaartLabel(controller.getSpelerKaarten(3).get(i).getOmgekeerdeImageString(), controller));
+                }
             }
         }
 
@@ -249,26 +264,22 @@ public class SpelbordUI extends JFrame {
          * wanneer men op de trekstapel klikt krijgt de speler een nieuwe kaart
          */
         //
+        if (controller.getSpelers().get(0) instanceof Mens) {
+            herschikKaarten(kaartenSpeler0, controller.getSpelerKaarten(0), 0, 0);
+            herschikKaarten(kaartenSpeler1, controller.getSpelerKaarten(1), 1, 1);
 
+            herschikKaartenNaTrekken(kaartenSpeler0, controller.getSpelerKaarten(0), 0, 0);
+            herschikKaartenNaTrekken(kaartenSpeler1, controller.getSpelerKaarten(1), 1, 1);
+            if (controller.getAantalSpelers() >= 3) {
+                herschikKaarten(kaartenSpeler2, controller.getSpelerKaarten(2), 2, 2);
 
-
-
-        herschikKaarten(kaartenSpeler0,controller.getSpelerKaarten(0),0,0);
-        herschikKaarten(kaartenSpeler1,controller.getSpelerKaarten(1),1,1);
-
-        herschikKaartenNaTrekken(kaartenSpeler0, controller.getSpelerKaarten(0), 0, 0);
-        herschikKaartenNaTrekken(kaartenSpeler1, controller.getSpelerKaarten(1), 1, 1);
-        if (controller.getAantalSpelers() >= 3){
-            herschikKaarten(kaartenSpeler2,controller.getSpelerKaarten(2),2,2);
-
-            herschikKaartenNaTrekken(kaartenSpeler2, controller.getSpelerKaarten(2), 2, 2);
+                herschikKaartenNaTrekken(kaartenSpeler2, controller.getSpelerKaarten(2), 2, 2);
+            }
+            if (controller.getAantalSpelers() == 4) {
+                herschikKaarten(kaartenSpeler3, controller.getSpelerKaarten(3), 3, 3);
+                herschikKaartenNaTrekken(kaartenSpeler3, controller.getSpelerKaarten(3), 3, 3);
+            }
         }
-        if (controller.getAantalSpelers() == 4){
-            herschikKaarten(kaartenSpeler3,controller.getSpelerKaarten(3),3,3);
-
-            herschikKaartenNaTrekken(kaartenSpeler3, controller.getSpelerKaarten(3), 3, 3);
-        }
-
     }
 
 

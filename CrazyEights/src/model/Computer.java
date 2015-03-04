@@ -19,25 +19,28 @@ public class Computer extends Speler {
          * daarna kijken of hij een kaart met dezelfde waarde kan spelen
          * ten slotte kijken of hij een 8 bezit
          */
-        for (Kaart kaart : super.kaarten) {
-            if (kaart.getKleur() == getSpelbord().getAflegstapel().getBovensteKaart().getKleur()) {
-                super.speelKaart(kaart);
-                return true;
+        if (super.getAanBeurt()) {
+            for (Kaart kaart : super.getKaarten()) {
+                if (kaart.getKleur() == getSpelbord().getAflegstapel().getBovensteKaart().getKleur()) {
+                    super.speelKaart(kaart);
+                    return true;
+                }
             }
-        }
 
-        for (Kaart kaart : super.kaarten) {
-            if (kaart.getWaarde() == getSpelbord().getAflegstapel().getBovensteKaart().getWaarde()) {
-                super.speelKaart(kaart);
-                return true;
+            for (Kaart kaart : super.getKaarten()) {
+                if (kaart.getWaarde() == getSpelbord().getAflegstapel().getBovensteKaart().getWaarde()) {
+                    super.speelKaart(kaart);
+                    return true;
+                }
             }
-        }
 
-        for (Kaart kaart : super.kaarten) {
-            if (kaart.getWaarde() == 8) {
-                super.speelKaart(kaart);
-                return true;
+            for (Kaart kaart : super.getKaarten()) {
+                if (kaart.getWaarde() == 8) {
+                    super.speelKaart(kaart);
+                    return true;
+                }
             }
+            return false;
         }
         return false;
     }
