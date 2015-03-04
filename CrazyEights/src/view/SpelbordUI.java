@@ -11,6 +11,8 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
+//TODO: niet alle kaartImages zijn aanwezig, SANDER KUT!!!
+
 public class SpelbordUI extends JFrame {
     private Controller controller;
 
@@ -221,7 +223,7 @@ public class SpelbordUI extends JFrame {
     }
 
 
-    public void herschikKaarten(List<KaartLabel> spelerKaartLabels,List<Kaart> spelerKaarten, int lpnlContainer){
+    public void herschikKaarten(List<KaartLabel> spelerKaartLabels,List<Kaart> spelerKaarten, int indexContainer){
         for (KaartLabel kaartLabel : spelerKaartLabels) {
             kaartLabel.addMouseListener(new MouseAdapter() {
                 @Override
@@ -254,25 +256,27 @@ public class SpelbordUI extends JFrame {
                     if (controller.speelKaartMogelijk(spelerKaarten.get(index))) {
                         String horizontaleImageString = spelerKaarten.get(index).getHorizontaleImageString();
                         spelerKaartLabels.remove(kaartLabel);
-                        lpnlkaartContainer[lpnlContainer].remove(kaartLabel);
+                        lpnlkaartContainer[indexContainer].remove(kaartLabel);
                         controller.speelKaart(spelerKaarten.get(index),0);
-                        lpnlkaartContainer[lpnlContainer].removeAll();
+                        lpnlkaartContainer[indexContainer].removeAll();
 
-
-                        if (lpnlContainer == 0 || lpnlContainer == 1){
-                            int minus = 40;
+                        kaartOverlap = 0;
+                        if (indexContainer == 0 || indexContainer == 1){
                             for (KaartLabel k : spelerKaartLabels) {
-                                k.setBounds(minus, 0, kaartBreedte, 100);
-                                minus += 40;
-                                lpnlkaartContainer[lpnlContainer].add(k);
+                                k.setBounds(kaartOverlap, 0, kaartBreedte, 100);
+                                kaartOverlap += 40;
+                                lpnlkaartContainer[indexContainer].add(k);
                                 lblAflegstapel.setImageString(imageString);
                             }
-                        } else if (lpnlContainer == 2 || lpnlContainer == 3){
+                            //lpnlkaartContainer[i].setPreferredSize(new Dimension(kaartOverlap  * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte, 100));
+                            kaartOverlap = 40;
+                            lpnlkaartContainer[indexContainer].setPreferredSize(new Dimension(kaartOverlap * (spelerKaartLabels.size() - 1) + kaartBreedte, 100));
+                        } else if (indexContainer == 2 || indexContainer == 3){
                             int minus = 40;
                             for (KaartLabel k : spelerKaartLabels) {
                                 k.setBounds(0, minus, 100, kaartBreedte);
                                 minus += 40;
-                                lpnlkaartContainer[lpnlContainer].add(k);
+                                lpnlkaartContainer[indexContainer].add(k);
                                 lblAflegstapel.setImageString(horizontaleImageString);
                             }
                         }
@@ -289,7 +293,7 @@ public class SpelbordUI extends JFrame {
             });
         }
     }
-    public void herschikKaartenNaTrekken(List<KaartLabel> kaartLabels,List<Kaart> kaartenSpelers, int lpnlKaartContainer){
+    public void herschikKaartenNaTrekken(List<KaartLabel> spelerKaartLabels,List<Kaart> kaartenSpelers, int indexContainer){
         lblTrekstapel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -298,19 +302,20 @@ public class SpelbordUI extends JFrame {
                 Kaart getrokkenKaart = controller.getSpelbord().getTrekstapel().neemKaart();
                 KaartLabel lblGetrokkenKaart = new KaartLabel(getrokkenKaart.getHorizontaleImageString(),controller);
 
-                kaartLabels.add(lblGetrokkenKaart);
+                spelerKaartLabels.add(lblGetrokkenKaart);
                 kaartenSpelers.add(getrokkenKaart);
 
-                lpnlkaartContainer[lpnlKaartContainer].removeAll();
-                int minus = 40;
-                for (int i=0; i<kaartLabels.size();i++) {
-                    kaartLabels.get(i).setBounds(minus, 0, kaartBreedte, 100);
-                    minus += 40;
-                    lpnlkaartContainer[lpnlKaartContainer].add(kaartLabels.get(i),new Integer(i));
+                lpnlkaartContainer[indexContainer].removeAll();
+                kaartOverlap = 0;
+                for (int i=0; i<spelerKaartLabels.size();i++) {
+                    spelerKaartLabels.get(i).setBounds(kaartOverlap, 0, kaartBreedte, 100);
+                    kaartOverlap += 40;
+                    lpnlkaartContainer[indexContainer].add(spelerKaartLabels.get(i),new Integer(i));
                 }
-                lpnlkaartContainer[lpnlKaartContainer].setPreferredSize(new Dimension(lpnlkaartContainer[lpnlKaartContainer].getWidth()+kaartBreedte,100)); //klopt nog niet helemaal
-                System.out.println("breedte jlayeredpane" + lpnlkaartContainer[lpnlKaartContainer].getWidth());
-                herschikKaarten(kaartLabels, kaartenSpelers, lpnlKaartContainer);
+                kaartOverlap = 40;
+                lpnlkaartContainer[indexContainer].setPreferredSize(new Dimension(kaartOverlap * (spelerKaartLabels.size() - 1) + kaartBreedte, 100));
+                System.out.println("breedte jlayeredpane" + lpnlkaartContainer[indexContainer].getWidth());
+                herschikKaarten(spelerKaartLabels, kaartenSpelers, indexContainer);
 
                 revalidate();
                 repaint();
