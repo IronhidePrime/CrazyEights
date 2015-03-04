@@ -138,18 +138,26 @@ public class SpelbordUI extends JFrame {
             pnlKaartContainer[i] = new JPanel();
             lpnlkaartContainer[i].setBackground(Color.BLUE);
             lpnlkaartContainer[i].setOpaque(true);
-            pnlKaartContainer[i].add(lpnlkaartContainer[i]);
+
         }
         if (controller.getAantalSpelers() >= 2) {
+            pnlKaartContainer[0].add(lpnlkaartContainer[0]);
+            pnlKaartContainer[1].add(lpnlkaartContainer[1]);
             tweeSpelersContainerLayOut();
         }
 
         if (controller.getAantalSpelers() >= 3) {
+            //voor panel verticaal te centreren -> gridbaglayout
+            pnlKaartContainer[2].setLayout(new GridBagLayout());
+            pnlKaartContainer[2].add(lpnlkaartContainer[2], new GridBagConstraints());
             lpnlkaartContainer[2].setPreferredSize(new Dimension(100, kaartOverlap * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte));
             derdeSpelerContainerLayOut();
         }
 
         if (controller.getAantalSpelers() == 4){
+            //voor panel verticaal te centreren -> gridbaglayout
+            pnlKaartContainer[3].setLayout(new GridBagLayout());
+            pnlKaartContainer[3].add(lpnlkaartContainer[3], new GridBagConstraints());
             lpnlkaartContainer[3].setPreferredSize(new Dimension(100, kaartOverlap * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte));
             vierdeSpelerContainerLayOut();
         }
@@ -276,13 +284,15 @@ public class SpelbordUI extends JFrame {
                             kaartOverlap = 40;
                             lpnlkaartContainer[indexContainer].setPreferredSize(new Dimension(kaartOverlap * (spelerKaartLabels.size() - 1) + kaartBreedte, 100));
                         } else if (indexContainer == 2 || indexContainer == 3){
-                            int minus = 40;
+
                             for (KaartLabel k : spelerKaartLabels) {
-                                k.setBounds(0, minus, 100, kaartBreedte);
-                                minus += 40;
+                                k.setBounds(0, kaartOverlap, 100, kaartBreedte);
+                                kaartOverlap += 40;
                                 lpnlkaartContainer[indexContainer].add(k);
                                 lblAflegstapel.setImageString(horizontaleImageString);
                             }
+                            kaartOverlap = 40;
+                            lpnlkaartContainer[indexContainer].setPreferredSize(new Dimension(100, kaartOverlap * (spelerKaartLabels.size() - 1) + kaartBreedte));
                         }
 
                         //DEBUG//
