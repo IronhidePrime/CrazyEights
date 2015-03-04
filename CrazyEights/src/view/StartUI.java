@@ -137,7 +137,8 @@ public class StartUI extends JFrame {
                         controller.maakMens(spelersNaam);
                     } else {
                         if (i==0) {
-                            controller.maakComputer("Christiaan");
+                            String spelersNaam = JOptionPane.showInputDialog(null, "Geef uw nickname", "Naam");
+                            controller.maakMens(spelersNaam);
                         } else if (i==1) {
                             controller.maakComputer("Eddy");
                         } else if (i==2) {
