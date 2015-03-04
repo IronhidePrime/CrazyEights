@@ -205,18 +205,8 @@ public class SpelbordUI extends JFrame {
         /**
          * wanneer men op de trekstapel klikt krijgt de speler een nieuwe kaart
          */
-        lblTrekstapel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                super.mouseReleased(e);
-                Kaart bovensteKaart = controller.getSpelbord().getTrekstapel().neemKaart();
-                String imageString = bovensteKaart.getHorizontaleImageString();
-                KaartLabel nieuweKaart = new KaartLabel(imageString, controller);
-                nieuweKaart.setBounds(50,50,kaartBreedte,100);
-                kaartenSpeler0.add(nieuweKaart);
-                lpnlkaartContainer[0].add(nieuweKaart);
-            }
-        });
+
+        herschikKaartenNaTrekken(kaartenSpeler0,controller.getSpelerKaarten(0),0);
 
 
         herschikKaarten(kaartenSpeler0,controller.getSpelerKaarten(0),0);
@@ -229,6 +219,7 @@ public class SpelbordUI extends JFrame {
         }
 
     }
+
 
     public void herschikKaarten(List<KaartLabel> spelerKaartLabels,List<Kaart> spelerKaarten, int lpnlContainer){
         for (KaartLabel kaartLabel : spelerKaartLabels) {
@@ -297,5 +288,34 @@ public class SpelbordUI extends JFrame {
                 }
             });
         }
+    }
+    public void herschikKaartenNaTrekken(List<KaartLabel> kaartLabels,List<Kaart> kaartenSpelers, int lpnlKaartContainer){
+        lblTrekstapel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                System.out.println("er is op de trekstapel geklikt");
+                Kaart getrokkenKaart = controller.getSpelbord().getTrekstapel().neemKaart();
+                KaartLabel lblGetrokkenKaart = new KaartLabel(getrokkenKaart.getHorizontaleImageString(),controller);
+
+                kaartLabels.add(lblGetrokkenKaart);
+                kaartenSpelers.add(getrokkenKaart);
+
+                lpnlkaartContainer[lpnlKaartContainer].removeAll();
+                int minus = 40;
+                for (int i=0; i<kaartLabels.size();i++) {
+                    kaartLabels.get(i).setBounds(minus, 0, kaartBreedte, 100);
+                    minus += 40;
+                    lpnlkaartContainer[lpnlKaartContainer].add(kaartLabels.get(i),new Integer(i));
+                }
+                lpnlkaartContainer[lpnlKaartContainer].setPreferredSize(new Dimension(lpnlkaartContainer[lpnlKaartContainer].getWidth()+kaartBreedte,100)); //klopt nog niet helemaal
+                System.out.println("breedte jlayeredpane" + lpnlkaartContainer[lpnlKaartContainer].getWidth());
+                herschikKaarten(kaartLabels, kaartenSpelers, lpnlKaartContainer);
+
+                revalidate();
+                repaint();
+
+            }
+        });
     }
 }

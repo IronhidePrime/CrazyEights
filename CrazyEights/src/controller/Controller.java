@@ -162,6 +162,10 @@ public class Controller {
             return KAARTEN_MEER_SPELERS;
         }
     }
+
+    public boolean checkBeurt(int spelerNr){
+        return getSpelers().get(spelerNr).getAanBeurt();
+    }
 }
 
 
