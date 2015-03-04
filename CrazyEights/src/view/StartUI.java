@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 
@@ -25,7 +24,7 @@ public class StartUI extends JFrame {
 
     private JComboBox cboSpelers;
 
-    private JCheckBox chkComputer;
+    private JCheckBox chkMultiplayer;
 
     private JButton btnDeal;
     private JButton btnHighscores;
@@ -66,7 +65,7 @@ public class StartUI extends JFrame {
         cboSpelers.addItem(4);
         cboSpelers.setToolTipText("Aantal spelers?");
 
-        chkComputer = new JCheckBox("Multiplayer");
+        chkMultiplayer = new JCheckBox("Multiplayer");
 
         btnDeal = new JButton("Start");
         btnHighscores = new JButton("Highscores");
@@ -98,7 +97,7 @@ public class StartUI extends JFrame {
         pnlSpelerContainer.add(lblAantalSpelers);
         pnlSpelerContainer.add(cboSpelers);
         pnlSpelerContainer.add(new JLabel());
-        pnlSpelerContainer.add(chkComputer);
+        pnlSpelerContainer.add(chkMultiplayer);
         pnlSpelerContainer.add(new JLabel());
         pnlSpelerContainer.add(new JLabel());
         pnlSpelerContainer.add(new JLabel());
@@ -133,8 +132,20 @@ public class StartUI extends JFrame {
                  */
                 int aantalSpelers = cboSpelers.getSelectedIndex() + 2;
                 for (int i=0; i<aantalSpelers; i++) {
-                    String spelersNaam = JOptionPane.showInputDialog(null, "Geef de naam van speler " + (i + 1), "Naam");
-                    controller.maakSpeler(spelersNaam);
+                    if (chkMultiplayer.isSelected()) {
+                        String spelersNaam = JOptionPane.showInputDialog(null, "Geef de naam van speler " + (i + 1), "Naam");
+                        controller.maakMens(spelersNaam);
+                    } else {
+                        if (i==0) {
+                            controller.maakComputer("Christiaan");
+                        } else if (i==1) {
+                            controller.maakComputer("Eddy");
+                        } else if (i==2) {
+                            controller.maakComputer("Hans");
+                        } else if (i==3) {
+                            controller.maakComputer("Dirk");
+                        }
+                    }
                 }
                 new SpelbordUI(controller);
             }

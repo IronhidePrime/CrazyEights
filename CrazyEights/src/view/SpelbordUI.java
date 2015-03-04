@@ -258,15 +258,14 @@ public class SpelbordUI extends JFrame {
 
         herschikKaartenNaTrekken(kaartenSpeler0, controller.getSpelerKaarten(0), 0, 0);
         herschikKaartenNaTrekken(kaartenSpeler1, controller.getSpelerKaarten(1), 1, 1);
-        if (controller.getAantalSpelers() == 3){
+        if (controller.getAantalSpelers() >= 3){
             herschikKaarten(kaartenSpeler2,controller.getSpelerKaarten(2),2,2);
 
             herschikKaartenNaTrekken(kaartenSpeler2, controller.getSpelerKaarten(2), 2, 2);
-        } else if (controller.getAantalSpelers() == 4){
-            herschikKaarten(kaartenSpeler2,controller.getSpelerKaarten(2),2,2);
+        }
+        if (controller.getAantalSpelers() == 4){
             herschikKaarten(kaartenSpeler3,controller.getSpelerKaarten(3),3,3);
 
-            herschikKaartenNaTrekken(kaartenSpeler2, controller.getSpelerKaarten(2), 2, 2);
             herschikKaartenNaTrekken(kaartenSpeler3, controller.getSpelerKaarten(3), 3, 3);
         }
 

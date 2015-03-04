@@ -51,8 +51,14 @@ public class Trekstapel  {
      * Er wordt een kaart genomen van de stapel en deze wordt 'verwijderd' uit de trekstapel
      */
     public Kaart neemKaart() {
-        Kaart kaart = kaarten.get(kaarten.size() - 1);
+        Kaart kaart = getBovensteKaart();
         kaarten.remove(kaart);
+        return kaart;
+    }
+
+
+    public Kaart getBovensteKaart() {
+        Kaart kaart = getKaarten().get(kaarten.size()-1);
         return kaart;
     }
 
@@ -62,9 +68,4 @@ public class Trekstapel  {
     public List<Kaart> getKaarten() {
         return kaarten;
     }
-
-    /*
-    public Kaart getBovensteKaart() {
-        return getKaarten().get(kaarten.size()-1);
-    }*/
 }

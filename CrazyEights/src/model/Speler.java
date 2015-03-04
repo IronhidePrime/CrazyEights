@@ -6,9 +6,9 @@ import java.util.List;
 
 
 public class Speler {
-    private String naam;
-    private List<Kaart> kaarten;
-    private boolean isAanBeurt;
+    protected String naam;
+    protected List<Kaart> kaarten;
+    protected boolean isAanBeurt;
 
     public Speler(String naam) {
         this.naam = naam;

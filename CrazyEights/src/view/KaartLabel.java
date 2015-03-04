@@ -27,5 +27,7 @@ public class KaartLabel extends JLabel{
         return imageString;
     }
 
-
+    public void setOmgekeerdeKaart() {
+        this.imageString = "/view/images/kaartAchterkant.png";
+    }
 }

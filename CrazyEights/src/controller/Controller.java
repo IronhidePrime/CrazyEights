@@ -1,9 +1,6 @@
 package controller;
 
-import model.Kaart;
-import model.Kleur;
-import model.Spelbord;
-import model.Speler;
+import model.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -30,8 +27,12 @@ public class Controller {
      * alle spelers opvragen
      * aantal spelers opvragen
      */
-    public void maakSpeler (String naam) {
-        spelers.add(new Speler(naam));
+    public void maakMens (String naam) {
+        spelers.add(new Mens(naam));
+    }
+
+    public void maakComputer (String naam) {
+        spelers.add(new Computer(naam, this.spelbord));
     }
 
     public String getSpelerNaam(int spelerNr){
@@ -162,12 +163,6 @@ public class Controller {
             return KAARTEN_MEER_SPELERS;
         }
     }
-
-    public boolean checkBeurt(int spelerNr){
-        return getSpelers().get(spelerNr).getAanBeurt();
-    }
-
-
 }
 
 
