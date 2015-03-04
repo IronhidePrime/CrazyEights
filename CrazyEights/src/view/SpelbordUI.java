@@ -309,7 +309,6 @@ public class SpelbordUI extends JFrame {
                             controller.getSpelers().get(0).setAanBeurt(true);
                         } else {
                             controller.getSpelers().get(spelerNr+1).setAanBeurt(true);
-
                         }
 
 
@@ -333,29 +332,38 @@ public class SpelbordUI extends JFrame {
                 super.mouseReleased(e);
                 System.out.println("er is op de trekstapel geklikt");
                 Kaart getrokkenKaart = controller.getSpelbord().getTrekstapel().neemKaart();
-                KaartLabel lblGetrokkenKaart = new KaartLabel(getrokkenKaart.getHorizontaleImageString(),controller);
+                KaartLabel lblGetrokkenKaart = new KaartLabel(getrokkenKaart.getHorizontaleImageString(), controller);
 
-                if (controller.getSpelers().get(SpelerNr).getAanBeurt()){
-                    spelerKaartLabels.add(lblGetrokkenKaart);
+                if (controller.getSpelers().get(SpelerNr).getAanBeurt()) {
                     kaartenSpelers.add(getrokkenKaart);
-
                     lpnlkaartContainer[indexContainer].removeAll();
+
                     kaartOverlap = 0;
-                    for (int i=0; i<spelerKaartLabels.size();i++) {
-                        spelerKaartLabels.get(i).setBounds(kaartOverlap, 0, kaartBreedte, 100);
-                        kaartOverlap += 40;
-                        lpnlkaartContainer[indexContainer].add(spelerKaartLabels.get(i),new Integer(i));
+                    if (indexContainer == 0 || indexContainer == 1) {
+                        spelerKaartLabels.add(lblGetrokkenKaart);
+                        for (int i = 0; i < spelerKaartLabels.size(); i++) {
+                            spelerKaartLabels.get(i).setBounds(kaartOverlap, 0, kaartBreedte, 100);
+                            kaartOverlap += 40;
+                            lpnlkaartContainer[indexContainer].add(spelerKaartLabels.get(i), new Integer(i));
+                        }
+                        kaartOverlap = 40;
+                        lpnlkaartContainer[indexContainer].setPreferredSize(new Dimension(kaartOverlap * (spelerKaartLabels.size() - 1) + kaartBreedte, 100));
+                    } else if (indexContainer == 2 || indexContainer == 3) {
+                        KaartLabel lblVerticaalGetrokkenKaart = new KaartLabel(getrokkenKaart.getVerticaleImageString(), controller);
+                        spelerKaartLabels.add(lblVerticaalGetrokkenKaart);
+                        for (int i = 0; i < spelerKaartLabels.size(); i++) {
+                            spelerKaartLabels.get(i).setBounds(0, kaartOverlap, 100, kaartBreedte);
+                            kaartOverlap += 40;
+                            lpnlkaartContainer[indexContainer].add(spelerKaartLabels.get(i), new Integer(i));
+                        }
+                        kaartOverlap = 40;
+                        lpnlkaartContainer[indexContainer].setPreferredSize(new Dimension(100, kaartOverlap * (spelerKaartLabels.size() - 1) + kaartBreedte));
                     }
-                    kaartOverlap = 40;
-                    lpnlkaartContainer[indexContainer].setPreferredSize(new Dimension(kaartOverlap * (spelerKaartLabels.size() - 1) + kaartBreedte, 100));
                     //System.out.println("breedte jlayeredpane" + lpnlkaartContainer[indexContainer].getWidth());
                     herschikKaarten(spelerKaartLabels, kaartenSpelers, indexContainer, SpelerNr);
                 }
-
-
                 revalidate();
                 repaint();
-
             }
         });
     }
