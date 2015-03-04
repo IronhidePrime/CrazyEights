@@ -11,6 +11,6 @@ public class LogoLabel extends JLabel {
         Image image = imageIcon.getImage();
         super.paintComponent(g);
         int x = (this.getWidth() - image.getWidth(null)) / 2;
-        g.drawImage(image, x, -50, null);
+        g.drawImage(image, x, 0, null);
     }
 }

@@ -3,11 +3,14 @@ package view;
 import controller.Controller;
 import model.Kaart;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,6 +38,8 @@ public class SpelbordUI extends JFrame {
     private int kaartBreedte = 70;
     private int kaartOverlap = 40;
 
+
+
     public SpelbordUI(Controller controller) throws HeadlessException {
         super("Crazy Eights");
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -48,7 +53,17 @@ public class SpelbordUI extends JFrame {
         maakLayout();
         behandelEvents();
         super.setVisible(true);
+
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(getClass().getResource("/view/images/icon.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.setIconImage(image);
     }
+
+
 
     public void maakComponenten() {
         /**
@@ -227,18 +242,18 @@ public class SpelbordUI extends JFrame {
         herschikKaarten(kaartenSpeler0,controller.getSpelerKaarten(0),0,0);
         herschikKaarten(kaartenSpeler1,controller.getSpelerKaarten(1),1,1);
 
-        herschikKaartenNaTrekken(kaartenSpeler0,controller.getSpelerKaarten(0),0,0);
-        herschikKaartenNaTrekken(kaartenSpeler1,controller.getSpelerKaarten(1),1,1);
+        herschikKaartenNaTrekken(kaartenSpeler0, controller.getSpelerKaarten(0), 0, 0);
+        herschikKaartenNaTrekken(kaartenSpeler1, controller.getSpelerKaarten(1), 1, 1);
         if (controller.getAantalSpelers() == 3){
             herschikKaarten(kaartenSpeler2,controller.getSpelerKaarten(2),2,2);
 
-            herschikKaartenNaTrekken(kaartenSpeler2,controller.getSpelerKaarten(2),2,2);
+            herschikKaartenNaTrekken(kaartenSpeler2, controller.getSpelerKaarten(2), 2, 2);
         } else if (controller.getAantalSpelers() == 4){
             herschikKaarten(kaartenSpeler2,controller.getSpelerKaarten(2),2,2);
             herschikKaarten(kaartenSpeler3,controller.getSpelerKaarten(3),3,3);
 
-            herschikKaartenNaTrekken(kaartenSpeler2,controller.getSpelerKaarten(2),2,2);
-            herschikKaartenNaTrekken(kaartenSpeler3,controller.getSpelerKaarten(3),3,3);
+            herschikKaartenNaTrekken(kaartenSpeler2, controller.getSpelerKaarten(2), 2, 2);
+            herschikKaartenNaTrekken(kaartenSpeler3, controller.getSpelerKaarten(3), 3, 3);
         }
 
     }

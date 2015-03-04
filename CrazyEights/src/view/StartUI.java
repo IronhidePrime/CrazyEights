@@ -3,17 +3,22 @@ package view;
 import controller.Controller;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
 public class StartUI extends JFrame {
     //TODO: afwerking StartUI (logo, fonts, ...)
     //TODO: keuze multiplayer doorsturen
     //TODO: spelregels/info/highscores toevoegen
+    //java.net.URL url = ClassLoader.getSystemResource("/view/images/icon.png");
     private JLabel lblTitel;
     private JLabel lblCrazyLogo;
     private JLabel lblAantalSpelers;
@@ -40,11 +45,19 @@ public class StartUI extends JFrame {
         behandelEvents();
         super.setVisible(true);
         this.controller = new Controller();
+
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(getClass().getResource("/view/images/icon.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.setIconImage(image);
     }
 
     public void maakComponenten(){
         lblTitel = new JLabel("Crazy Eights");
-        lblCrazyLogo = new JLabel("Test");
+        lblCrazyLogo = new LogoLabel();
         lblAantalSpelers = new JLabel("Aantal spelers:");
 
         cboSpelers = new JComboBox();
