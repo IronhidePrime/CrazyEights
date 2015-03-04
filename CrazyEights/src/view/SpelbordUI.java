@@ -38,6 +38,8 @@ public class SpelbordUI extends JFrame {
     private int kaartBreedte = 70;
     private int kaartOverlap = 40;
 
+    private AchtergrondLabel achtergrond;
+
 
 
     public SpelbordUI(Controller controller) throws HeadlessException {
@@ -107,9 +109,13 @@ public class SpelbordUI extends JFrame {
                 kaartenSpeler3.add(new KaartLabel(controller.getSpelerKaarten(3).get(i).getVerticaleImageString(), controller));
             }
         }
+
+        achtergrond = new AchtergrondLabel();
     }
 
     public void maakLayout() {
+
+
         /**
          * container voor de 2 stapels (trek- & aflegstapel) aanmaken
          * aftrek + legstapel toevoegen
@@ -121,11 +127,18 @@ public class SpelbordUI extends JFrame {
         JPanel aflegstapelContainer = new JPanel();
         trekstapelContainer.add(lblTrekstapel);
         aflegstapelContainer.add(lblAflegstapel);
+        aflegstapelContainer.setOpaque(false);
         trekstapelContainer.setBorder(new EmptyBorder(0, 0, 0, 30));
+        trekstapelContainer.setOpaque(false);
         aflegstapelContainer.setBorder(new EmptyBorder(0, 30, 0, 0));
         stapelContainer.add(trekstapelContainer);
         stapelContainer.add(aflegstapelContainer);
-        super.add(stapelContainer, BorderLayout.CENTER);
+        stapelContainer.setOpaque(false);
+        //super.add(stapelContainer, BorderLayout.CENTER);
+
+        achtergrond.setLayout(new BorderLayout());
+        super.add(achtergrond, BorderLayout.CENTER);
+        achtergrond.add(stapelContainer,BorderLayout.CENTER);
 
         /**
          * 1. speler label aanmaken en naam van de ingegeven speler toevoegen
@@ -138,6 +151,7 @@ public class SpelbordUI extends JFrame {
             lblSpelerNaam[i] = new JLabel();
             lblSpelerNaam[i].setText(controller.getSpelerNaam(i));
             lblSpelerNaam[i].setHorizontalAlignment(SwingConstants.CENTER);
+            lblSpelerNaam[i].setForeground(Color.WHITE);
 
             lblSpelersAfbeelding[i] = new SpelerAfbeelding();
             lblSpelersAfbeelding[i].setPreferredSize(new Dimension(150, 100));
@@ -145,14 +159,15 @@ public class SpelbordUI extends JFrame {
             //2
             pnlSpelerContainer[i] = new JPanel();
             pnlSpelerContainer[i].setLayout(new BorderLayout());
+            pnlSpelerContainer[i].setOpaque(false);
             pnlSpelerContainer[i].add(lblSpelersAfbeelding[i], BorderLayout.CENTER);
 
             //3
             lpnlkaartContainer[i] = new JLayeredPane();
             lpnlkaartContainer[i].setPreferredSize(new Dimension(kaartOverlap  * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte, 100));
             pnlKaartContainer[i] = new JPanel();
-            lpnlkaartContainer[i].setBackground(Color.BLUE);
-            lpnlkaartContainer[i].setOpaque(true);
+            pnlKaartContainer[i].setOpaque(false);
+            lpnlkaartContainer[i].setOpaque(false);
 
         }
         if (controller.getAantalSpelers() >= 2) {
@@ -198,18 +213,17 @@ public class SpelbordUI extends JFrame {
             }
             kaartOverlap += 40;
         }
-
     }
 
     /**
      * containers worden toegevoegd afhankelijk van het aantal spelers op de aangegeven positie
      */
     public void tweeSpelersContainerLayOut() {
-        super.add(pnlSpelerContainer[0], BorderLayout.SOUTH);
+        achtergrond.add(pnlSpelerContainer[0], BorderLayout.SOUTH);
         pnlSpelerContainer[0].add(lblSpelerNaam[0], BorderLayout.SOUTH);
         pnlSpelerContainer[0].add(pnlKaartContainer[0], BorderLayout.NORTH);
 
-        super.add(pnlSpelerContainer[1], BorderLayout.NORTH);
+        achtergrond.add(pnlSpelerContainer[1], BorderLayout.NORTH);
         pnlSpelerContainer[1].add(lblSpelerNaam[1], BorderLayout.NORTH);
         pnlSpelerContainer[1].add(pnlKaartContainer[1], BorderLayout.SOUTH);
     }
@@ -218,14 +232,14 @@ public class SpelbordUI extends JFrame {
         JPanel pnlLegeSpeler = new JPanel();
         pnlLegeSpeler.setPreferredSize(new Dimension(250, 100));
 
-        super.add(pnlLegeSpeler, BorderLayout.WEST);
-        super.add(pnlSpelerContainer[2], BorderLayout.EAST);
+        achtergrond.add(pnlLegeSpeler, BorderLayout.WEST);
+        achtergrond.add(pnlSpelerContainer[2], BorderLayout.EAST);
         pnlSpelerContainer[2].add(lblSpelerNaam[2], BorderLayout.EAST);
         pnlSpelerContainer[2].add(pnlKaartContainer[2], BorderLayout.WEST);
     }
 
     public void vierdeSpelerContainerLayOut() {
-        super.add(pnlSpelerContainer[3], BorderLayout.WEST);
+        achtergrond.add(pnlSpelerContainer[3], BorderLayout.WEST);
         pnlSpelerContainer[3].add(lblSpelerNaam[3], BorderLayout.WEST);
         pnlSpelerContainer[3].add(pnlKaartContainer[3], BorderLayout.EAST);
     }
