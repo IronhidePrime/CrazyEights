@@ -127,40 +127,20 @@ public class Controller {
         }
     }
 
-    /* BRAINSTORM OVER BEURT -> speelspel zeker fout
-
-    public int getSpelerAanBeurt() {
-        int spelerNr=0;
-        int i=0;
-        for (Speler s : spelers) {
-            if (s.getAanBeurt()) {
-                spelerNr = i;
-            }
-            i++;
-        }
-        return spelerNr;
-    }
-
-    public void setSpelerAanBeurt (int spelerNr) {
-        getSpelers().get(spelerNr).setAanBeurt(true);
-    }
-
-
-    public void speelSpel() {
-        while (!eindeSpel()) {
-            if (getSpelerAanBeurt() == getSpelers().size()) {
-                setSpelerAanBeurt(0);
-            } else {
-                setSpelerAanBeurt(getSpelerAanBeurt()+1);
-            }
-        }
-    }*/
-
     public int getAantalKaartenSpeler(){
         if(getAantalSpelers()==2){
             return KAARTEN_2_SPELERS;
         } else {
             return KAARTEN_MEER_SPELERS;
+        }
+    }
+
+    public void checkComputerAanBeurt(){
+        for (Speler s : getSpelers()) {
+            if (s instanceof Computer && s.getAanBeurt()) {
+                ((Computer) s).speeltKaart();
+                System.out.println("size na uitvoeren speelKaart is " + s.getKaarten().size());
+            }
         }
     }
 }

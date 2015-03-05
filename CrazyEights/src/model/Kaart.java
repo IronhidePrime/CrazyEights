@@ -13,7 +13,7 @@ public class Kaart {
         this.kleur = kleur;
         this.horizontaleImageString = HorizontaleImageString;
         this.verticaleImageString = VerticaleImageString;
-        this.omgekeerdeImageString = "/view/images/kaartAchterkant.jpg";
+        this.omgekeerdeImageString = "/view/images/kaartAchterkant.png";
     }
 
     public int getWaarde() {

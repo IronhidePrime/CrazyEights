@@ -1,13 +1,17 @@
 package view;
 
+import controller.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class AflegStapelLabel extends JLabel {
     private String imageString;
+    private Controller controller;
 
-    public AflegStapelLabel(String imageString) {
+    public AflegStapelLabel(String imageString, Controller controller) {
         this.imageString = imageString;
+        this.controller = controller;
     }
     @Override
     protected void paintComponent(Graphics g) {

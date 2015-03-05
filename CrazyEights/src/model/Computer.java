@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 public class Computer extends Speler {
     private Spelbord spelbord;
 
@@ -52,4 +54,9 @@ public class Computer extends Speler {
         Kaart kaart = getSpelbord().getTrekstapel().neemKaart();
         super.voegKaartToe(kaart);
     }
+
+    public List<Kaart> getKaarten() {
+        return super.getKaarten();
+    }
+
 }
