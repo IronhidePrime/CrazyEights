@@ -143,6 +143,15 @@ public class Controller {
             }
         }
     }
+
+    public void beeindigBeurt(int spelerNr){
+        getSpelers().get(spelerNr).setAanBeurt(false);
+        if (spelerNr+1 == getSpelers().size()){
+            getSpelers().get(0).setAanBeurt(true);
+        } else {
+            getSpelers().get(spelerNr+1).setAanBeurt(true);
+        }
+    }
 }
 
 

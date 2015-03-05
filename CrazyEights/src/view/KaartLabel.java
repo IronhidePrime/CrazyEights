@@ -30,4 +30,8 @@ public class KaartLabel extends JLabel{
     public void setOmgekeerdeKaart() {
         this.imageString = "/view/images/kaartAchterkant.png";
     }
+
+    public void setImageString(String imageString) {
+        this.imageString = imageString;
+    }
 }
