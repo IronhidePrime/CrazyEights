@@ -232,10 +232,12 @@ public class SpelbordUI extends JFrame {
             } else if (spelers.get(i) instanceof Mens) {
                 lpnlkaartContainer[i].speelKaartEvent(spelers.get(i).getKaarten(),i);
                 lpnlkaartContainer[i].trekKaartEvent(i);
-            } else if (spelers.get(i) instanceof Computer) {
-                lpnlkaartContainer[i].computerSpeelEvent(spelers.get(i).getKaarten(), i);
-                lpnlkaartContainer[i].computerTrekEvent();
             }
+            /*else if (spelers.get(i) instanceof Computer) {
+                System.out.println("hallo");
+                lpnlkaartContainer[i].computerSpeelEvent(i);
+                lpnlkaartContainer[i].computerTrekEvent();
+            }*/
         }
     }
 }
