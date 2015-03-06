@@ -1,7 +1,9 @@
 package controller;
 
 import model.*;
+import view.KaartLabel;
 
+import javax.swing.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -132,15 +134,6 @@ public class Controller {
             return KAARTEN_2_SPELERS;
         } else {
             return KAARTEN_MEER_SPELERS;
-        }
-    }
-
-    public void checkComputerAanBeurt(){
-        for (Speler s : getSpelers()) {
-            if (s instanceof Computer && s.getAanBeurt()) {
-                ((Computer) s).speeltKaart();
-                System.out.println("size na uitvoeren speelKaart is " + s.getKaarten().size());
-            }
         }
     }
 

@@ -75,6 +75,8 @@ public class KaartContainer extends JLayeredPane {
         }
     }
 
+
+
     public void speelKaartEvent(List<Kaart> spelerKaarten, int spelerNr) {
         /**
          * 1. KaartObjectIndex is de index van het kaart Object dat verwijderd moet worden nadat dat je een kaart kan spelen uit de lijst van kaarten van de speler
@@ -155,9 +157,9 @@ public class KaartContainer extends JLayeredPane {
                             }
                         }
                         //TODO: wordt genegeerd
-                        else if (controller.getSpelers().get(spelerNr+1) instanceof Computer) {
+                        else if (controller.getSpelers().get(spelerNr) instanceof Computer) {
                             System.out.println("hallooooooooooooooooooooooo???");
-                            computerSpeelEvent(spelerNr+1);
+                            computerSpeelEvent(spelerNr);
                             System.out.println("hij doet dit");
                         }
 
@@ -227,58 +229,20 @@ public class KaartContainer extends JLayeredPane {
     }
 
     public void computerSpeelEvent(int spelerNr) {
-        Speler speler = controller.getSpelers().get(spelerNr);
-        String imageString;
-        Kaart teSpelenKaart;
-        System.out.println("test123");
-        if (speler instanceof Computer && controller.getSpelers().get(spelerNr).getAanBeurt()) {
+        if (controller.getSpelers().get(spelerNr) instanceof Computer){
+            int index = 0;
+            String imgString;
+            String imgStringTeSpelenKaart;
 
-            teSpelenKaart = ((Computer) speler).speeltKaart();
-
-            System.out.println(teSpelenKaart.getHorizontaleImageString());
-            imageString = teSpelenKaart.getHorizontaleImageString();
-
-            for (KaartLabel kaartLabel : kaartenSpeler) {
-                System.out.println(kaartLabel.getHorizontale()); //geeft NULLL-waarde
-                System.out.println(imageString);
-                if (kaartLabel.getHorizontale().equals(imageString)) {
-                    System.out.println("TRUEEEEEEEEEEEEEEEEE");
-                    kaartenSpeler.remove(kaartLabel);
-                    remove(kaartLabel);
-                    removeAll();
-                }
-                kaartOverlap = 0;
-                if (spelerNr == 0 || spelerNr == 1) {
-                    for (KaartLabel kaartLabel1 : kaartenSpeler) {
-                        kaartLabel1.setBounds(kaartOverlap, 0, kaartBreedte, 100);
-                        kaartOverlap += 40;
-                        add(kaartLabel1);
-                    }
-                    lblAflegStapel.setImageString(teSpelenKaart.getHorizontaleImageString());
-                    kaartOverlap = 40;
-                    zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
-                }
-
-                if (spelerNr == 2 || spelerNr == 3) {
-                    for (KaartLabel kaartLabel1 : kaartenSpeler) {
-                        kaartLabel1.setBounds(0, kaartOverlap, 100, kaartBreedte);
-                        kaartOverlap += 40;
-                        add(kaartLabel1);
-                    }
-                    lblAflegStapel.setImageString(teSpelenKaart.getHorizontaleImageString());
-
-                    kaartOverlap = 40;
-                    zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
-                }
+            Kaart teSpelenKaart = ((Computer) controller.getSpelers().get(spelerNr)).getTeSpelenKaart();
+            if (teSpelenKaart != null){
+                controller.speelKaart(teSpelenKaart, spelerNr);
+                imgString = controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString();
+                lblAflegStapel.setImageString(imgString);
             }
-            controller.speelKaart(teSpelenKaart, spelerNr);
+
             controller.beeindigBeurt(spelerNr);
         }
-
-        revalidate();
-        repaint();
-
-        System.out.println("bovenste kaart op aflegstapel is" + controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
     }
 
 
@@ -286,4 +250,7 @@ public class KaartContainer extends JLayeredPane {
         System.out.println("trekkeuh");
     }
 
+    public List<KaartLabel> getKaartenSpeler() {
+        return kaartenSpeler;
+    }
 }

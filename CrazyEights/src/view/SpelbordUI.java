@@ -225,19 +225,23 @@ public class SpelbordUI extends JFrame {
 
 
     public void behandelEvents() {
-        for (int i=0;i<spelers.size();i++){
-            if (i==0) {
-                lpnlkaartContainer[i].speelKaartEvent(spelers.get(i).getKaarten(),i);
-                lpnlkaartContainer[i].trekKaartEvent(i);
-            } else if (spelers.get(i) instanceof Mens) {
-                lpnlkaartContainer[i].speelKaartEvent(spelers.get(i).getKaarten(),i);
-                lpnlkaartContainer[i].trekKaartEvent(i);
+            for (int i=0;i<spelers.size();i++){
+                if (spelers.get(i) instanceof Mens){
+                    System.out.println("speler " + i + "krijgt een mens event");
+                    lpnlkaartContainer[i].speelKaartEvent(spelers.get(i).getKaarten(),i);
+                } else if (spelers.get(i) instanceof Computer){
+                    int index = i;
+                    System.out.println("speler " + i + "krijgt een computer event");
+                    lpnlkaartContainer[i].addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseReleased(MouseEvent e) {
+                            super.mouseReleased(e);
+                            if (controller.getSpelers().get(index).getAanBeurt()) {
+                                lpnlkaartContainer[index].computerSpeelEvent(index);
+                            }
+                        }
+                    });
+                }
             }
-            /*else if (spelers.get(i) instanceof Computer) {
-                System.out.println("hallo");
-                lpnlkaartContainer[i].computerSpeelEvent(i);
-                lpnlkaartContainer[i].computerTrekEvent();
-            }*/
-        }
     }
 }

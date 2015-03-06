@@ -14,33 +14,36 @@ public class Computer extends Speler {
         return spelbord;
     }
 
-    public Kaart speeltKaart() {
+    public Kaart getTeSpelenKaart() {
+
         /**
          * gaat kijken of de computer een kaart kan spelen
          * eerst kijken of hij een kaart met dezelfde kleur kan spelen
          * daarna kijken of hij een kaart met dezelfde waarde kan spelen
          * ten slotte kijken of hij een 8 bezit
          */
+
+        Kaart teSpelenKaart = null;
+        Kaart kaartSpelbord = getSpelbord().getAflegstapel().getBovensteKaart();
+        boolean kaartGevonden = false;
+
         for (Kaart kaart : super.getKaarten()) {
-            if (kaart.getKleur() == getSpelbord().getAflegstapel().getBovensteKaart().getKleur()) {
-                return kaart;
+            System.out.println(kaart.getHorizontaleImageString());
+            System.out.println(super.getKaarten().size());
+
+            if (kaart.getKleur() == kaartSpelbord.getKleur() || kaart.getWaarde() == kaartSpelbord.getWaarde() || kaart.getWaarde() == 8) {
+                teSpelenKaart = kaart;
+                kaartGevonden = true;
             }
         }
 
-        for (Kaart kaart : super.getKaarten()) {
-            if (kaart.getWaarde() == getSpelbord().getAflegstapel().getBovensteKaart().getWaarde()) {
-                return kaart;
-            }
+        if (kaartGevonden){
+            System.out.println("te spelen kaart is " + teSpelenKaart.getHorizontaleImageString());
+        } else {
+            System.out.println("kan geen kaart spelen");
         }
-
-        for (Kaart kaart : super.getKaarten()) {
-            if (kaart.getWaarde() == 8) {
-                return kaart;
-            }
-        }
-        return null;
+        return teSpelenKaart;
     }
-
     /**
      * neem kaart van de trekstapel
      */
