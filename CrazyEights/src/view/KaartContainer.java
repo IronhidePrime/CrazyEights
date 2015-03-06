@@ -239,14 +239,20 @@ public class KaartContainer extends JLayeredPane {
                 controller.speelKaart(teSpelenKaart, spelerNr);
                 imgString = controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString();
                 lblAflegStapel.setImageString(imgString);
+            } else {
+                computerTrekEvent(spelerNr);
             }
             controller.beeindigBeurt(spelerNr);
         }
     }
 
 
-    public void computerTrekEvent() {
-        System.out.println("trekkeuh");
+    public void computerTrekEvent(int spelerNr) {
+        if (controller.getSpelers().get(spelerNr) instanceof Computer){
+            ((Computer) controller.getSpelers().get(spelerNr)).voegKaartToe();
+            System.out.println("we hebben een kaart getrokken");
+            controller.beeindigBeurt(spelerNr);
+        }
     }
 
     public List<KaartLabel> getKaartenSpeler() {

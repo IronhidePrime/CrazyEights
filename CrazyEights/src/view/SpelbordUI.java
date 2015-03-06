@@ -230,6 +230,7 @@ public class SpelbordUI extends JFrame {
                 if (spelers.get(i) instanceof Mens){
                     System.out.println("speler " + i + "krijgt een mens event");
                     lpnlkaartContainer[i].speelKaartEvent(spelers.get(i).getKaarten(),i);
+                    lpnlkaartContainer[i].trekKaartEvent(i);
                 } else if (spelers.get(i) instanceof Computer){
                     int index = i;
                     System.out.println("speler " + i + "krijgt een computer event");
