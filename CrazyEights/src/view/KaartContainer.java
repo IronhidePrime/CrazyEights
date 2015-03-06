@@ -100,6 +100,8 @@ public class KaartContainer extends JLayeredPane {
                                 add(kaartLabel1);
                                 lblAflegStapel.setImageString(kaartLabel.getImageString());
                             }
+                            kaartOverlap = 40;
+                            zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
                         }
 
                         if (spelerNr == 2 || spelerNr == 3){
@@ -109,6 +111,8 @@ public class KaartContainer extends JLayeredPane {
                                 add(kaartLabel1);
                                 lblAflegStapel.setImageString(controller.getSpelerKaarten(spelerNr).get(KaartObjectIndex).getHorizontaleImageString());
                             }
+                            kaartOverlap = 40;
+                            zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
                         }
                         controller.speelKaart(teSpelenKaart, spelerNr);
                         controller.beeindigBeurt(spelerNr);
@@ -152,7 +156,7 @@ public class KaartContainer extends JLayeredPane {
                             add(kaartenSpeler.get(i), new Integer(i));
                         }
                         kaartOverlap = 40;
-                        zetBreedte(getWidth()+kaartOverlap,getHeight());
+                        zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
                     }
 
                     if (spelerNr == 2 || spelerNr == 3){
@@ -165,7 +169,7 @@ public class KaartContainer extends JLayeredPane {
                             add(kaartenSpeler.get(i), new Integer(i));
                         }
                         kaartOverlap = 40;
-                        zetBreedte(getWidth(),getHeight()+kaartOverlap);
+                        zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
                     }
                 }
                 revalidate();
