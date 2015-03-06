@@ -240,7 +240,6 @@ public class KaartContainer extends JLayeredPane {
                 imgString = controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString();
                 lblAflegStapel.setImageString(imgString);
             }
-
             controller.beeindigBeurt(spelerNr);
         }
     }

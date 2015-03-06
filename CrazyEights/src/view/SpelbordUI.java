@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -225,14 +226,14 @@ public class SpelbordUI extends JFrame {
 
 
     public void behandelEvents() {
-            for (int i=0;i<spelers.size();i++){
+        for (int i=0;i<spelers.size();i++){
                 if (spelers.get(i) instanceof Mens){
                     System.out.println("speler " + i + "krijgt een mens event");
                     lpnlkaartContainer[i].speelKaartEvent(spelers.get(i).getKaarten(),i);
                 } else if (spelers.get(i) instanceof Computer){
                     int index = i;
                     System.out.println("speler " + i + "krijgt een computer event");
-                    lpnlkaartContainer[i].addMouseListener(new MouseAdapter() {
+                    super.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseReleased(MouseEvent e) {
                             super.mouseReleased(e);
