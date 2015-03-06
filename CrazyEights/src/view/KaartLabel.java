@@ -10,8 +10,21 @@ public class KaartLabel extends JLabel{
     private String imageString;
     private Controller controller;
 
+
+    private String horizontale;
+    private String verticale;
+    private String omgedraaid;
+
     public KaartLabel(String imageString, Controller controller) {
         this.imageString = imageString;
+        this.controller = controller;
+    }
+
+    public KaartLabel(String horizontale, String verticale, String omgedraaid, Controller controller) {
+        this.horizontale = horizontale;
+        this.verticale = verticale;
+        this.omgedraaid = omgedraaid;
+
         this.controller = controller;
     }
 
@@ -33,5 +46,17 @@ public class KaartLabel extends JLabel{
 
     public void setImageString(String imageString) {
         this.imageString = imageString;
+    }
+
+    public String getHorizontale() {
+        return horizontale;
+    }
+
+    public String getVerticale() {
+        return verticale;
+    }
+
+    public String getOmgedraaid() {
+        return omgedraaid;
     }
 }

@@ -31,13 +31,6 @@ public class SpelbordUI extends JFrame {
     private JPanel[] pnlSpelerContainer;
     private JLabel[] lblSpelerNaam;
 
-    /*
-    private List<KaartLabel> kaartenSpeler0;
-    private List<KaartLabel> kaartenSpeler1;
-    private List<KaartLabel> kaartenSpeler2;
-    private List<KaartLabel> kaartenSpeler3;
-    */
-
     private List<Speler> spelers;
 
     private int kaartBreedte = 70;
@@ -233,8 +226,16 @@ public class SpelbordUI extends JFrame {
 
     public void behandelEvents() {
         for (int i=0;i<spelers.size();i++){
-            lpnlkaartContainer[i].speelKaartEvent(spelers.get(i).getKaarten(),i);
-            lpnlkaartContainer[i].trekKaartEvent(i);
+            if (i==0) {
+                lpnlkaartContainer[i].speelKaartEvent(spelers.get(i).getKaarten(),i);
+                lpnlkaartContainer[i].trekKaartEvent(i);
+            } else if (spelers.get(i) instanceof Mens) {
+                lpnlkaartContainer[i].speelKaartEvent(spelers.get(i).getKaarten(),i);
+                lpnlkaartContainer[i].trekKaartEvent(i);
+            } else if (spelers.get(i) instanceof Computer) {
+                lpnlkaartContainer[i].computerSpeelEvent(spelers.get(i).getKaarten(), i);
+                lpnlkaartContainer[i].computerTrekEvent();
+            }
         }
     }
 }
