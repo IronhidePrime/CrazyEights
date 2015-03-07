@@ -158,9 +158,9 @@ public class KaartContainer extends JLayeredPane {
                             }
                         }
                         if (controller.getSpelers().get(1) instanceof Computer) {
-                            System.out.println("hallooooooooooooooooooooooo???");
-                            computerSpeelEvent(1);
-                            System.out.println("hij doet dit");
+                            for (int i=1; i<controller.getSpelers().size(); i++) {
+                                computerSpeelEvent(i);
+                            }
                         }
 
 
