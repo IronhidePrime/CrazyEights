@@ -34,6 +34,7 @@ public class Computer extends Speler {
             if (kaart.getKleur() == kaartSpelbord.getKleur() || kaart.getWaarde() == kaartSpelbord.getWaarde() || kaart.getWaarde() == 8) {
                 teSpelenKaart = kaart;
                 kaartGevonden = true;
+                break;
             }
         }
 

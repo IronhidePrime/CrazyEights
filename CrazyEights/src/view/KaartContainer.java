@@ -126,6 +126,7 @@ public class KaartContainer extends JLayeredPane {
                             zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
                             controller.speelKaart(teSpelenKaart, spelerNr);
                             controller.beeindigBeurt(spelerNr);
+                            System.out.println("test123456789888999");
                         }
 
                         if (controller.getSpelers().get(spelerNr) instanceof Mens) {
@@ -156,10 +157,9 @@ public class KaartContainer extends JLayeredPane {
                                 controller.beeindigBeurt(spelerNr);
                             }
                         }
-                        //TODO: wordt genegeerd
-                        else if (controller.getSpelers().get(spelerNr) instanceof Computer) {
+                        if (controller.getSpelers().get(1) instanceof Computer) {
                             System.out.println("hallooooooooooooooooooooooo???");
-                            computerSpeelEvent(spelerNr);
+                            computerSpeelEvent(1);
                             System.out.println("hij doet dit");
                         }
 
@@ -230,15 +230,15 @@ public class KaartContainer extends JLayeredPane {
 
     public void computerSpeelEvent(int spelerNr) {
         if (controller.getSpelers().get(spelerNr) instanceof Computer){
-            int index = 0;
             String imgString;
-            String imgStringTeSpelenKaart;
 
             Kaart teSpelenKaart = ((Computer) controller.getSpelers().get(spelerNr)).getTeSpelenKaart();
             if (teSpelenKaart != null){
                 controller.speelKaart(teSpelenKaart, spelerNr);
                 imgString = controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString();
                 lblAflegStapel.setImageString(imgString);
+            } else if (controller.getSpelers().get(spelerNr).getKaarten().size() == 0){
+                System.out.println("Computer wint");
             } else {
                 computerTrekEvent(spelerNr);
             }
