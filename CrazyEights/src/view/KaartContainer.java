@@ -184,15 +184,14 @@ public class KaartContainer extends JLayeredPane {
                     KaartLabel lblGetrokkenKaart = new KaartLabel(getrokkenKaart.getHorizontaleImageString(), controller);
                     controller.getSpelerKaarten(spelerNr).add(getrokkenKaart);
 
-                    kaartOverlap = 0;
+                    kaartenSpeler.add(lblGetrokkenKaart);
+
                     if (spelerNr == 0 || spelerNr == 1) {
-                        kaartenSpeler.add(lblGetrokkenKaart);
                         hertekenKaartenHorizontaal();
                     }
 
                     if (spelerNr == 2 || spelerNr == 3) {
                         lblGetrokkenKaart.setImageString(getrokkenKaart.getVerticaleImageString());
-                        kaartenSpeler.add(lblGetrokkenKaart);
                         hertekenKaartenVerticaal();
                     }
                 }
@@ -231,15 +230,13 @@ public class KaartContainer extends JLayeredPane {
                     kaartOverlap = 0;
                     if (spelerNr == 1) {
                         hertekenKaartenHorizontaal();
-                        revalidate();
-                        repaint();
                     }
 
                     if (spelerNr == 2 || spelerNr == 3) {
                         hertekenKaartenVerticaal();
-                        revalidate();
-                        repaint();
                     }
+                    revalidate();
+                    repaint();
                 } catch (ArrayIndexOutOfBoundsException e){
                     System.out.println("negeer");
                 }
@@ -282,20 +279,15 @@ public class KaartContainer extends JLayeredPane {
                 System.out.println("de computer heeft zoveel kaartlabels: " + kaartenSpeler.size());
 
                 hertekenKaartenHorizontaal();
-
-                revalidate();
-                repaint();
             }
 
             if (spelerNr == 2 || spelerNr == 3){
                 kaartenSpeler.add(kaartenSpeler.size()-1,new KaartLabel("/view/images/kaartAchterkantV.png",controller));
 
                 hertekenKaartenVerticaal();
-
-                revalidate();
-                repaint();
             }
-
+            revalidate();
+            repaint();
             if (((Computer) controller.getSpelers().get(spelerNr)).getTeSpelenKaart() != null){
                 System.out.println("we kunnen de getrokken kaart spelen");
                 computerSpeelEvent(spelerNr);
