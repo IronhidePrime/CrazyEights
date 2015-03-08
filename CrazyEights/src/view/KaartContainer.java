@@ -187,13 +187,13 @@ public class KaartContainer extends JLayeredPane {
                     kaartOverlap = 0;
                     if (spelerNr == 0 || spelerNr == 1) {
                         kaartenSpeler.add(lblGetrokkenKaart);
-                        tekenNieuweKaartHorizontaal();
+                        hertekenKaartenHorizontaal();
                     }
 
                     if (spelerNr == 2 || spelerNr == 3) {
                         lblGetrokkenKaart.setImageString(getrokkenKaart.getVerticaleImageString());
                         kaartenSpeler.add(lblGetrokkenKaart);
-                        tekenNieuweKaartVerticaal();
+                        hertekenKaartenVerticaal();
                     }
                 }
                 revalidate();
@@ -281,7 +281,7 @@ public class KaartContainer extends JLayeredPane {
 
                 System.out.println("de computer heeft zoveel kaartlabels: " + kaartenSpeler.size());
 
-                tekenNieuweKaartHorizontaal();
+                hertekenKaartenHorizontaal();
 
                 revalidate();
                 repaint();
@@ -290,7 +290,7 @@ public class KaartContainer extends JLayeredPane {
             if (spelerNr == 2 || spelerNr == 3){
                 kaartenSpeler.add(kaartenSpeler.size()-1,new KaartLabel("/view/images/kaartAchterkantV.png",controller));
 
-                tekenNieuweKaartVerticaal();
+                hertekenKaartenVerticaal();
 
                 revalidate();
                 repaint();
@@ -303,17 +303,13 @@ public class KaartContainer extends JLayeredPane {
         }
     }
 
-    public List<KaartLabel> getKaartenSpeler() {
-        return kaartenSpeler;
-    }
-
     public void hertekenKaartenHorizontaal() {
         removeAll();
         kaartOverlap = 0;
-        for (KaartLabel kaartLabel1 : kaartenSpeler) {
-            kaartLabel1.setBounds(kaartOverlap, 0, kaartBreedte, 100);
+        for (int i = 0; i < kaartenSpeler.size(); i++) {
+            kaartenSpeler.get(i).setBounds(kaartOverlap, 0, kaartBreedte, 100);
             kaartOverlap += 40;
-            add(kaartLabel1);
+            add(kaartenSpeler.get(i), new Integer(i));
         }
 
         kaartOverlap = 40;
@@ -323,36 +319,12 @@ public class KaartContainer extends JLayeredPane {
     public void hertekenKaartenVerticaal() {
         removeAll();
         kaartOverlap = 0;
-        for (KaartLabel kaartLabel1 : kaartenSpeler) {
-            kaartLabel1.setBounds(0, kaartOverlap, 100, kaartBreedte);
-            kaartOverlap += 40;
-            add(kaartLabel1);
-        }
-
-        kaartOverlap = 40;
-        zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
-    }
-
-    public void tekenNieuweKaartHorizontaal() {
-        removeAll();
-        kaartOverlap = 0;
-        for (int i = 0; i < kaartenSpeler.size(); i++) {
-            kaartenSpeler.get(i).setBounds(kaartOverlap, 0, kaartBreedte, 100);
-            kaartOverlap += 40;
-            add(kaartenSpeler.get(i), new Integer(i));
-        }
-        kaartOverlap = 40;
-        zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
-    }
-
-    public void tekenNieuweKaartVerticaal() {
-        removeAll();
-        kaartOverlap = 0;
         for (int i = 0; i < kaartenSpeler.size(); i++) {
             kaartenSpeler.get(i).setBounds(0, kaartOverlap, 100, kaartBreedte);
             kaartOverlap += 40;
             add(kaartenSpeler.get(i), new Integer(i));
         }
+
         kaartOverlap = 40;
         zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
     }
