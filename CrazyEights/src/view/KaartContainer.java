@@ -132,11 +132,8 @@ public class KaartContainer extends JLayeredPane {
                         if (spelerNr == 0) {
                             hertekenKaartenHorizontaal();
 
-                            lblAflegStapel.setImageString(kaartLabel.getImageString());
-
-                            controller.speelKaart(teSpelenKaart, spelerNr);
                             JOptionPane.showMessageDialog(null,"computers gaan nu hun kaarten spelen");
-                            controller.beeindigBeurt(spelerNr);
+
                             robot.mouseMove(getX()+500,getY()+700);
                             robot.mouseRelease(InputEvent.BUTTON1_MASK);
                             System.out.println("fake click");
@@ -145,21 +142,16 @@ public class KaartContainer extends JLayeredPane {
                         if (controller.getSpelers().get(spelerNr) instanceof Mens) {
                             if (spelerNr == 1) {
                                 hertekenKaartenHorizontaal();
-
-                                lblAflegStapel.setImageString(kaartLabel.getImageString());
-
-                                controller.speelKaart(teSpelenKaart, spelerNr);
-                                controller.beeindigBeurt(spelerNr);
                             }
                             if (spelerNr == 2 || spelerNr == 3) {
                                 hertekenKaartenVerticaal();
-
-                                lblAflegStapel.setImageString(controller.getSpelerKaarten(spelerNr).get(KaartObjectIndex).getHorizontaleImageString());
-
-                                controller.speelKaart(teSpelenKaart, spelerNr);
-                                controller.beeindigBeurt(spelerNr);
                             }
                         }
+                        lblAflegStapel.setImageString(kaartLabel.getImageString());
+
+                        controller.speelKaart(teSpelenKaart, spelerNr);
+                        controller.beeindigBeurt(spelerNr);
+
                         System.out.println("bovenste kaart op aflegstapel is" + controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
                         revalidate();
                         repaint();
