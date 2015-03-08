@@ -8,6 +8,7 @@ import model.Speler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
@@ -20,6 +21,7 @@ public class KaartContainer extends JLayeredPane {
     private Controller controller;
     private AflegStapelLabel lblAflegStapel;
     private TrekStapelLabel lblTrekstapel;
+    private Robot robot;
 
     public KaartContainer(Controller controller, AflegStapelLabel lblAflegStapel, TrekStapelLabel lblTrekstapel) {
         this.controller = controller;
@@ -46,14 +48,22 @@ public class KaartContainer extends JLayeredPane {
                     kaartenSpeler.add(new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller));
                 }
                 if (spelerNr == 2 || spelerNr == 3) {
-                    kaartenSpeler.add(new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller));
+                    kaartenSpeler.add(new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getOmgekeerdeImageString(), controller));
                 }
             } else if (controller.getSpelers().get(spelerNr) instanceof Computer) {
                 Kaart kaart = controller.getSpelerKaarten(spelerNr).get(i);
                 KaartLabel kaartLabel = new KaartLabel(kaart.getHorizontaleImageString(), kaart.getVerticaleImageString(), kaart.getOmgekeerdeImageString(), controller);
                 kaartLabel.setImageString(kaartLabel.getOmgedraaid());
+                if (spelerNr == 2 || spelerNr == 3){
+                    kaartLabel.setImageString(kaart.getOmgekeerdeImageStringV());
+                }
                 kaartenSpeler.add(kaartLabel);
             }
+        }
+        try {
+            robot = new Robot();
+        } catch (AWTException e) {
+            e.printStackTrace();
         }
     }
 
@@ -61,7 +71,7 @@ public class KaartContainer extends JLayeredPane {
         kaartOverlap = 0;
         for (int j = 0; j < controller.getAantalKaartenSpeler(); j++) {
             kaartenSpeler.get(j).setBounds(kaartOverlap, 0, kaartBreedte, 100);
-            this.add(kaartenSpeler.get(j), new Integer(j));
+            add(kaartenSpeler.get(j), new Integer(j));
             kaartOverlap += 40;
         }
     }
@@ -82,14 +92,11 @@ public class KaartContainer extends JLayeredPane {
          * 1. KaartObjectIndex is de index van het kaart Object dat verwijderd moet worden nadat dat je een kaart kan spelen uit de lijst van kaarten van de speler
          * 2. controleren of het kaartObject gespeeld kan worden en controleren of de huidige speler aan beurt is, zo ja wordt het kaartObject en het bijbehorende kaartlabel verwijderd
          */
-
         for (KaartLabel kaartLabel : kaartenSpeler) {
-
             kaartLabel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     super.mouseReleased(e);
-
                     //1
                     int KaartObjectIndex = 0;
                     String imageStringKaartLabel = kaartLabel.getImageString();
@@ -105,13 +112,21 @@ public class KaartContainer extends JLayeredPane {
                             System.out.println("img string kaartLabel is " + kaartLabel.getImageString());
                         }
                     }
-
                     if (controller.speelKaartMogelijk(spelerKaarten.get(KaartObjectIndex)) && controller.getSpelers().get(spelerNr).getAanBeurt()) {
                         Kaart teSpelenKaart = controller.getSpelerKaarten(spelerNr).get(KaartObjectIndex);
+                        controller.speelKaart(teSpelenKaart,spelerNr);
+                        System.out.println("de aflegstapel heeft nu " + controller.getSpelbord().getAflegstapel().getKaarten().size() + " kaarten");
                         System.out.println("teSpelen kaart is " + teSpelenKaart.getHorizontaleImageString());
                         kaartenSpeler.remove(kaartLabel);
                         remove(kaartLabel);
                         removeAll();
+                        if (controller.getSpelerKaarten(spelerNr).size() == 0){
+                            JOptionPane.showMessageDialog(null,"Je hebt gewonnen");
+                            int keuze = JOptionPane.showConfirmDialog(null,"Nog een keer spelen?");
+                            if(keuze == JOptionPane.YES_OPTION){
+                                controller.herstartSpel();
+                            }
+                        }
 
                         kaartOverlap = 0;
                         if (spelerNr == 0) {
@@ -125,8 +140,11 @@ public class KaartContainer extends JLayeredPane {
                             kaartOverlap = 40;
                             zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
                             controller.speelKaart(teSpelenKaart, spelerNr);
+                            JOptionPane.showMessageDialog(null,"computers gaan nu hun kaarten spelen");
                             controller.beeindigBeurt(spelerNr);
-                            System.out.println("test123456789888999");
+                            robot.mouseMove(getX()+500,getY()+700);
+                            robot.mouseRelease(InputEvent.BUTTON1_MASK);
+                            System.out.println("fake click");
                         }
 
                         if (controller.getSpelers().get(spelerNr) instanceof Mens) {
@@ -157,10 +175,11 @@ public class KaartContainer extends JLayeredPane {
                                 controller.beeindigBeurt(spelerNr);
                             }
                         }
-                        if (controller.getSpelers().get(1) instanceof Computer) {
-                            for (int i=1; i<controller.getSpelers().size(); i++) {
-                                computerSpeelEvent(i);
-                            }
+                        //TODO: wordt genegeerd
+                        else if (controller.getSpelers().get(spelerNr) instanceof Computer) {
+                            System.out.println("hallooooooooooooooooooooooo???");
+                            computerSpeelEvent(spelerNr);
+                            System.out.println("hij doet dit");
                         }
 
 
@@ -185,11 +204,16 @@ public class KaartContainer extends JLayeredPane {
         lblTrekstapel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                Kaart getrokkenKaart = null;
                 super.mouseReleased(e);
                 System.out.println("er is op de trekstapel geklikt");
+                if (controller.getSpelbord().getTrekstapel().getKaarten().size() == 1){
+                    System.out.println("stapel vullen");
+                    controller.vulTrekStapel();
+                }
 
                 if (controller.getSpelers().get(spelerNr).getAanBeurt()) {
-                    Kaart getrokkenKaart = controller.getSpelbord().getTrekstapel().neemKaart();
+                    getrokkenKaart = controller.getSpelbord().getTrekstapel().neemKaart();
                     System.out.println("getrokken kaart is" + getrokkenKaart.getHorizontaleImageString());
                     KaartLabel lblGetrokkenKaart = new KaartLabel(getrokkenKaart.getHorizontaleImageString(), controller);
                     controller.getSpelerKaarten(spelerNr).add(getrokkenKaart);
@@ -223,6 +247,16 @@ public class KaartContainer extends JLayeredPane {
                 revalidate();
                 repaint();
                 speelKaartEvent(controller.getSpelerKaarten(spelerNr), spelerNr);
+                if (controller.speelKaartMogelijk(getrokkenKaart)){
+                    System.out.println("je kan de getrokken kaart spelen");
+                    controller.getSpelers().get(spelerNr).setAanBeurt(true);
+                } else {
+                    JOptionPane.showMessageDialog(null,"Je kan de getrokken kaart niet spelen, je beurt is voorbij, computers gaan nu hun kaarten spelen");
+                    controller.beeindigBeurt(spelerNr);
+                    robot.mouseMove(getX()+500,getY()+700);
+                    robot.mouseRelease(InputEvent.BUTTON1_MASK);
+                    System.out.println("fake click");
+                }
                 System.out.println("Size trekstapel na het trekken van een kaart" + controller.getSpelbord().getTrekstapel().getKaarten().size());
             }
         });
@@ -237,21 +271,81 @@ public class KaartContainer extends JLayeredPane {
                 controller.speelKaart(teSpelenKaart, spelerNr);
                 imgString = controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString();
                 lblAflegStapel.setImageString(imgString);
-            } else if (controller.getSpelers().get(spelerNr).getKaarten().size() == 0){
-                System.out.println("Computer wint");
+                kaartenSpeler.remove(kaartenSpeler.size()-1);
+                try{
+                    remove(kaartenSpeler.size());
+                } catch (ArrayIndexOutOfBoundsException e){
+                    System.out.println("negeer");
+                }
+                //if (spelerNr == 2){
+                    //kaartOverlap = 40;
+                    //zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
+                //}
+                System.out.println(kaartenSpeler.size());
             } else {
                 computerTrekEvent(spelerNr);
             }
+
+            if (controller.getSpelerKaarten(spelerNr).size() == 0){
+                JOptionPane.showMessageDialog(null, "Je hebt verloren");
+                int keuze = JOptionPane.showConfirmDialog(null,"Nog een keer spelen?");
+                if(keuze == JOptionPane.YES_OPTION){
+                    controller.herstartSpel();
+                }
+            }
             controller.beeindigBeurt(spelerNr);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
 
     public void computerTrekEvent(int spelerNr) {
         if (controller.getSpelers().get(spelerNr) instanceof Computer){
+            if (controller.getSpelbord().getTrekstapel().getKaarten().size() == 1){
+                System.out.println("stapel vullen");
+                controller.vulTrekStapel();
+            }
+
             ((Computer) controller.getSpelers().get(spelerNr)).voegKaartToe();
-            System.out.println("we hebben een kaart getrokken");
-            controller.beeindigBeurt(spelerNr);
+            System.out.println("computer heeft een kaart getrokken ");
+
+            if (spelerNr == 1){
+                kaartenSpeler.add(kaartenSpeler.size()-1,new KaartLabel("/view/images/kaartAchterkant.png",controller));
+                kaartOverlap = 40;
+                zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
+            }
+
+            if (spelerNr == 2 || spelerNr==3){
+                kaartenSpeler.add(kaartenSpeler.size()-1,new KaartLabel("/view/images/kaartAchterkantV.png",controller));
+            }
+
+            try {
+                add(kaartenSpeler.get(kaartenSpeler.size() -1));
+            } catch (IllegalComponentStateException | IllegalArgumentException e){
+                System.out.println("negeren");
+            }
+            removeAll();
+            try {
+                if (spelerNr == 1){
+                    kaartOverlap = 40;
+                    zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
+                    tekenKaartLabels();
+                }
+                if (spelerNr == 2 || spelerNr == 3){
+                    tekenKaartLabelsVerticaal();
+                }
+            } catch ( IndexOutOfBoundsException e){
+                System.out.println("negeren");
+            }
+            System.out.println(kaartenSpeler.size() + "na het trekken van een kaart");
+            if (((Computer) controller.getSpelers().get(spelerNr)).getTeSpelenKaart() != null){
+                System.out.println("we kunnen de getrokken kaart spelen");
+                computerSpeelEvent(spelerNr);
+            }
         }
     }
 

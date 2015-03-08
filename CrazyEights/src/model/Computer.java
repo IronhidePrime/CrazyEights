@@ -56,5 +56,4 @@ public class Computer extends Speler {
     public List<Kaart> getKaarten() {
         return super.getKaarten();
     }
-
 }

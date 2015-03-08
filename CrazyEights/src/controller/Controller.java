@@ -2,8 +2,11 @@ package controller;
 
 import model.*;
 import view.KaartLabel;
+import view.SpelbordUI;
+import view.StartUI;
 
 import javax.swing.*;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,6 +16,8 @@ public class Controller {
      */
     private static final int KAARTEN_2_SPELERS = 7;
     private static final int KAARTEN_MEER_SPELERS = 5;
+
+    private SpelbordUI spelbordUI;
 
     private Spelbord spelbord;
     private List<Speler> spelers;
@@ -86,6 +91,10 @@ public class Controller {
         getSpelers().get(0).setAanBeurt(true);
     }
 
+    public void herstartSpel(){
+        new StartUI();
+    }
+
     /**
      * spel is ten einde wanneer een van de spelers erin slaagt om al zijn kaarten te hebben afgelegd
      */
@@ -144,6 +153,14 @@ public class Controller {
         } else {
             getSpelers().get(spelerNr+1).setAanBeurt(true);
         }
+    }
+
+    public void vulTrekStapel(){
+        Kaart bovensteKaart = getSpelbord().getAflegstapel().getBovensteKaart();
+        getSpelbord().getTrekstapel().getKaarten().addAll(getSpelbord().getAflegstapel().getKaarten());
+        getSpelbord().getAflegstapel().getKaarten().removeAll(getSpelbord().getAflegstapel().getKaarten());
+        getSpelbord().getAflegstapel().getKaarten().add(bovensteKaart);
+        Collections.shuffle(getSpelbord().getTrekstapel().getKaarten());
     }
 }
 
