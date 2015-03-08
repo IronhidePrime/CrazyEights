@@ -114,12 +114,12 @@ public class KaartContainer extends JLayeredPane {
                     }
                     if (controller.speelKaartMogelijk(spelerKaarten.get(KaartObjectIndex)) && controller.getSpelers().get(spelerNr).getAanBeurt()) {
                         Kaart teSpelenKaart = controller.getSpelerKaarten(spelerNr).get(KaartObjectIndex);
-                        controller.speelKaart(teSpelenKaart,spelerNr);
+                        controller.speelKaart(teSpelenKaart, spelerNr);
                         System.out.println("de aflegstapel heeft nu " + controller.getSpelbord().getAflegstapel().getKaarten().size() + " kaarten");
                         System.out.println("teSpelen kaart is " + teSpelenKaart.getHorizontaleImageString());
                         kaartenSpeler.remove(kaartLabel);
                         remove(kaartLabel);
-                        removeAll();
+
                         if (controller.getSpelerKaarten(spelerNr).size() == 0){
                             JOptionPane.showMessageDialog(null,"Je hebt gewonnen");
                             int keuze = JOptionPane.showConfirmDialog(null,"Nog een keer spelen?");
@@ -128,17 +128,12 @@ public class KaartContainer extends JLayeredPane {
                             }
                         }
 
-                        kaartOverlap = 0;
+
                         if (spelerNr == 0) {
-                            for (KaartLabel kaartLabel1 : kaartenSpeler) {
-                                kaartLabel1.setBounds(kaartOverlap, 0, kaartBreedte, 100);
-                                kaartOverlap += 40;
-                                add(kaartLabel1);
-                            }
+                            hertekenKaartenHorizontaal();
+
                             lblAflegStapel.setImageString(kaartLabel.getImageString());
 
-                            kaartOverlap = 40;
-                            zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
                             controller.speelKaart(teSpelenKaart, spelerNr);
                             JOptionPane.showMessageDialog(null,"computers gaan nu hun kaarten spelen");
                             controller.beeindigBeurt(spelerNr);
@@ -149,46 +144,25 @@ public class KaartContainer extends JLayeredPane {
 
                         if (controller.getSpelers().get(spelerNr) instanceof Mens) {
                             if (spelerNr == 1) {
-                                for (KaartLabel kaartLabel1 : kaartenSpeler) {
-                                    kaartLabel1.setBounds(kaartOverlap, 0, kaartBreedte, 100);
-                                    kaartOverlap += 40;
-                                    add(kaartLabel1);
-                                }
+                                hertekenKaartenHorizontaal();
+
                                 lblAflegStapel.setImageString(kaartLabel.getImageString());
 
-                                kaartOverlap = 40;
-                                zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
                                 controller.speelKaart(teSpelenKaart, spelerNr);
                                 controller.beeindigBeurt(spelerNr);
                             }
                             if (spelerNr == 2 || spelerNr == 3) {
-                                for (KaartLabel kaartLabel1 : kaartenSpeler) {
-                                    kaartLabel1.setBounds(0, kaartOverlap, 100, kaartBreedte);
-                                    kaartOverlap += 40;
-                                    add(kaartLabel1);
-                                }
+                                hertekenKaartenVerticaal();
+
                                 lblAflegStapel.setImageString(controller.getSpelerKaarten(spelerNr).get(KaartObjectIndex).getHorizontaleImageString());
 
-                                kaartOverlap = 40;
-                                zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
                                 controller.speelKaart(teSpelenKaart, spelerNr);
                                 controller.beeindigBeurt(spelerNr);
                             }
                         }
-                        //TODO: wordt genegeerd
-                        else if (controller.getSpelers().get(spelerNr) instanceof Computer) {
-                            System.out.println("hallooooooooooooooooooooooo???");
-                            computerSpeelEvent(spelerNr);
-                            System.out.println("hij doet dit");
-                        }
-
-
                         System.out.println("bovenste kaart op aflegstapel is" + controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
-
                         revalidate();
                         repaint();
-
-
                     }
                 }
             });
@@ -220,32 +194,19 @@ public class KaartContainer extends JLayeredPane {
 
                     kaartOverlap = 0;
                     if (spelerNr == 0 || spelerNr == 1) {
-                        removeAll();
                         kaartenSpeler.add(lblGetrokkenKaart);
-                        for (int i = 0; i < kaartenSpeler.size(); i++) {
-                            kaartenSpeler.get(i).setBounds(kaartOverlap, 0, kaartBreedte, 100);
-                            kaartOverlap += 40;
-                            add(kaartenSpeler.get(i), new Integer(i));
-                        }
-                        kaartOverlap = 40;
-                        zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
+                        tekenNieuweKaartHorizontaal();
                     }
 
                     if (spelerNr == 2 || spelerNr == 3) {
-                        removeAll();
                         lblGetrokkenKaart.setImageString(getrokkenKaart.getVerticaleImageString());
                         kaartenSpeler.add(lblGetrokkenKaart);
-                        for (int i = 0; i < kaartenSpeler.size(); i++) {
-                            kaartenSpeler.get(i).setBounds(0, kaartOverlap, 100, kaartBreedte);
-                            kaartOverlap += 40;
-                            add(kaartenSpeler.get(i), new Integer(i));
-                        }
-                        kaartOverlap = 40;
-                        zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
+                        tekenNieuweKaartVerticaal();
                     }
                 }
                 revalidate();
                 repaint();
+
                 speelKaartEvent(controller.getSpelerKaarten(spelerNr), spelerNr);
                 if (controller.speelKaartMogelijk(getrokkenKaart)){
                     System.out.println("je kan de getrokken kaart spelen");
@@ -273,17 +234,27 @@ public class KaartContainer extends JLayeredPane {
                 lblAflegStapel.setImageString(imgString);
                 kaartenSpeler.remove(kaartenSpeler.size()-1);
                 try{
-                    remove(kaartenSpeler.size());
+                    remove(kaartenSpeler.size()-1);
+                    removeAll();
+                    kaartOverlap = 0;
+                    if (spelerNr == 1) {
+                        hertekenKaartenHorizontaal();
+                        revalidate();
+                        repaint();
+                    }
+
+                    if (spelerNr == 2 || spelerNr == 3) {
+                        hertekenKaartenVerticaal();
+                        revalidate();
+                        repaint();
+                    }
                 } catch (ArrayIndexOutOfBoundsException e){
                     System.out.println("negeer");
                 }
-                //if (spelerNr == 2){
-                    //kaartOverlap = 40;
-                    //zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
-                //}
-                System.out.println(kaartenSpeler.size());
             } else {
                 computerTrekEvent(spelerNr);
+                revalidate();
+                repaint();
             }
 
             if (controller.getSpelerKaarten(spelerNr).size() == 0){
@@ -314,34 +285,25 @@ public class KaartContainer extends JLayeredPane {
             System.out.println("computer heeft een kaart getrokken ");
 
             if (spelerNr == 1){
-                kaartenSpeler.add(kaartenSpeler.size()-1,new KaartLabel("/view/images/kaartAchterkant.png",controller));
-                kaartOverlap = 40;
-                zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
+                kaartenSpeler.add(new KaartLabel("/view/images/kaartAchterkant.png",controller));
+
+                System.out.println("de computer heeft zoveel kaartlabels: " + kaartenSpeler.size());
+
+                tekenNieuweKaartHorizontaal();
+
+                revalidate();
+                repaint();
             }
 
-            if (spelerNr == 2 || spelerNr==3){
+            if (spelerNr == 2 || spelerNr == 3){
                 kaartenSpeler.add(kaartenSpeler.size()-1,new KaartLabel("/view/images/kaartAchterkantV.png",controller));
+
+                tekenNieuweKaartVerticaal();
+
+                revalidate();
+                repaint();
             }
 
-            try {
-                add(kaartenSpeler.get(kaartenSpeler.size() -1));
-            } catch (IllegalComponentStateException | IllegalArgumentException e){
-                System.out.println("negeren");
-            }
-            removeAll();
-            try {
-                if (spelerNr == 1){
-                    kaartOverlap = 40;
-                    zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
-                    tekenKaartLabels();
-                }
-                if (spelerNr == 2 || spelerNr == 3){
-                    tekenKaartLabelsVerticaal();
-                }
-            } catch ( IndexOutOfBoundsException e){
-                System.out.println("negeren");
-            }
-            System.out.println(kaartenSpeler.size() + "na het trekken van een kaart");
             if (((Computer) controller.getSpelers().get(spelerNr)).getTeSpelenKaart() != null){
                 System.out.println("we kunnen de getrokken kaart spelen");
                 computerSpeelEvent(spelerNr);
@@ -351,5 +313,55 @@ public class KaartContainer extends JLayeredPane {
 
     public List<KaartLabel> getKaartenSpeler() {
         return kaartenSpeler;
+    }
+
+    public void hertekenKaartenHorizontaal() {
+        removeAll();
+        kaartOverlap = 0;
+        for (KaartLabel kaartLabel1 : kaartenSpeler) {
+            kaartLabel1.setBounds(kaartOverlap, 0, kaartBreedte, 100);
+            kaartOverlap += 40;
+            add(kaartLabel1);
+        }
+
+        kaartOverlap = 40;
+        zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
+    }
+
+    public void hertekenKaartenVerticaal() {
+        removeAll();
+        kaartOverlap = 0;
+        for (KaartLabel kaartLabel1 : kaartenSpeler) {
+            kaartLabel1.setBounds(0, kaartOverlap, 100, kaartBreedte);
+            kaartOverlap += 40;
+            add(kaartLabel1);
+        }
+
+        kaartOverlap = 40;
+        zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
+    }
+
+    public void tekenNieuweKaartHorizontaal() {
+        removeAll();
+        kaartOverlap = 0;
+        for (int i = 0; i < kaartenSpeler.size(); i++) {
+            kaartenSpeler.get(i).setBounds(kaartOverlap, 0, kaartBreedte, 100);
+            kaartOverlap += 40;
+            add(kaartenSpeler.get(i), new Integer(i));
+        }
+        kaartOverlap = 40;
+        zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
+    }
+
+    public void tekenNieuweKaartVerticaal() {
+        removeAll();
+        kaartOverlap = 0;
+        for (int i = 0; i < kaartenSpeler.size(); i++) {
+            kaartenSpeler.get(i).setBounds(0, kaartOverlap, 100, kaartBreedte);
+            kaartOverlap += 40;
+            add(kaartenSpeler.get(i), new Integer(i));
+        }
+        kaartOverlap = 40;
+        zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
     }
 }
