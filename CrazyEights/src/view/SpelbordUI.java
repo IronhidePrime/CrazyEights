@@ -126,6 +126,11 @@ public class SpelbordUI extends JFrame {
         super.add(achtergrond, BorderLayout.CENTER);
         achtergrond.add(stapelContainer,BorderLayout.CENTER);
 
+
+        if (controller.getSpelers().get(1) instanceof Mens) {
+            super.add(btnDraaiOm, BorderLayout.LINE_END);
+        }
+
         /**
          * 1. speler label aanmaken en naam van de ingegeven speler toevoegen
          * 2. x aantal containers aanmaken, 1 voor elke speler -> speler afbeelding in het midden plaatsen
@@ -249,7 +254,7 @@ public class SpelbordUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 for (int i=0; i<spelers.size(); i++) {
-                    lpnlkaartContainer[i].draaiKaartenOm();
+                    lpnlkaartContainer[i].draaiKaartenOm(i);
                 }
             }
         });

@@ -67,7 +67,7 @@ public class KaartContainer extends JLayeredPane {
                 Kaart kaart = controller.getSpelerKaarten(spelerNr).get(i);
                 KaartLabel kaartLabel = new KaartLabel(kaart.getHorizontaleImageString(), kaart.getVerticaleImageString(), controller);
                 kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
-                if (spelerNr == 2 || spelerNr == 3){
+                if (spelerNr == 2 || spelerNr == 3) {
                     kaartLabel.setImageString(kaartLabel.getOmgedraaidV());
                 }
                 kaartenSpeler.add(kaartLabel);
@@ -97,7 +97,6 @@ public class KaartContainer extends JLayeredPane {
             kaartOverlap += 40;
         }
     }
-
 
 
     public void speelKaartEvent(List<Kaart> spelerKaarten, int spelerNr) {
@@ -131,10 +130,10 @@ public class KaartContainer extends JLayeredPane {
                         kaartenSpeler.remove(kaartLabel);
                         remove(kaartLabel);
 
-                        if (controller.getSpelerKaarten(spelerNr).size() == 0){
-                            JOptionPane.showMessageDialog(null,"Je hebt gewonnen");
-                            int keuze = JOptionPane.showConfirmDialog(null,"Nog een keer spelen?");
-                            if(keuze == JOptionPane.YES_OPTION){
+                        if (controller.getSpelerKaarten(spelerNr).size() == 0) {
+                            JOptionPane.showMessageDialog(null, "Je hebt gewonnen");
+                            int keuze = JOptionPane.showConfirmDialog(null, "Nog een keer spelen?");
+                            if (keuze == JOptionPane.YES_OPTION) {
                                 controller.herstartSpel();
                             }
                         }
@@ -204,7 +203,7 @@ public class KaartContainer extends JLayeredPane {
                 Kaart getrokkenKaart = null;
                 super.mouseReleased(e);
                 System.out.println("er is op de trekstapel geklikt");
-                if (controller.getSpelbord().getTrekstapel().getKaarten().size() == 1){
+                if (controller.getSpelbord().getTrekstapel().getKaarten().size() == 1) {
                     System.out.println("stapel vullen");
                     controller.vulTrekStapel();
                 }
@@ -230,13 +229,13 @@ public class KaartContainer extends JLayeredPane {
                 repaint();
 
                 speelKaartEvent(controller.getSpelerKaarten(spelerNr), spelerNr);
-                if (controller.speelKaartMogelijk(getrokkenKaart)){
+                if (controller.speelKaartMogelijk(getrokkenKaart)) {
                     System.out.println("je kan de getrokken kaart spelen");
                     controller.getSpelers().get(spelerNr).setAanBeurt(true);
                 } else {
-                    JOptionPane.showMessageDialog(null,"Je kan de getrokken kaart niet spelen, je beurt is voorbij, computers gaan nu hun kaarten spelen");
+                    JOptionPane.showMessageDialog(null, "Je kan de getrokken kaart niet spelen, je beurt is voorbij, computers gaan nu hun kaarten spelen");
                     controller.beeindigBeurt(spelerNr);
-                    robot.mouseMove(getX()+500,getY()+700);
+                    robot.mouseMove(getX() + 500, getY() + 700);
                     robot.mouseRelease(InputEvent.BUTTON1_MASK);
                     System.out.println("fake click");
                 }
@@ -246,17 +245,17 @@ public class KaartContainer extends JLayeredPane {
     }
 
     public void computerSpeelEvent(int spelerNr) {
-        if (controller.getSpelers().get(spelerNr) instanceof Computer){
+        if (controller.getSpelers().get(spelerNr) instanceof Computer) {
             String imgString;
 
             Kaart teSpelenKaart = ((Computer) controller.getSpelers().get(spelerNr)).getTeSpelenKaart();
-            if (teSpelenKaart != null){
+            if (teSpelenKaart != null) {
                 controller.speelKaart(teSpelenKaart, spelerNr);
                 imgString = controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString();
                 lblAflegStapel.setImageString(imgString);
-                kaartenSpeler.remove(kaartenSpeler.size()-1);
-                try{
-                    remove(kaartenSpeler.size()-1);
+                kaartenSpeler.remove(kaartenSpeler.size() - 1);
+                try {
+                    remove(kaartenSpeler.size() - 1);
                     removeAll();
                     kaartOverlap = 0;
                     if (spelerNr == 1) {
@@ -268,7 +267,7 @@ public class KaartContainer extends JLayeredPane {
                     }
                     revalidate();
                     repaint();
-                } catch (ArrayIndexOutOfBoundsException e){
+                } catch (ArrayIndexOutOfBoundsException e) {
                     System.out.println("negeer");
                 }
             } else {
@@ -277,10 +276,10 @@ public class KaartContainer extends JLayeredPane {
                 repaint();
             }
 
-            if (controller.getSpelerKaarten(spelerNr).size() == 0){
+            if (controller.getSpelerKaarten(spelerNr).size() == 0) {
                 JOptionPane.showMessageDialog(null, "Je hebt verloren");
-                int keuze = JOptionPane.showConfirmDialog(null,"Nog een keer spelen?");
-                if(keuze == JOptionPane.YES_OPTION){
+                int keuze = JOptionPane.showConfirmDialog(null, "Nog een keer spelen?");
+                if (keuze == JOptionPane.YES_OPTION) {
                     controller.herstartSpel();
                 }
             }
@@ -295,8 +294,8 @@ public class KaartContainer extends JLayeredPane {
 
 
     public void computerTrekEvent(int spelerNr) {
-        if (controller.getSpelers().get(spelerNr) instanceof Computer){
-            if (controller.getSpelbord().getTrekstapel().getKaarten().size() == 1){
+        if (controller.getSpelers().get(spelerNr) instanceof Computer) {
+            if (controller.getSpelbord().getTrekstapel().getKaarten().size() == 1) {
                 System.out.println("stapel vullen");
                 controller.vulTrekStapel();
             }
@@ -304,22 +303,22 @@ public class KaartContainer extends JLayeredPane {
             ((Computer) controller.getSpelers().get(spelerNr)).voegKaartToe();
             System.out.println("computer heeft een kaart getrokken ");
 
-            if (spelerNr == 1){
-                kaartenSpeler.add(new KaartLabel("/view/images/kaartAchterkant.png",controller));
+            if (spelerNr == 1) {
+                kaartenSpeler.add(new KaartLabel("/view/images/kaartAchterkant.png", controller));
 
                 System.out.println("de computer heeft zoveel kaartlabels: " + kaartenSpeler.size());
 
                 hertekenKaartenHorizontaal();
             }
 
-            if (spelerNr == 2 || spelerNr == 3){
-                kaartenSpeler.add(kaartenSpeler.size()-1,new KaartLabel("/view/images/kaartAchterkantV.png",controller));
+            if (spelerNr == 2 || spelerNr == 3) {
+                kaartenSpeler.add(kaartenSpeler.size() - 1, new KaartLabel("/view/images/kaartAchterkantV.png", controller));
 
                 hertekenKaartenVerticaal();
             }
             revalidate();
             repaint();
-            if (((Computer) controller.getSpelers().get(spelerNr)).getTeSpelenKaart() != null){
+            if (((Computer) controller.getSpelers().get(spelerNr)).getTeSpelenKaart() != null) {
                 System.out.println("we kunnen de getrokken kaart spelen");
                 computerSpeelEvent(spelerNr);
             }
@@ -356,9 +355,15 @@ public class KaartContainer extends JLayeredPane {
         repaint();
     }
 
-    public void draaiKaartenOm() {
-        for (KaartLabel kaartLabel1 : kaartenSpeler) {
-            kaartLabel1.setImageString(kaartLabel1.getHorizontale());
+    public void draaiKaartenOm(int spelerNr) {
+        if (controller.getSpelers().get(spelerNr).getAanBeurt()) {
+            for (int i = 0; i < kaartenSpeler.size(); i++) {
+                if (spelerNr == 0 || spelerNr == 1) {
+                    kaartenSpeler.get(i).setImageString(kaartenSpeler.get(i).getHorizontale());
+                } else if (spelerNr == 2 || spelerNr == 3) {
+                    kaartenSpeler.get(i).setImageString(kaartenSpeler.get(i).getVerticale());
+                }
+            }
             revalidate();
             repaint();
         }
