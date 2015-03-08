@@ -23,6 +23,7 @@ public class KaartContainer extends JLayeredPane {
     private TrekStapelLabel lblTrekstapel;
     private Robot robot;
 
+
     public KaartContainer(Controller controller, AflegStapelLabel lblAflegStapel, TrekStapelLabel lblTrekstapel) {
         this.controller = controller;
         this.setPreferredSize(new Dimension(new Dimension(kaartOverlap * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte, 100)));
@@ -41,21 +42,33 @@ public class KaartContainer extends JLayeredPane {
         kaartenSpeler = new LinkedList<>();
         for (int i = 0; i < controller.getAantalKaartenSpeler(); i++) {
             if (spelerNr == 0) {
-                kaartenSpeler.add(new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller));
+                KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller);
+                kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
+                if (controller.getSpelers().get(1) instanceof Computer) {
+                    kaartLabel.setImageString(kaartLabel.getHorizontale());
+                    revalidate();
+                    repaint();
+                }
+                kaartenSpeler.add(kaartLabel);
             }
             if (controller.getSpelers().get(spelerNr) instanceof Mens) {
                 if (spelerNr == 1) {
-                    kaartenSpeler.add(new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller));
+                    KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller);
+                    kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
+                    kaartenSpeler.add(kaartLabel);
                 }
                 if (spelerNr == 2 || spelerNr == 3) {
-                    kaartenSpeler.add(new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getOmgekeerdeImageString(), controller));
+                    KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller);
+                    kaartLabel.setImageString(kaartLabel.getOmgedraaidV());
+                    kaartenSpeler.add(kaartLabel);
                 }
             } else if (controller.getSpelers().get(spelerNr) instanceof Computer) {
+
                 Kaart kaart = controller.getSpelerKaarten(spelerNr).get(i);
-                KaartLabel kaartLabel = new KaartLabel(kaart.getHorizontaleImageString(), kaart.getVerticaleImageString(), kaart.getOmgekeerdeImageString(), controller);
-                kaartLabel.setImageString(kaartLabel.getOmgedraaid());
+                KaartLabel kaartLabel = new KaartLabel(kaart.getHorizontaleImageString(), kaart.getVerticaleImageString(), controller);
+                kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
                 if (spelerNr == 2 || spelerNr == 3){
-                    kaartLabel.setImageString(kaart.getOmgekeerdeImageStringV());
+                    kaartLabel.setImageString(kaartLabel.getOmgedraaidV());
                 }
                 kaartenSpeler.add(kaartLabel);
             }
@@ -99,13 +112,11 @@ public class KaartContainer extends JLayeredPane {
                     super.mouseReleased(e);
                     //1
                     int KaartObjectIndex = 0;
-                    String imageStringKaartLabel = kaartLabel.getImageString();
-                    System.out.println("geklikte kaart is" + kaartLabel.getImageString());
+                    String imageStringKaartLabel = kaartLabel.getHorizontale();
                     for (int i = 0; i < spelerKaarten.size(); i++) {
                         String imageStringKaartObjectH = spelerKaarten.get(i).getHorizontaleImageString();
-                        String imageStringKaartObjectV = spelerKaarten.get(i).getVerticaleImageString();
 
-                        if (imageStringKaartObjectH.equals(imageStringKaartLabel) || imageStringKaartObjectV.equals(imageStringKaartLabel)) {
+                        if (imageStringKaartObjectH.equals(imageStringKaartLabel)) {
                             KaartObjectIndex = i;
                             System.out.println("KaartIndex is " + KaartObjectIndex);
                             System.out.println("img string KaartObject is " + controller.getSpelers().get(spelerNr).getKaarten().get(KaartObjectIndex).getHorizontaleImageString());
@@ -131,30 +142,50 @@ public class KaartContainer extends JLayeredPane {
 
                         if (spelerNr == 0) {
                             hertekenKaartenHorizontaal();
-
-                            JOptionPane.showMessageDialog(null,"computers gaan nu hun kaarten spelen");
-
-                            robot.mouseMove(getX()+500,getY()+700);
-                            robot.mouseRelease(InputEvent.BUTTON1_MASK);
-                            System.out.println("fake click");
+                            for (KaartLabel kaartLabel1 : kaartenSpeler) {
+                                if (controller.getSpelers().get(1) instanceof Computer) {
+                                    kaartLabel1.setImageString(kaartLabel1.getHorizontale());
+                                } else {
+                                    kaartLabel1.setImageString(kaartLabel1.getOmgedraaidH());
+                                }
+                            }
+                            revalidate();
+                            repaint();
                         }
 
                         if (controller.getSpelers().get(spelerNr) instanceof Mens) {
                             if (spelerNr == 1) {
                                 hertekenKaartenHorizontaal();
+                                for (KaartLabel kaartLabel1 : kaartenSpeler) {
+                                    kaartLabel1.setImageString(kaartLabel1.getOmgedraaidH());
+                                }
                             }
                             if (spelerNr == 2 || spelerNr == 3) {
                                 hertekenKaartenVerticaal();
+                                for (KaartLabel kaartLabel1 : kaartenSpeler) {
+                                    kaartLabel1.setImageString(kaartLabel1.getOmgedraaidV());
+                                }
                             }
                         }
+
                         lblAflegStapel.setImageString(kaartLabel.getImageString());
+
+                        revalidate();
+                        repaint();
 
                         controller.speelKaart(teSpelenKaart, spelerNr);
                         controller.beeindigBeurt(spelerNr);
 
+                        if (controller.getSpelers().get(1) instanceof Computer) {
+                            JOptionPane.showMessageDialog(null, "computers gaan nu hun kaarten spelen");
+                            robot.mouseMove(getX() + 500, getY() + 700);
+                            robot.mouseRelease(InputEvent.BUTTON1_MASK);
+                            System.out.println("fake click");
+                        }
+
+
                         System.out.println("bovenste kaart op aflegstapel is" + controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
-                        revalidate();
-                        repaint();
+
                     }
                 }
             });
@@ -306,6 +337,8 @@ public class KaartContainer extends JLayeredPane {
 
         kaartOverlap = 40;
         zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
+        revalidate();
+        repaint();
     }
 
     public void hertekenKaartenVerticaal() {
@@ -319,5 +352,15 @@ public class KaartContainer extends JLayeredPane {
 
         kaartOverlap = 40;
         zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
+        revalidate();
+        repaint();
+    }
+
+    public void draaiKaartenOm() {
+        for (KaartLabel kaartLabel1 : kaartenSpeler) {
+            kaartLabel1.setImageString(kaartLabel1.getHorizontale());
+            revalidate();
+            repaint();
+        }
     }
 }

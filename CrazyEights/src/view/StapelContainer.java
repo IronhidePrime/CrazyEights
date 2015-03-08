@@ -8,15 +8,11 @@ import java.awt.*;
 public class StapelContainer extends JPanel {
     private JPanel trekStapelContainer;
     private JPanel aflegStapelContainer;
-    //private AflegStapelLabel lblAflegStapel;
-    //private TrekStapelLabel lblTrekStapel;
+
 
     public StapelContainer(){
         trekStapelContainer = new JPanel();
         aflegStapelContainer = new JPanel();
-
-        //lblAflegStapel = new AflegStapelLabel("");
-        //lblTrekStapel = new TrekStapelLabel();
 
         setLayout();
     }

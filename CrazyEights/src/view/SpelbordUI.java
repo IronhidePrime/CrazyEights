@@ -10,12 +10,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 
 public class SpelbordUI extends JFrame {
@@ -41,7 +38,7 @@ public class SpelbordUI extends JFrame {
     private AchtergrondLabel achtergrond;
     private StapelContainer stapelContainer;
 
-
+    private JButton btnDraaiOm;
 
     public SpelbordUI(Controller controller) throws HeadlessException {
         super("Crazy Eights");
@@ -97,6 +94,9 @@ public class SpelbordUI extends JFrame {
 
         achtergrond = new AchtergrondLabel();
         stapelContainer = new StapelContainer();
+
+        btnDraaiOm = new JButton("Draai kaarten om!");
+
     }
 
     public void maakLayout() {
@@ -125,7 +125,6 @@ public class SpelbordUI extends JFrame {
         achtergrond.setLayout(new BorderLayout());
         super.add(achtergrond, BorderLayout.CENTER);
         achtergrond.add(stapelContainer,BorderLayout.CENTER);
-
 
         /**
          * 1. speler label aanmaken en naam van de ingegeven speler toevoegen
@@ -245,5 +244,14 @@ public class SpelbordUI extends JFrame {
                     });
                 }
             }
+
+        btnDraaiOm.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int i=0; i<spelers.size(); i++) {
+                    lpnlkaartContainer[i].draaiKaartenOm();
+                }
+            }
+        });
     }
 }
