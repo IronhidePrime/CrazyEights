@@ -3,6 +3,7 @@ package view;
 import controller.Controller;
 import model.Computer;
 import model.Kaart;
+import model.Kleur;
 import model.Mens;
 
 import javax.swing.*;
@@ -12,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class KaartContainer extends JLayeredPane {
     private int kaartBreedte = 70;
@@ -112,6 +114,7 @@ public class KaartContainer extends JLayeredPane {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     super.mouseReleased(e);
+
                     //1
                     int KaartObjectIndex = 0;
                     String imageStringKaartLabel = kaartLabel.getHorizontale();
@@ -177,6 +180,29 @@ public class KaartContainer extends JLayeredPane {
                         repaint();
 
                         controller.speelKaart(teSpelenKaart, spelerNr);
+                        System.out.println("bovenste kaart op aflegstapel is" + controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
+                        if (teSpelenKaart.getWaarde() == 8){
+                            String[] keuzes = { "Harten", "Ruiten", "Klaveren", "Schoppen" };
+                            System.out.println("KAART IS EEN 8");
+                            int keuze = JOptionPane.showOptionDialog(null, "In welke kleur wil je veranderen?", "verander kleur",
+                                    0, JOptionPane.INFORMATION_MESSAGE, null, keuzes, null);
+                            System.out.println("Keuze is" + keuze);
+                            switch (keuze) {
+                                case 0: lblAflegStapel.setImageString("images/harten/harten8.png");
+                                        controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.harten,"images/harten/harten8.png","images/harten/verticaal/harten8.png"));
+                                        break;
+                                case 1: lblAflegStapel.setImageString("images/ruiten/ruiten8.png");
+                                        controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.ruiten,"images/ruiten/ruiten8.png","images/ruiten/verticaal/ruiten8.png"));
+                                        break;
+                                case 2: lblAflegStapel.setImageString("images/klaveren/klaveren8.png");
+                                        controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.klaveren,"images/klaveren/klaveren8.png","images/klaveren/verticaal/klaveren8.png"));
+                                        break;
+                                case 3: lblAflegStapel.setImageString("images/schoppen/schoppen8.png");
+                                        controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.ruiten,"images/schoppen/ruiten8.png","images/ruiten/verticaal/schoppen8.png"));
+                                        break;
+                            }
+                            System.out.println("na kleur verandere is de bovenste kaart " + controller.getSpelbord().getAflegstapel().getBovensteKaart());
+                        }
                         controller.beeindigBeurt(spelerNr);
 
                         if (controller.getSpelers().get(1) instanceof Computer) {
@@ -204,6 +230,7 @@ public class KaartContainer extends JLayeredPane {
         lblTrekstapel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                if (controller.getSpelers().get(spelerNr).getAanBeurt()) {
                 super.mouseReleased(e);
                 Kaart getrokkenKaart;
                 System.out.println("er is op de trekstapel geklikt");
@@ -211,8 +238,6 @@ public class KaartContainer extends JLayeredPane {
                     System.out.println("stapel vullen");
                     controller.vulTrekStapel();
                 }
-
-                if (controller.getSpelers().get(spelerNr).getAanBeurt()) {
                     System.out.println("DDDDDDDDDD");
                     getrokkenKaart = controller.getSpelbord().getTrekstapel().neemKaart();
                     System.out.println("getrokken kaart is" + getrokkenKaart.getHorizontaleImageString());
@@ -235,18 +260,13 @@ public class KaartContainer extends JLayeredPane {
                     speelKaartEvent(controller.getSpelerKaarten(spelerNr), spelerNr);
                     if (controller.speelKaartMogelijk(getrokkenKaart)) {
                         System.out.println("je kan de getrokken kaart spelen");
-                        controller.getSpelers().get(spelerNr).setAanBeurt(true);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Je kan de getrokken kaart niet spelen, je beurt is voorbij, computers gaan nu hun kaarten spelen");
-                        controller.beeindigBeurt(spelerNr);
-                        robot.mouseMove(getX() + 500, getY() + 700);
-                        robot.mouseRelease(InputEvent.BUTTON1_MASK);
-                        System.out.println("fake click");
+                        //controller.getSpelers().get(spelerNr).setAanBeurt(true);
                     }
                     System.out.println("Size trekstapel na het trekken van een kaart" + controller.getSpelbord().getTrekstapel().getKaarten().size());
                 }
             }
         });
+
     }
 
     public void computerSpeelEvent(int spelerNr) {
@@ -274,6 +294,19 @@ public class KaartContainer extends JLayeredPane {
                     repaint();
                 } catch (ArrayIndexOutOfBoundsException e) {
                     System.out.println("negeer");
+                }
+
+                if (teSpelenKaart.getWaarde() == 8){
+                    String [] kleurKeuze = {"harten","ruiten","klaveren","schoppen"};
+                    Random random = new Random();
+                    int kleurKeuzeIndex = random.nextInt(3);
+                    System.out.println("computer heeft een 8 gespeeld");
+                    System.out.println("HIER KLEUR VERANDEREN");
+                    lblAflegStapel.setImageString("images/" + kleurKeuze[kleurKeuzeIndex] + "/" + kleurKeuze[kleurKeuzeIndex] + "8.png");
+                    System.out.println(lblAflegStapel.getImageString() + "na veranderen kleur");
+
+                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8,Kleur.values()[kleurKeuzeIndex],"images/"+kleurKeuze[kleurKeuzeIndex]+"/"+kleurKeuze[kleurKeuzeIndex]+"8.png",""));
+                    System.out.println("bovenste kaart na verandering door computer" + controller.getSpelbord().getAflegstapel().getBovensteKaart());
                 }
             } else {
                 computerTrekEvent(spelerNr);
@@ -311,7 +344,9 @@ public class KaartContainer extends JLayeredPane {
             System.out.println("computer heeft een kaart getrokken ");
 
             if (spelerNr == 1) {
-                kaartenSpeler.add(new KaartLabel("/view/images/kaartAchterkant.png", "/view/images/kaartAchterkant.png", controller));
+                KaartLabel kaartLabel = new KaartLabel("/view/images/kaartAchterkant.png", "/view/images/kaartAchterkantV.png", controller);
+                kaartLabel.setImageString(kaartLabel.getHorizontale());
+                kaartenSpeler.add(kaartLabel);
 
                 System.out.println("de computer heeft zoveel kaartlabels: " + kaartenSpeler.size());
 
@@ -319,7 +354,9 @@ public class KaartContainer extends JLayeredPane {
             }
 
             if (spelerNr == 2 || spelerNr == 3) {
-                kaartenSpeler.add(kaartenSpeler.size() - 1, new KaartLabel("/view/images/kaartAchterkant.png", "/view/images/kaartAchterkant.png", controller));
+                KaartLabel kaartLabel = new KaartLabel("/view/images/kaartAchterkant.png", "/view/images/kaartAchterkantV.png", controller);
+                kaartLabel.setImageString(kaartLabel.getVerticale());
+                kaartenSpeler.add(kaartLabel);
 
                 hertekenKaartenVerticaal();
             }

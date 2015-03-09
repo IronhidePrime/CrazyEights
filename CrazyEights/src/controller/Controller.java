@@ -22,9 +22,12 @@ public class Controller {
     private Spelbord spelbord;
     private List<Speler> spelers;
 
+    private SpelProperties spelProperties;
+
     public Controller() {
         this.spelbord = new Spelbord();
         this.spelers = new LinkedList<>();
+        spelProperties = new SpelProperties();
     }
 
     /**
