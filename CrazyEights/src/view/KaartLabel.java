@@ -16,11 +16,6 @@ public class KaartLabel extends JLabel{
     private String omgedraaidH;
     private String omgedraaidV;
 
-    public KaartLabel(String imageString, Controller controller) {
-        this.imageString = imageString;
-        this.controller = controller;
-    }
-
     public KaartLabel(String horizontale, String verticale, Controller controller) {
         this.horizontale = horizontale;
         this.verticale = verticale;

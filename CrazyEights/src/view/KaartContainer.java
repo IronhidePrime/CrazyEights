@@ -4,7 +4,6 @@ import controller.Controller;
 import model.Computer;
 import model.Kaart;
 import model.Mens;
-import model.Speler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,11 +55,15 @@ public class KaartContainer extends JLayeredPane {
                     KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller);
                     kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
                     kaartenSpeler.add(kaartLabel);
+                    revalidate();
+                    repaint();
                 }
                 if (spelerNr == 2 || spelerNr == 3) {
                     KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller);
                     kaartLabel.setImageString(kaartLabel.getOmgedraaidV());
                     kaartenSpeler.add(kaartLabel);
+                    revalidate();
+                    repaint();
                 }
             } else if (controller.getSpelers().get(spelerNr) instanceof Computer) {
 
@@ -148,6 +151,7 @@ public class KaartContainer extends JLayeredPane {
                                     kaartLabel1.setImageString(kaartLabel1.getOmgedraaidH());
                                 }
                             }
+                            lblAflegStapel.setImageString(kaartLabel.getHorizontale());
                             revalidate();
                             repaint();
                         }
@@ -158,17 +162,17 @@ public class KaartContainer extends JLayeredPane {
                                 for (KaartLabel kaartLabel1 : kaartenSpeler) {
                                     kaartLabel1.setImageString(kaartLabel1.getOmgedraaidH());
                                 }
+                                lblAflegStapel.setImageString(kaartLabel.getHorizontale());
                             }
                             if (spelerNr == 2 || spelerNr == 3) {
                                 hertekenKaartenVerticaal();
                                 for (KaartLabel kaartLabel1 : kaartenSpeler) {
                                     kaartLabel1.setImageString(kaartLabel1.getOmgedraaidV());
                                 }
+                                lblAflegStapel.setImageString(kaartLabel.getHorizontale());
                             }
+
                         }
-
-                        lblAflegStapel.setImageString(kaartLabel.getImageString());
-
                         revalidate();
                         repaint();
 
@@ -200,8 +204,8 @@ public class KaartContainer extends JLayeredPane {
         lblTrekstapel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                Kaart getrokkenKaart = null;
                 super.mouseReleased(e);
+                Kaart getrokkenKaart;
                 System.out.println("er is op de trekstapel geklikt");
                 if (controller.getSpelbord().getTrekstapel().getKaarten().size() == 1) {
                     System.out.println("stapel vullen");
@@ -209,9 +213,11 @@ public class KaartContainer extends JLayeredPane {
                 }
 
                 if (controller.getSpelers().get(spelerNr).getAanBeurt()) {
+                    System.out.println("DDDDDDDDDD");
                     getrokkenKaart = controller.getSpelbord().getTrekstapel().neemKaart();
                     System.out.println("getrokken kaart is" + getrokkenKaart.getHorizontaleImageString());
-                    KaartLabel lblGetrokkenKaart = new KaartLabel(getrokkenKaart.getHorizontaleImageString(), controller);
+                    KaartLabel lblGetrokkenKaart = new KaartLabel(getrokkenKaart.getHorizontaleImageString(), getrokkenKaart.getVerticaleImageString(), controller);
+                    lblGetrokkenKaart.setImageString(getrokkenKaart.getHorizontaleImageString());
                     controller.getSpelerKaarten(spelerNr).add(getrokkenKaart);
 
                     kaartenSpeler.add(lblGetrokkenKaart);
@@ -221,25 +227,24 @@ public class KaartContainer extends JLayeredPane {
                     }
 
                     if (spelerNr == 2 || spelerNr == 3) {
-                        lblGetrokkenKaart.setImageString(getrokkenKaart.getVerticaleImageString());
                         hertekenKaartenVerticaal();
                     }
-                }
-                revalidate();
-                repaint();
+                    revalidate();
+                    repaint();
 
-                speelKaartEvent(controller.getSpelerKaarten(spelerNr), spelerNr);
-                if (controller.speelKaartMogelijk(getrokkenKaart)) {
-                    System.out.println("je kan de getrokken kaart spelen");
-                    controller.getSpelers().get(spelerNr).setAanBeurt(true);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Je kan de getrokken kaart niet spelen, je beurt is voorbij, computers gaan nu hun kaarten spelen");
-                    controller.beeindigBeurt(spelerNr);
-                    robot.mouseMove(getX() + 500, getY() + 700);
-                    robot.mouseRelease(InputEvent.BUTTON1_MASK);
-                    System.out.println("fake click");
+                    speelKaartEvent(controller.getSpelerKaarten(spelerNr), spelerNr);
+                    if (controller.speelKaartMogelijk(getrokkenKaart)) {
+                        System.out.println("je kan de getrokken kaart spelen");
+                        controller.getSpelers().get(spelerNr).setAanBeurt(true);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Je kan de getrokken kaart niet spelen, je beurt is voorbij, computers gaan nu hun kaarten spelen");
+                        controller.beeindigBeurt(spelerNr);
+                        robot.mouseMove(getX() + 500, getY() + 700);
+                        robot.mouseRelease(InputEvent.BUTTON1_MASK);
+                        System.out.println("fake click");
+                    }
+                    System.out.println("Size trekstapel na het trekken van een kaart" + controller.getSpelbord().getTrekstapel().getKaarten().size());
                 }
-                System.out.println("Size trekstapel na het trekken van een kaart" + controller.getSpelbord().getTrekstapel().getKaarten().size());
             }
         });
     }
@@ -294,7 +299,9 @@ public class KaartContainer extends JLayeredPane {
 
 
     public void computerTrekEvent(int spelerNr) {
+        //TODO: kaart trekken -> kaartlabel met getrokken kaart, set imageString omgedraaid
         if (controller.getSpelers().get(spelerNr) instanceof Computer) {
+
             if (controller.getSpelbord().getTrekstapel().getKaarten().size() == 1) {
                 System.out.println("stapel vullen");
                 controller.vulTrekStapel();
@@ -304,7 +311,7 @@ public class KaartContainer extends JLayeredPane {
             System.out.println("computer heeft een kaart getrokken ");
 
             if (spelerNr == 1) {
-                kaartenSpeler.add(new KaartLabel("/view/images/kaartAchterkant.png", controller));
+                kaartenSpeler.add(new KaartLabel("/view/images/kaartAchterkant.png", "/view/images/kaartAchterkant.png", controller));
 
                 System.out.println("de computer heeft zoveel kaartlabels: " + kaartenSpeler.size());
 
@@ -312,7 +319,7 @@ public class KaartContainer extends JLayeredPane {
             }
 
             if (spelerNr == 2 || spelerNr == 3) {
-                kaartenSpeler.add(kaartenSpeler.size() - 1, new KaartLabel("/view/images/kaartAchterkantV.png", controller));
+                kaartenSpeler.add(kaartenSpeler.size() - 1, new KaartLabel("/view/images/kaartAchterkant.png", "/view/images/kaartAchterkant.png", controller));
 
                 hertekenKaartenVerticaal();
             }
