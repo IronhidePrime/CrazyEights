@@ -24,6 +24,7 @@ public class KaartContainer extends JLayeredPane {
     private TrekStapelLabel lblTrekstapel;
     private Robot robot;
 
+    private int speelRichting = 0;
 
     public KaartContainer(Controller controller, AflegStapelLabel lblAflegStapel, TrekStapelLabel lblTrekstapel) {
         this.controller = controller;
@@ -203,7 +204,19 @@ public class KaartContainer extends JLayeredPane {
                             }
                             System.out.println("na kleur verandere is de bovenste kaart " + controller.getSpelbord().getAflegstapel().getBovensteKaart());
                         }
-                        controller.beeindigBeurt(spelerNr);
+/*
+                        if (teSpelenKaart.getWaarde() == 1) {
+                            if  (speelRichting == 0) {
+                                speelRichting++;
+                            } else {
+                                speelRichting--;
+                            }
+                            controller.veranderSpeelRichting(spelerNr, speelRichting);
+                        } else */if (teSpelenKaart.getWaarde() == 12) {
+                            controller.beeindigBeurtDame(spelerNr);
+                        } else {
+                            controller.beeindigBeurt(spelerNr);
+                        }
 
                         if (controller.getSpelers().get(1) instanceof Computer) {
                             JOptionPane.showMessageDialog(null, "computers gaan nu hun kaarten spelen");

@@ -158,6 +158,46 @@ public class Controller {
         }
     }
 
+    public void beeindigBeurtDame (int spelerNr) {
+        getSpelers().get(spelerNr).setAanBeurt(false);
+        if (getSpelers().size() == 2) {
+            getSpelers().get(spelerNr).setAanBeurt(true);
+        } else if (getSpelers().size() == 3) {
+            if (spelerNr == 0) {
+                getSpelers().get(2).setAanBeurt(true);
+            } else {
+                getSpelers().get(spelerNr-1).setAanBeurt(true);
+            }
+        } else if (getSpelers().size() == 4) {
+            if (spelerNr == 0 || spelerNr == 1) {
+                getSpelers().get(spelerNr+2).setAanBeurt(true);
+            } else {
+                getSpelers().get(spelerNr-2).setAanBeurt(true);
+            }
+        }
+        /*
+        if (spelerNr == 2) {
+            getSpelers().get(0).setAanBeurt(true);
+        } else if (spelerNr == 3) {
+            getSpelers().get(1).setAanBeurt(true);
+        } else {
+            getSpelers().get(spelerNr+2).setAanBeurt(true);
+        }*/
+    }
+
+    public void veranderSpeelRichting (int spelerNr, int speelRichting) {
+        if (speelRichting == 0) {
+            beeindigBeurt(spelerNr);
+        } else {
+            getSpelers().get(spelerNr).setAanBeurt(false);
+            if (spelerNr==0) {
+                getSpelers().get(3).setAanBeurt(true);
+            } else {
+                getSpelers().get(spelerNr - 1).setAanBeurt(true);
+            }
+        }
+    }
+
     public void vulTrekStapel(){
         Kaart bovensteKaart = getSpelbord().getAflegstapel().getBovensteKaart();
         getSpelbord().getTrekstapel().getKaarten().addAll(getSpelbord().getAflegstapel().getKaarten());
