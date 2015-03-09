@@ -151,6 +151,13 @@ public class StartUI extends JFrame {
                 new SpelbordUI(controller);
             }
         });
+
+        btnSpelregels.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new SpelregelsWindow();
+            }
+        });
     }
 }
 

@@ -8,6 +8,7 @@ import model.Speler;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
@@ -28,6 +29,8 @@ public class SpelbordUI extends JFrame {
 
     private JPanel[] pnlSpelerContainer;
     private JLabel[] lblSpelerNaam;
+
+    private JLabel lblStatus;
 
     private List<Speler> spelers;
 
@@ -82,6 +85,12 @@ public class SpelbordUI extends JFrame {
         lblTrekstapel = new TrekStapelLabel();
         lblTrekstapel.setPreferredSize(new Dimension(100, 140));
 
+        lblStatus = new JLabel();
+        lblStatus.setFont(new Font("Serif", Font.BOLD, 20));
+        lblStatus.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblStatus.setText("Speler aan beurt: " + controller.getSpelerNaamAanBeurt());
+        lblStatus.setForeground(Color.BLACK);
+
         lblSpelerNaam = new JLabel[aantalSpelers];
         lblSpelersAfbeelding = new SpelerAfbeelding[aantalSpelers];
 
@@ -126,9 +135,10 @@ public class SpelbordUI extends JFrame {
         super.add(achtergrond, BorderLayout.CENTER);
         achtergrond.add(stapelContainer,BorderLayout.CENTER);
 
+        super.add(lblStatus, BorderLayout.AFTER_LAST_LINE);
 
         if (controller.getSpelers().get(1) instanceof Mens) {
-            super.add(btnDraaiOm, BorderLayout.LINE_END);
+            super.add(btnDraaiOm, BorderLayout.BEFORE_FIRST_LINE);
         }
 
         /**
@@ -154,7 +164,7 @@ public class SpelbordUI extends JFrame {
             pnlSpelerContainer[i].add(lblSpelersAfbeelding[i], BorderLayout.CENTER);
 
             //3
-            lpnlkaartContainer[i] = new KaartContainer(controller,lblAflegstapel, lblTrekstapel);
+            lpnlkaartContainer[i] = new KaartContainer(controller,lblAflegstapel, lblTrekstapel, lblStatus);
             pnlKaartContainer[i] = new JPanel();
             pnlKaartContainer[i].setOpaque(false);
 

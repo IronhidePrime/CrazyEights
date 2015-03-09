@@ -239,6 +239,19 @@ public class Controller {
         getSpelbord().getAflegstapel().getKaarten().add(bovensteKaart);
         Collections.shuffle(getSpelbord().getTrekstapel().getKaarten());
     }
+
+    public int getSpelerNrAanBeurt() {
+        for (int i=0; i<spelers.size(); i++) {
+            if (spelers.get(i).getAanBeurt()) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public String getSpelerNaamAanBeurt() {
+        return spelers.get(getSpelerNrAanBeurt()).getNaam();
+    }
 }
 
 
