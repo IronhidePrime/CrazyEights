@@ -24,16 +24,14 @@ public class KaartContainer extends JLayeredPane {
     private TrekStapelLabel lblTrekstapel;
     private Robot robot;
 
-    private JLabel lblStatus;
+    private int speelRichting = 0;
 
-    public KaartContainer(Controller controller, AflegStapelLabel lblAflegStapel, TrekStapelLabel lblTrekstapel, JLabel lblStatus) {
+    public KaartContainer(Controller controller, AflegStapelLabel lblAflegStapel, TrekStapelLabel lblTrekstapel) {
         this.controller = controller;
         this.setPreferredSize(new Dimension(new Dimension(kaartOverlap * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte, 100)));
         this.setOpaque(false);
         this.lblAflegStapel = lblAflegStapel;
         this.lblTrekstapel = lblTrekstapel;
-
-        this.lblStatus = lblStatus;
     }
 
     public void maakLists(int spelerNr) {
@@ -140,12 +138,10 @@ public class KaartContainer extends JLayeredPane {
                         remove(kaartLabel);
 
                         if (controller.getSpelerKaarten(spelerNr).size() == 0) {
-                            String felicitaties = "Speler " + controller.getSpelerNaamAanBeurt() + " heeft gewonnen! PROFICIAT!";
-                            int keuze = JOptionPane.showOptionDialog(null, felicitaties, "Einde spel!", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {"Ja", "Nee"}, "Ja");
-                            if (keuze == 0) {
+                            JOptionPane.showMessageDialog(null, "Je hebt gewonnen");
+                            int keuze = JOptionPane.showConfirmDialog(null, "Nog een keer spelen?");
+                            if (keuze == JOptionPane.YES_OPTION) {
                                 controller.herstartSpel();
-                            } else {
-
                             }
                         }
 
@@ -186,65 +182,57 @@ public class KaartContainer extends JLayeredPane {
 
                         controller.speelKaart(teSpelenKaart, spelerNr);
                         System.out.println("bovenste kaart op aflegstapel is" + controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
-
-                        /**
-                         * bij een 8 kan de speler van kleur veranderen
-                         */
-                        if (teSpelenKaart.getWaarde() == 8) {
-                            String[] keuzes = {"Harten", "Ruiten", "Klaveren", "Schoppen"};
+                        if (teSpelenKaart.getWaarde() == 8){
+                            String[] keuzes = { "Harten", "Ruiten", "Klaveren", "Schoppen" };
                             System.out.println("KAART IS EEN 8");
-                            int keuze = JOptionPane.showOptionDialog(null, "In welke kleur wil je veranderen?", "Verander kleur",
+                            int keuze = JOptionPane.showOptionDialog(null, "In welke kleur wil je veranderen?", "verander kleur",
                                     0, JOptionPane.INFORMATION_MESSAGE, null, keuzes, null);
                             System.out.println("Keuze is" + keuze);
                             switch (keuze) {
-                                case 0:
-                                    lblAflegStapel.setImageString("images/harten/harten8.png");
-                                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.harten, "images/harten/harten8.png", "images/harten/verticaal/harten8.png"));
-                                    break;
-                                case 1:
-                                    lblAflegStapel.setImageString("images/ruiten/ruiten8.png");
-                                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.ruiten, "images/ruiten/ruiten8.png", "images/ruiten/verticaal/ruiten8.png"));
-                                    break;
-                                case 2:
-                                    lblAflegStapel.setImageString("images/klaveren/klaveren8.png");
-                                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.klaveren, "images/klaveren/klaveren8.png", "images/klaveren/verticaal/klaveren8.png"));
-                                    break;
-                                case 3:
-                                    lblAflegStapel.setImageString("images/schoppen/schoppen8.png");
-                                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.schoppen, "images/schoppen/schoppen8.png", "images/ruiten/verticaal/schoppen8.png"));
-                                    break;
+                                case 0: lblAflegStapel.setImageString("images/harten/harten8.png");
+                                        controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.harten,"images/harten/harten8.png","images/harten/verticaal/harten8.png"));
+                                        break;
+                                case 1: lblAflegStapel.setImageString("images/ruiten/ruiten8.png");
+                                        controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.ruiten,"images/ruiten/ruiten8.png","images/ruiten/verticaal/ruiten8.png"));
+                                        break;
+                                case 2: lblAflegStapel.setImageString("images/klaveren/klaveren8.png");
+                                        controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.klaveren,"images/klaveren/klaveren8.png","images/klaveren/verticaal/klaveren8.png"));
+                                        break;
+                                case 3: lblAflegStapel.setImageString("images/schoppen/schoppen8.png");
+                                        controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.ruiten,"images/schoppen/ruiten8.png","images/ruiten/verticaal/schoppen8.png"));
+                                        break;
                             }
                             System.out.println("na kleur verandere is de bovenste kaart " + controller.getSpelbord().getAflegstapel().getBovensteKaart());
                         }
-
-                        /**
-                         * bepaalt wie de volgende speler aan beurt is na het spelen van een kaart
-                         */
-                        if (controller.getSpeelRichting() == 0) {
-                            if (teSpelenKaart.getWaarde() == 1) {
-                                controller.setSpeelRichting(1);
-                                controller.speelRichting(spelerNr);
-                                JOptionPane.showMessageDialog(null, "Er is van spelrichting veranderd", "Richting veranderd", JOptionPane.DEFAULT_OPTION);
-                            } else if (teSpelenKaart.getWaarde() == 12) {
-                                controller.beeindigBeurtDame(spelerNr);
-                                JOptionPane.showMessageDialog(null, "De volgende speler wordt overgeslagen", "Volgende speler overslaan", JOptionPane.DEFAULT_OPTION);
+/*
+                        if (teSpelenKaart.getWaarde() == 1) {
+                            if  (speelRichting == 0) {
+                                speelRichting++;
                             } else {
-                                controller.beeindigBeurt(spelerNr);
+                                speelRichting--;
+                            }
+                            controller.veranderSpeelRichting(spelerNr, speelRichting);
+                        } else */
+                        if (teSpelenKaart.getWaarde() == 12) {
+                            controller.beeindigBeurtDame(spelerNr);
+                            if (spelerNr+1 >= controller.getAantalSpelers()){
+                                System.out.println("beurt over maximum speler, even fixen");
+                                controller.zetPropertySpelerBeurtNr(0);
+                            } else  {
+                                controller.zetPropertySpelerBeurtNr(spelerNr + 2);
                             }
                         } else {
-                            if (teSpelenKaart.getWaarde() == 1) {
-                                controller.setSpeelRichting(0);
-                                controller.speelRichting(spelerNr);
-                                JOptionPane.showMessageDialog(null, "Er is van spelrichting veranderd");
-                            } else if (teSpelenKaart.getWaarde() == 12) {
-                                controller.beeindigBeurtDame(spelerNr);
-                                JOptionPane.showMessageDialog(null, "De volgende speler wordt overgeslagen");
+                            controller.beeindigBeurt(spelerNr);
+                            if (spelerNr+1 == controller.getAantalSpelers()){
+                                System.out.println("beurt over maximum speler, even fixen");
+                                controller.zetPropertySpelerBeurtNr(0);
                             } else {
-                                controller.speelRichting(spelerNr);
+                                controller.zetPropertySpelerBeurtNr(spelerNr + 1);
+                            }
+                            if (spelerNr==0){
+                                controller.zetPropertyKaarten(controller.getSpelerKaarten(0));
                             }
                         }
-
-                        lblStatus.setText("Speler aan beurt: " + controller.getSpelerNaamAanBeurt());
 
                         if (controller.getSpelers().get(1) instanceof Computer) {
                             JOptionPane.showMessageDialog(null, "computers gaan nu hun kaarten spelen");
@@ -252,8 +240,11 @@ public class KaartContainer extends JLayeredPane {
                             robot.mouseRelease(InputEvent.BUTTON1_MASK);
                             System.out.println("fake click");
                         }
+
+
+                        System.out.println("bovenste kaart op aflegstapel is" + controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
+
                     }
-                    System.out.println("bovenste kaart op aflegstapel is" + controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
                 }
             });
         }
@@ -282,6 +273,7 @@ public class KaartContainer extends JLayeredPane {
                     KaartLabel lblGetrokkenKaart = new KaartLabel(getrokkenKaart.getHorizontaleImageString(), getrokkenKaart.getVerticaleImageString(), controller);
                     lblGetrokkenKaart.setImageString(getrokkenKaart.getHorizontaleImageString());
                     controller.getSpelerKaarten(spelerNr).add(getrokkenKaart);
+                    controller.zetPropertyKaarten(controller.getSpelerKaarten(0));
 
                     kaartenSpeler.add(lblGetrokkenKaart);
 
@@ -290,7 +282,6 @@ public class KaartContainer extends JLayeredPane {
                     }
 
                     if (spelerNr == 2 || spelerNr == 3) {
-                        lblGetrokkenKaart.setImageString(getrokkenKaart.getVerticaleImageString());
                         hertekenKaartenVerticaal();
                     }
                     revalidate();
@@ -309,7 +300,7 @@ public class KaartContainer extends JLayeredPane {
     }
 
     public void computerSpeelEvent(int spelerNr) {
-        if (controller.getSpelers().get(spelerNr).getAanBeurt()) {
+        if (controller.getSpelers().get(spelerNr) instanceof Computer) {
             String imgString;
 
             Kaart teSpelenKaart = ((Computer) controller.getSpelers().get(spelerNr)).getTeSpelenKaart();
@@ -335,51 +326,22 @@ public class KaartContainer extends JLayeredPane {
                     System.out.println("negeer");
                 }
 
-                if (teSpelenKaart.getWaarde() == 8) {
-                    String[] kleurKeuze = {"harten", "ruiten", "klaveren", "schoppen"};
+                if (teSpelenKaart.getWaarde() == 8){
+                    String [] kleurKeuze = {"harten","ruiten","klaveren","schoppen"};
                     Random random = new Random();
-                    int kleurKeuzeIndex = random.nextInt(4);
+                    int kleurKeuzeIndex = random.nextInt(3);
                     System.out.println("computer heeft een 8 gespeeld");
                     System.out.println("HIER KLEUR VERANDEREN");
                     lblAflegStapel.setImageString("images/" + kleurKeuze[kleurKeuzeIndex] + "/" + kleurKeuze[kleurKeuzeIndex] + "8.png");
                     System.out.println(lblAflegStapel.getImageString() + "na veranderen kleur");
 
-                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.values()[kleurKeuzeIndex], "images/" + kleurKeuze[kleurKeuzeIndex] + "/" + kleurKeuze[kleurKeuzeIndex] + "8.png", ""));
+                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8,Kleur.values()[kleurKeuzeIndex],"images/"+kleurKeuze[kleurKeuzeIndex]+"/"+kleurKeuze[kleurKeuzeIndex]+"8.png",""));
                     System.out.println("bovenste kaart na verandering door computer" + controller.getSpelbord().getAflegstapel().getBovensteKaart());
-                }
-
-                if (controller.getSpeelRichting() == 0) {
-                    if (teSpelenKaart.getWaarde() == 1) {
-                        controller.setSpeelRichting(1);
-                        controller.speelRichting(spelerNr);
-                        JOptionPane.showMessageDialog(null, "Er is van spelrichting veranderd");
-                    } else if (teSpelenKaart.getWaarde() == 12) {
-                        controller.beeindigBeurtDame(spelerNr);
-                        JOptionPane.showMessageDialog(null, "De volgende speler wordt overgeslagen");
-                    } else {
-                        controller.beeindigBeurt(spelerNr);
-                    }
-                } else {
-                    if (teSpelenKaart.getWaarde() == 1) {
-                        controller.setSpeelRichting(0);
-                        controller.speelRichting(spelerNr);
-                        JOptionPane.showMessageDialog(null, "Er is van spelrichting veranderd");
-                    } else if (teSpelenKaart.getWaarde() == 12) {
-                        controller.beeindigBeurtDame(spelerNr);
-                        JOptionPane.showMessageDialog(null, "De volgende speler wordt overgeslagen");
-                    } else {
-                        controller.speelRichting(spelerNr);
-                    }
                 }
             } else {
                 computerTrekEvent(spelerNr);
                 revalidate();
                 repaint();
-            }
-
-            if (!controller.getSpelers().get(0).getAanBeurt()) {
-                robot.mouseMove(getX() + 500, getY() + 700);
-                robot.mouseRelease(InputEvent.BUTTON1_MASK);
             }
 
             if (controller.getSpelerKaarten(spelerNr).size() == 0) {
@@ -389,6 +351,7 @@ public class KaartContainer extends JLayeredPane {
                     controller.herstartSpel();
                 }
             }
+            controller.beeindigBeurt(spelerNr);
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {

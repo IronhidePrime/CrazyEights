@@ -38,4 +38,8 @@ public class Speler {
     public List<Kaart> getKaarten() {
         return kaarten;
     }
+
+    public void setNaam(String naam) {
+        this.naam = naam;
+    }
 }

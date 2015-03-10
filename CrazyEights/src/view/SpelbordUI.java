@@ -51,9 +51,16 @@ public class SpelbordUI extends JFrame {
 
         this.controller = controller;
         controller.startSpel();
-
-        aantalSpelers = controller.getAantalSpelers();
         spelers = controller.getSpelers();
+        System.out.println(controller.vraagPropertySpelGeladen());
+        if (controller.vraagPropertySpelGeladen()){
+            System.out.println("beurt resetten");
+            for (Speler speler: spelers){
+                speler.setAanBeurt(false);
+            }
+            spelers.get(controller.vraagBeurtProperty()).setAanBeurt(true);
+        }
+        aantalSpelers = controller.getAantalSpelers();
 
         maakComponenten();
         maakLayout();
@@ -259,6 +266,7 @@ public class SpelbordUI extends JFrame {
                     });
                 }
             }
+
 
         btnDraaiOm.addActionListener(new ActionListener() {
             @Override

@@ -1,12 +1,14 @@
 package view;
 
 import controller.Controller;
+import model.Speler;
 
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -32,6 +34,8 @@ public class StartUI extends JFrame {
     private JButton btnSpelregels;
 
     private Controller controller;
+
+    private int aantalSpelers;
 
 
     public StartUI(){
@@ -69,7 +73,7 @@ public class StartUI extends JFrame {
 
         btnDeal = new JButton("Start");
         btnHighscores = new JButton("Highscores");
-        btnInfo = new JButton("Info");
+        btnInfo = new JButton("Laad spel");
         btnSpelregels = new JButton("Spelregels");
     }
 
@@ -125,19 +129,27 @@ public class StartUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
+                controller.zetSpelGeladenBoolean(false);
+                System.out.println("nieuw spel");
 
                 /**
                  * Namen van de spelers opvragen
                  * Doorgeven aan controller -> spelbord
                  */
-                int aantalSpelers = cboSpelers.getSelectedIndex() + 2;
+                aantalSpelers = cboSpelers.getSelectedIndex() + 2;
+                String[] namenSpelers = new String[aantalSpelers];
                 for (int i=0; i<aantalSpelers; i++) {
                     if (chkMultiplayer.isSelected()) {
                         String spelersNaam = JOptionPane.showInputDialog(null, "Geef de naam van speler " + (i + 1), "Naam");
+                        namenSpelers[i] = spelersNaam;
+                        System.out.println(namenSpelers[i] + "als naam");
+                        controller.zetPropertySpelerBord(aantalSpelers,true);
                         controller.maakMens(spelersNaam);
                     } else {
                         if (i==0) {
                             String spelersNaam = JOptionPane.showInputDialog(null, "Geef uw nickname", "Naam");
+                            controller.zetPropertySpelerBord(aantalSpelers, false);
+                            controller.zetPropertySpelersSingle(spelersNaam);
                             controller.maakMens(spelersNaam);
                         } else if (i==1) {
                             controller.maakComputer("Eddy");
@@ -145,6 +157,45 @@ public class StartUI extends JFrame {
                             controller.maakComputer("Hans");
                         } else if (i==3) {
                             controller.maakComputer("Dirk");
+                        }
+                    }
+                }
+                if (controller.vraagPropertyMultiplayer()){
+                    controller.zetPropertySpelersMulti(namenSpelers);
+                }
+                new SpelbordUI(controller);
+            }
+        });
+
+        btnInfo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                controller.zetSpelGeladenBoolean(true);
+                System.out.println("laad spel");
+                System.out.println(controller.vraagPropertySpelGeladen() + " boolean geladen");
+
+                for (int i=0;i<controller.vraagPropertySpelersAantal();i++){
+                    if (!controller.vraagPropertyMultiplayer()){
+                        if (i==0){
+                            controller.maakMens(controller.vraagProperySpelerNaamSingle());
+                        } else if (i==1) {
+                            controller.maakComputer("Eddy");
+                        } else if (i==2) {
+                            controller.maakComputer("Hans");
+                        } else if (i==3) {
+                            controller.maakComputer("Dirk");
+                        }
+                    } else {
+                        controller.maakMens("");
+                        if (i==0){
+                            controller.getSpelers().get(0).setNaam(controller.vraagProperySpelerNaamMulti()[0]);
+                        } else if (i==1){
+                            controller.getSpelers().get(1).setNaam(controller.vraagProperySpelerNaamMulti()[1]);
+                        } else if (i==2){
+                            controller.getSpelers().get(2).setNaam(controller.vraagProperySpelerNaamMulti()[2]);
+                        } else if (i==3){
+                            controller.getSpelers().get(3).setNaam(controller.vraagProperySpelerNaamMulti()[3]);
                         }
                     }
                 }

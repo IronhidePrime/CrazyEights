@@ -14,23 +14,28 @@ public class SpelProperties {
         readProperties();
     }
 
-    private static void writeProperties(){
-        try (FileOutputStream out = new FileOutputStream("Application8.properties")) {
+    private static void writeProperties() {
+        try (FileOutputStream out = new
+                FileOutputStream("Application.properties")) {
             Properties atts = new Properties();
-            atts.setProperty("spelerInt","1");
+            atts.setProperty("Pad", "");
+            atts.setProperty("Score", "189");
+            atts.setProperty("Naam", "Freddy");
             atts.storeToXML(out, "Application properties");
         } catch (IOException e) {
             System.out.println("Fout bij aanmaken properties-bestand");
         }
     }
 
-    private static void readProperties(){
-        try (FileInputStream in = new FileInputStream("Application8.properties")) {
+
+    private static void readProperties() {
+        try (FileInputStream in = new
+                FileInputStream("Application.properties")) {
             Properties atts = new Properties();
             atts.loadFromXML(in);
-            atts.list(System.out);
         } catch (IOException e) {
             System.out.println("Fout bij het ophalen van properties");
         }
     }
+
 }

@@ -6,9 +6,10 @@ import view.SpelbordUI;
 import view.StartUI;
 
 import javax.swing.*;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.*;
 
 public class Controller {
     /**
@@ -22,14 +23,10 @@ public class Controller {
     private Spelbord spelbord;
     private List<Speler> spelers;
 
-    private SpelProperties spelProperties;
-
-    private int speelRichting = 0;
 
     public Controller() {
         this.spelbord = new Spelbord();
         this.spelers = new LinkedList<>();
-        spelProperties = new SpelProperties();
     }
 
     /**
@@ -143,6 +140,20 @@ public class Controller {
         }
     }
 
+    public boolean checkOfKaartKanSpelen(int spelerNr){
+        Boolean mogelijkeKaart = false;
+        for (int i=0; i<getSpelerKaarten(spelerNr).size();i++){
+            if (speelKaartMogelijk(getSpelerKaarten(spelerNr).get(i))){
+                System.out.println("Speler, je kan een kaart spelen");
+                mogelijkeKaart = true;
+                break;
+            } else {
+                System.out.println("je kan geen enkele kaart spelen, jammer");
+            }
+        }
+        return mogelijkeKaart;
+    }
+
     public int getAantalKaartenSpeler(){
         if(getAantalSpelers()==2){
             return KAARTEN_2_SPELERS;
@@ -161,75 +172,43 @@ public class Controller {
     }
 
     public void beeindigBeurtDame (int spelerNr) {
-        if (speelRichting == 0) {
-            getSpelers().get(spelerNr).setAanBeurt(false);
-            if (getSpelers().size() == 2) {
-                getSpelers().get(spelerNr).setAanBeurt(true);
-            } else if (getSpelers().size() == 3) {
-                if (spelerNr == 0) {
-                    getSpelers().get(2).setAanBeurt(true);
-                } else {
-                    getSpelers().get(spelerNr - 1).setAanBeurt(true);
-                }
-            } else if (getSpelers().size() == 4) {
-                if (spelerNr == 0 || spelerNr == 1) {
-                    getSpelers().get(spelerNr + 2).setAanBeurt(true);
-                } else {
-                    getSpelers().get(spelerNr - 2).setAanBeurt(true);
-                }
+        getSpelers().get(spelerNr).setAanBeurt(false);
+        if (getSpelers().size() == 2) {
+            getSpelers().get(spelerNr).setAanBeurt(true);
+        } else if (getSpelers().size() == 3) {
+            if (spelerNr == 0) {
+                getSpelers().get(2).setAanBeurt(true);
+            } else {
+                getSpelers().get(spelerNr-1).setAanBeurt(true);
             }
-        } else {
-            getSpelers().get(spelerNr).setAanBeurt(false);
-            if (getSpelers().size() == 2) {
-                getSpelers().get(spelerNr).setAanBeurt(true);
-            } else if (getSpelers().size() == 3) {
-                if (spelerNr == 0) {
-                    getSpelers().get(1).setAanBeurt(true);
-                } else if (spelerNr == 1) {
-                    getSpelers().get(2).setAanBeurt(true);
-                } else {
-                    getSpelers().get(0).setAanBeurt(true);
-                }
-            } else if (getSpelers().size() == 4) {
-                if (spelerNr == 2 || spelerNr == 3) {
-                    getSpelers().get(spelerNr - 2).setAanBeurt(true);
-                } else {
-                    getSpelers().get(spelerNr + 2).setAanBeurt(true);
-                }
+        } else if (getSpelers().size() == 4) {
+            if (spelerNr == 0 || spelerNr == 1) {
+                getSpelers().get(spelerNr+2).setAanBeurt(true);
+            } else {
+                getSpelers().get(spelerNr-2).setAanBeurt(true);
             }
         }
+        /*
+        if (spelerNr == 2) {
+            getSpelers().get(0).setAanBeurt(true);
+        } else if (spelerNr == 3) {
+            getSpelers().get(1).setAanBeurt(true);
+        } else {
+            getSpelers().get(spelerNr+2).setAanBeurt(true);
+        }*/
     }
 
-    public void speelRichting (int spelerNr) {
+    public void veranderSpeelRichting (int spelerNr, int speelRichting) {
         if (speelRichting == 0) {
             beeindigBeurt(spelerNr);
         } else {
-            if (getSpelers().size() == 2) {
-                beeindigBeurt(spelerNr);
-            } else if (getSpelers().size() == 3) {
-                getSpelers().get(spelerNr).setAanBeurt(false);
-                if (spelerNr == 0) {
-                    getSpelers().get(2).setAanBeurt(true);
-                } else {
-                    getSpelers().get(spelerNr -1).setAanBeurt(true);
-                }
-            } else if (getSpelers().size() == 4) {
-                getSpelers().get(spelerNr).setAanBeurt(false);
-                if (spelerNr == 0) {
-                    getSpelers().get(3).setAanBeurt(true);
-                } else {
-                    getSpelers().get(spelerNr-1).setAanBeurt(true);
-                }
+            getSpelers().get(spelerNr).setAanBeurt(false);
+            if (spelerNr==0) {
+                getSpelers().get(3).setAanBeurt(true);
+            } else {
+                getSpelers().get(spelerNr - 1).setAanBeurt(true);
             }
         }
-    }
-
-    public int getSpeelRichting() {
-        return speelRichting;
-    }
-
-    public void setSpeelRichting(int speelRichting) {
-        this.speelRichting = speelRichting;
     }
 
     public void vulTrekStapel(){
@@ -240,17 +219,185 @@ public class Controller {
         Collections.shuffle(getSpelbord().getTrekstapel().getKaarten());
     }
 
-    public int getSpelerNrAanBeurt() {
-        for (int i=0; i<spelers.size(); i++) {
-            if (spelers.get(i).getAanBeurt()) {
-                return i;
-            }
+    public void zetPropertySpelerBord(int aantalSpelers,Boolean multiplayerJaofNee){
+        try (FileOutputStream out = new
+                FileOutputStream("SpelerBordProperties.properties")) {
+            Properties atts = new Properties();
+            atts.setProperty("aantalSpelers", String.valueOf(aantalSpelers));
+            atts.setProperty("multiplayer?",String.valueOf(multiplayerJaofNee));
+            atts.storeToXML(out, "SpelerProperties.properties");
+        } catch (IOException e) {
+            System.out.println("Fout bij aanmaken properties-bestand");
         }
-        return 0;
     }
 
-    public String getSpelerNaamAanBeurt() {
-        return spelers.get(getSpelerNrAanBeurt()).getNaam();
+    public void zetPropertySpelersSingle(String spelerNaam){
+        try (FileOutputStream out = new
+                FileOutputStream("SpelerProperties.properties")) {
+            Properties atts = new Properties();
+            atts.setProperty("naamSpeler1", spelerNaam);
+            System.out.println("naam weggeschreven");
+            atts.storeToXML(out, "SpelerProperties.properties");
+        } catch (IOException e) {
+            System.out.println("Fout bij aanmaken properties-bestand");
+        }
+    }
+
+    public void zetPropertySpelersMulti(String[] spelerNaam){
+        for (String string : spelerNaam){
+            System.out.println(string);
+        }
+        try (FileOutputStream out = new
+                FileOutputStream("SpelerProperties.properties")) {
+            Properties atts = new Properties();
+            atts.setProperty("naamSpeler1", spelerNaam[0]);
+            atts.setProperty("naamSpeler2", spelerNaam[1]);
+            if (vraagPropertySpelersAantal() == 3){
+                atts.setProperty("naamSpeler3", spelerNaam[2]);
+            } if (vraagPropertySpelersAantal() == 4){
+                atts.setProperty("naamSpeler3", spelerNaam[2]);
+                atts.setProperty("naamSpeler4", spelerNaam[3]);
+            }
+            atts.storeToXML(out, "SpelerProperties.properties");
+        } catch (IOException e) {
+            System.out.println("Fout bij aanmaken properties-bestand");
+        }
+    }
+
+    public void zetPropertySpelerBeurtNr(int spelerNr){
+        try (FileOutputStream out = new
+                FileOutputStream("BeurtProperties.properties")) {
+            Properties atts = new Properties();
+            atts.setProperty("intSpelerAanBeurt", String.valueOf(spelerNr));
+            System.out.println("beurt weggeschreven");
+            atts.storeToXML(out, "BeurtProperties.properties");
+        } catch (IOException e) {
+            System.out.println("Fout bij aanmaken properties-bestand");
+        }
+    }
+
+    public void zetSpelGeladenBoolean(boolean spelGeladen){
+        try (FileOutputStream out = new
+                FileOutputStream("SpelGeladenProperties.properties")) {
+            Properties atts = new Properties();
+            atts.setProperty("SpelGeladen", String.valueOf(spelGeladen));
+            System.out.println("beurt weggeschreven");
+            atts.storeToXML(out, "SpelGeladenProperties.properties");
+        } catch (IOException e) {
+            System.out.println("Fout bij aanmaken properties-bestand");
+        }
+    }
+
+    public void zetPropertyKaarten(List<Kaart> kaarten){
+        try (FileOutputStream out = new
+                FileOutputStream("KaartenProperties.properties")) {
+            Properties atts = new Properties();
+            for (int i=0;i<kaarten.size();i++){
+                atts.setProperty("WaardeKaart" + i,String.valueOf(kaarten.get(i).getWaarde()));
+                atts.setProperty("KleurKaart" + i,String.valueOf(kaarten.get(i).getKleur()));
+                atts.setProperty("kaart" + i,kaarten.get(i).getHorizontaleImageString());
+                atts.setProperty("kaartV" + i,kaarten.get(i).getVerticaleImageString());
+            }
+            atts.storeToXML(out, "KaartenProperties.properties");
+        } catch (IOException e) {
+            System.out.println("Fout bij aanmaken properties-bestand");
+        }
+    }
+
+    public boolean vraagPropertySpelGeladen(){
+        boolean spelGeladen = false;
+        try (FileInputStream in = new
+                FileInputStream("SpelGeladenProperties.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            spelGeladen = Boolean.valueOf(atts.getProperty("SpelGeladen"));
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return spelGeladen;
+    }
+
+    public int vraagPropertySpelersAantal(){
+        int aantalSpelers = 0;
+        try (FileInputStream in = new
+                FileInputStream("SpelerBordProperties.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            aantalSpelers = Integer.parseInt(atts.getProperty("aantalSpelers"));
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return aantalSpelers;
+    }
+
+
+    public Boolean vraagPropertyMultiplayer(){
+        Boolean multiplayerJaOfNee = false;
+        try (FileInputStream in = new
+                FileInputStream("SpelerBordProperties.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            multiplayerJaOfNee = Boolean.valueOf(atts.getProperty("multiplayer?"));
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return multiplayerJaOfNee;
+    }
+
+    public String vraagProperySpelerNaamSingle(){
+        String spelerNaam = "";
+        try (FileInputStream in = new
+                FileInputStream("SpelerProperties.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            spelerNaam = atts.getProperty("naamSpeler1");
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return spelerNaam;
+    }
+
+    public String[] vraagProperySpelerNaamMulti(){
+        String[] spelersNamen = new String[vraagPropertySpelersAantal()];
+        System.out.println(spelersNamen.length);
+        try (FileInputStream in = new
+                FileInputStream("SpelerProperties.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            if (vraagPropertySpelersAantal() == 2){
+                spelersNamen[0] = atts.getProperty("naamSpeler1");
+                spelersNamen[1] = atts.getProperty("naamSpeler2");
+            } else if (vraagPropertySpelersAantal() == 3){
+                spelersNamen[0] = atts.getProperty("naamSpeler1");
+                spelersNamen[1] = atts.getProperty("naamSpeler2");
+                spelersNamen[2] = atts.getProperty("naamSpeler3");
+            } else if (vraagPropertySpelersAantal() == 4){
+                spelersNamen[0] = atts.getProperty("naamSpeler1");
+                spelersNamen[1] = atts.getProperty("naamSpeler2");
+                spelersNamen[2] = atts.getProperty("naamSpeler3");
+                spelersNamen[3] = atts.getProperty("naamSpeler4");
+            }
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+
+        for (String string: spelersNamen){
+            System.out.println(string);
+        }
+        return spelersNamen;
+    }
+
+    public int vraagBeurtProperty(){
+        int spelerNr = 15;
+        try (FileInputStream in = new
+                FileInputStream("BeurtProperties.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            spelerNr = Integer.valueOf(atts.getProperty("intSpelerAanBeurt"));
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return spelerNr;
     }
 }
 
