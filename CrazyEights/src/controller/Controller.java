@@ -23,6 +23,10 @@ public class Controller {
     private Spelbord spelbord;
     private List<Speler> spelers;
 
+    private int speelRichting = 0;
+
+
+
 
     public Controller() {
         this.spelbord = new Spelbord();
@@ -205,44 +209,90 @@ public class Controller {
     }
 
     public void beeindigBeurtDame (int spelerNr) {
-        getSpelers().get(spelerNr).setAanBeurt(false);
-        if (getSpelers().size() == 2) {
-            getSpelers().get(spelerNr).setAanBeurt(true);
-        } else if (getSpelers().size() == 3) {
-            if (spelerNr == 0) {
-                getSpelers().get(2).setAanBeurt(true);
-            } else {
-                getSpelers().get(spelerNr-1).setAanBeurt(true);
+        if (speelRichting == 0) {
+            getSpelers().get(spelerNr).setAanBeurt(false);
+            if (getSpelers().size() == 2) {
+                getSpelers().get(spelerNr).setAanBeurt(true);
+            } else if (getSpelers().size() == 3) {
+                if (spelerNr == 0) {
+                    getSpelers().get(2).setAanBeurt(true);
+                } else {
+                    getSpelers().get(spelerNr - 1).setAanBeurt(true);
+                }
+            } else if (getSpelers().size() == 4) {
+                if (spelerNr == 0 || spelerNr == 1) {
+                    getSpelers().get(spelerNr + 2).setAanBeurt(true);
+                } else {
+                    getSpelers().get(spelerNr - 2).setAanBeurt(true);
+                }
             }
-        } else if (getSpelers().size() == 4) {
-            if (spelerNr == 0 || spelerNr == 1) {
-                getSpelers().get(spelerNr+2).setAanBeurt(true);
-            } else {
-                getSpelers().get(spelerNr-2).setAanBeurt(true);
+        } else {
+            getSpelers().get(spelerNr).setAanBeurt(false);
+            if (getSpelers().size() == 2) {
+                getSpelers().get(spelerNr).setAanBeurt(true);
+            } else if (getSpelers().size() == 3) {
+                if (spelerNr == 0) {
+                    getSpelers().get(1).setAanBeurt(true);
+                } else if (spelerNr == 1) {
+                    getSpelers().get(2).setAanBeurt(true);
+                } else {
+                    getSpelers().get(0).setAanBeurt(true);
+                }
+            } else if (getSpelers().size() == 4) {
+                if (spelerNr == 2 || spelerNr == 3) {
+                    getSpelers().get(spelerNr - 2).setAanBeurt(true);
+                } else {
+                    getSpelers().get(spelerNr + 2).setAanBeurt(true);
+                }
             }
         }
-        /*
-        if (spelerNr == 2) {
-            getSpelers().get(0).setAanBeurt(true);
-        } else if (spelerNr == 3) {
-            getSpelers().get(1).setAanBeurt(true);
-        } else {
-            getSpelers().get(spelerNr+2).setAanBeurt(true);
-        }*/
     }
 
-    public void veranderSpeelRichting (int spelerNr, int speelRichting) {
+    public void speelRichting (int spelerNr) {
         if (speelRichting == 0) {
             beeindigBeurt(spelerNr);
         } else {
-            getSpelers().get(spelerNr).setAanBeurt(false);
-            if (spelerNr==0) {
-                getSpelers().get(3).setAanBeurt(true);
-            } else {
-                getSpelers().get(spelerNr - 1).setAanBeurt(true);
+            if (getSpelers().size() == 2) {
+                beeindigBeurt(spelerNr);
+            } else if (getSpelers().size() == 3) {
+                getSpelers().get(spelerNr).setAanBeurt(false);
+                if (spelerNr == 0) {
+                    getSpelers().get(2).setAanBeurt(true);
+                } else {
+                    getSpelers().get(spelerNr -1).setAanBeurt(true);
+                }
+            } else if (getSpelers().size() == 4) {
+                getSpelers().get(spelerNr).setAanBeurt(false);
+                if (spelerNr == 0) {
+                    getSpelers().get(3).setAanBeurt(true);
+                } else {
+                    getSpelers().get(spelerNr-1).setAanBeurt(true);
+                }
             }
         }
     }
+
+    public int getSpeelRichting() {
+        return speelRichting;
+    }
+
+    public void setSpeelRichting(int speelRichting) {
+        this.speelRichting = speelRichting;
+    }
+
+    public int getSpelerNrAanBeurt() {
+        for (int i=0; i<spelers.size(); i++) {
+            if (spelers.get(i).getAanBeurt()) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public String getSpelerNaamAanBeurt() {
+        return spelers.get(getSpelerNrAanBeurt()).getNaam();
+    }
+
 
     public void vulTrekStapel(){
         Kaart bovensteKaart = getSpelbord().getAflegstapel().getBovensteKaart();

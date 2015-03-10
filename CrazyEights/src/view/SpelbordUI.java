@@ -29,6 +29,8 @@ public class SpelbordUI extends JFrame {
     private JPanel[] pnlSpelerContainer;
     private JLabel[] lblSpelerNaam;
 
+
+
     private List<Speler> spelers;
 
     private int kaartBreedte = 70;
@@ -39,6 +41,8 @@ public class SpelbordUI extends JFrame {
     private StapelContainer stapelContainer;
 
     private JButton btnDraaiOm;
+
+    private JLabel lblStatus;
 
     public SpelbordUI(Controller controller) throws HeadlessException {
         super("Crazy Eights");
@@ -86,6 +90,12 @@ public class SpelbordUI extends JFrame {
         Kaart aflegKaart = controller.getSpelbord().getAflegstapel().getBovensteKaart();
         lblAflegstapel = new AflegStapelLabel(aflegKaart.getHorizontaleImageString(),controller);
         lblAflegstapel.setPreferredSize(new Dimension(100, 140));
+
+        lblStatus = new JLabel();
+        lblStatus.setFont(new Font("Serif", Font.BOLD, 20));
+        lblStatus.setHorizontalAlignment(SwingConstants.RIGHT);
+        lblStatus.setText("Speler aan beurt: " + controller.getSpelerNaamAanBeurt());
+        lblStatus.setForeground(Color.BLACK);
 
         /**
          * trekstapel omgedraaid label
@@ -142,9 +152,10 @@ public class SpelbordUI extends JFrame {
         super.add(achtergrond, BorderLayout.CENTER);
         achtergrond.add(stapelContainer,BorderLayout.CENTER);
 
+        super.add(lblStatus, BorderLayout.AFTER_LAST_LINE);
 
         if (controller.getSpelers().get(1) instanceof Mens) {
-            super.add(btnDraaiOm, BorderLayout.LINE_END);
+            super.add(btnDraaiOm, BorderLayout.BEFORE_FIRST_LINE);
         }
 
         /**
@@ -156,7 +167,7 @@ public class SpelbordUI extends JFrame {
 
         if (controller.vraagPropertySpelGeladen()){
             for (int i=0;i<controller.vraagPropertySpelersAantal();i++){
-                lpnlkaartContainer[i] = new KaartContainer(controller,lblAflegstapel, lblTrekstapel);
+                lpnlkaartContainer[i] = new KaartContainer(controller,lblAflegstapel, lblTrekstapel, lblStatus);
                 pnlKaartContainer[i] = new JPanel();
                 pnlKaartContainer[i].setOpaque(false);
             }
@@ -164,7 +175,7 @@ public class SpelbordUI extends JFrame {
 
         } else  {
             for (int i=0;i<aantalSpelers;i++){
-                lpnlkaartContainer[i] = new KaartContainer(controller,lblAflegstapel, lblTrekstapel);
+                lpnlkaartContainer[i] = new KaartContainer(controller,lblAflegstapel, lblTrekstapel, lblStatus);
                 pnlKaartContainer[i] = new JPanel();
                 pnlKaartContainer[i].setOpaque(false);
             }
