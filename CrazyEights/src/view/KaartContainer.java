@@ -448,7 +448,7 @@ public class KaartContainer extends JLayeredPane {
     }
 
     public void computerSpeelEvent(int spelerNr) {
-        if (controller.getSpelers().get(spelerNr) instanceof Computer) {
+        if (controller.getSpelers().get(spelerNr) instanceof Computer && controller.getSpelers().get(spelerNr).getAanBeurt()) {
             String imgString;
 
             Kaart teSpelenKaart = ((Computer) controller.getSpelers().get(spelerNr)).getTeSpelenKaart();
@@ -523,15 +523,17 @@ public class KaartContainer extends JLayeredPane {
                         controller.speelRichting(spelerNr);
                     }
                 }
+
+                if (!controller.getSpelers().get(0).getAanBeurt()) {
+                    robot.mouseMove(getX() + 500, getY() + 700);
+                    robot.mouseRelease(InputEvent.BUTTON1_MASK);
+                }
+
+
             } else {
                 computerTrekEvent(spelerNr);
                 revalidate();
                 repaint();
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -571,6 +573,11 @@ public class KaartContainer extends JLayeredPane {
             if (((Computer) controller.getSpelers().get(spelerNr)).getTeSpelenKaart() != null) {
                 System.out.println("we kunnen de getrokken kaart spelen");
                 computerSpeelEvent(spelerNr);
+            } else {
+                if (!controller.getSpelers().get(0).getAanBeurt()) {
+                    robot.mouseMove(getX() + 500, getY() + 700);
+                    robot.mouseRelease(InputEvent.BUTTON1_MASK);
+                }
             }
         }
     }
