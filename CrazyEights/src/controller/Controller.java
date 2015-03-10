@@ -84,13 +84,46 @@ public class Controller {
      */
     public void startSpel() {
         //1
-        kaartenUitdelen();
+        if (!vraagPropertySpelGeladen()){
+            kaartenUitdelen();
+        } else {
+            for (int i=0; i<vraagPropertySpelersAantal();i++){
+                getSpelerKaarten(i).removeAll(getSpelerKaarten(i));
+                if (i==0){
+                    for (int j=0;j<vraagPropertyKaartAantal1();j++){
+                        getSpelerKaarten(0).add(new Kaart(vraagPropertyWaarde1(j),vraagPropertyKleur1(j),vraagPropertyKaartImgString1(j,true),vraagPropertyKaartImgString1(j,false)));
+                    }
+                    System.out.println("Kaart objecten speler 1 aangemaakt");
+                    System.out.println("er zitten nu " + getSpelerKaarten(0).size() + " kaarten in");
+                } else if (i==1){
+                    for (int j=0;j<vraagPropertyKaartAantal2();j++){
+                        getSpelerKaarten(1).add(new Kaart(vraagPropertyWaarde2(j),vraagPropertyKleur2(j),vraagPropertyKaartImgString2(j, true),vraagPropertyKaartImgString2(j, false)));
+                    }
+                    System.out.println("Kaart objecten speler 2 aangemaakt");
+                    System.out.println("er zitten nu " + getSpelerKaarten(1).size() + " kaarten in");
+                } else if (i==2){
+                    for (int j=0;j<vraagPropertyKaartAantal3();j++){
+                        getSpelerKaarten(2).add(new Kaart(vraagPropertyWaarde3(j),vraagPropertyKleur3(j),vraagPropertyKaartImgString3(j, true),vraagPropertyKaartImgString3(j, false)));
+                    }
+                    System.out.println("Kaart objecten speler 3 aangemaakt");
+                    System.out.println("er zitten nu " + getSpelerKaarten(2).size() + " kaarten in");
+                } else if (i==3){
+                    for (int j=0;j<vraagPropertyKaartAantal4();j++){
+                        getSpelerKaarten(3).add(new Kaart(vraagPropertyWaarde4(j),vraagPropertyKleur4(j),vraagPropertyKaartImgString4(j, true),vraagPropertyKaartImgString4(j, false)));
+                    }
+                    System.out.println("Kaart objecten speler 2 aangemaakt");
+                    System.out.println("er zitten nu " + getSpelerKaarten(3).size() + " kaarten in");
+                }
+            }
+        }
 
         //2
         beginKaart();
 
         //3
+
         getSpelers().get(0).setAanBeurt(true);
+
     }
 
     public void herstartSpel(){
@@ -288,9 +321,9 @@ public class Controller {
         }
     }
 
-    public void zetPropertyKaarten(List<Kaart> kaarten){
+    public void zetPropertyKaarten1(List<Kaart> kaarten){
         try (FileOutputStream out = new
-                FileOutputStream("KaartenProperties.properties")) {
+                FileOutputStream("KaartenProperties1.properties")) {
             Properties atts = new Properties();
             for (int i=0;i<kaarten.size();i++){
                 atts.setProperty("WaardeKaart" + i,String.valueOf(kaarten.get(i).getWaarde()));
@@ -298,10 +331,367 @@ public class Controller {
                 atts.setProperty("kaart" + i,kaarten.get(i).getHorizontaleImageString());
                 atts.setProperty("kaartV" + i,kaarten.get(i).getVerticaleImageString());
             }
-            atts.storeToXML(out, "KaartenProperties.properties");
+            atts.storeToXML(out, "KaartenProperties1.properties");
         } catch (IOException e) {
             System.out.println("Fout bij aanmaken properties-bestand");
         }
+    }
+
+    public Kleur vraagPropertyKleur1(int kaartNummer){
+        Kleur kaartKleur = Kleur.harten;
+        try (FileInputStream in = new
+                FileInputStream("KaartenProperties1.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            if (atts.getProperty("KleurKaart" + kaartNummer).equals("ruiten")){
+                kaartKleur = Kleur.ruiten;
+            } else if (atts.getProperty("KleurKaart" + kaartNummer).equals("klaveren")){
+                kaartKleur = Kleur.klaveren;
+            } else if (atts.getProperty("KleurKaart" + kaartNummer).equals("schoppen")){
+                kaartKleur = Kleur.schoppen;
+            }
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return kaartKleur;
+    }
+
+    public int vraagPropertyWaarde1(int kaartNummer){
+        int kaartWaarde = 0;
+        try (FileInputStream in = new
+                FileInputStream("KaartenProperties1.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            kaartWaarde = Integer.valueOf(atts.getProperty("WaardeKaart" + kaartNummer));
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return kaartWaarde;
+    }
+
+    public String vraagPropertyKaartImgString1(int kaartNummer,Boolean horizontaal){
+        String imgString = "";
+        try (FileInputStream in = new
+                FileInputStream("KaartenProperties1.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            if (horizontaal){
+                imgString = atts.getProperty("kaart" + kaartNummer);
+            } else {
+                imgString = atts.getProperty("kaartV" + kaartNummer);
+            }
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return imgString;
+    }
+
+    public void zetPropertyKaarten2(List<Kaart> kaarten){
+        try (FileOutputStream out = new
+                FileOutputStream("KaartenProperties2.properties")) {
+            Properties atts = new Properties();
+            for (int i=0;i<kaarten.size();i++){
+                atts.setProperty("WaardeKaart" + i,String.valueOf(kaarten.get(i).getWaarde()));
+                atts.setProperty("KleurKaart" + i,String.valueOf(kaarten.get(i).getKleur()));
+                atts.setProperty("kaart" + i,kaarten.get(i).getHorizontaleImageString());
+                atts.setProperty("kaartV" + i,kaarten.get(i).getVerticaleImageString());
+            }
+            atts.storeToXML(out, "KaartenProperties2.properties");
+        } catch (IOException e) {
+            System.out.println("Fout bij aanmaken properties-bestand");
+        }
+    }
+
+    public Kleur vraagPropertyKleur2(int kaartNummer){
+        Kleur kaartKleur = Kleur.harten;
+        try (FileInputStream in = new
+                FileInputStream("KaartenProperties2.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            if (atts.getProperty("KleurKaart" + kaartNummer).equals("ruiten")){
+                kaartKleur = Kleur.ruiten;
+            } else if (atts.getProperty("KleurKaart" + kaartNummer).equals("klaveren")){
+                kaartKleur = Kleur.klaveren;
+            } else if (atts.getProperty("KleurKaart" + kaartNummer).equals("schoppen")){
+                kaartKleur = Kleur.schoppen;
+            }
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return kaartKleur;
+    }
+
+    public int vraagPropertyWaarde2(int kaartNummer){
+        int kaartWaarde = 0;
+        try (FileInputStream in = new
+                FileInputStream("KaartenProperties2.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            kaartWaarde = Integer.valueOf(atts.getProperty("WaardeKaart" + kaartNummer));
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return kaartWaarde;
+    }
+
+    public String vraagPropertyKaartImgString2(int kaartNummer,Boolean horizontaal){
+        String imgString = "";
+        try (FileInputStream in = new
+                FileInputStream("KaartenProperties2.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            if (horizontaal){
+                imgString = atts.getProperty("kaart" + kaartNummer);
+            } else {
+                imgString = atts.getProperty("kaartV" + kaartNummer);
+            }
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return imgString;
+    }
+
+    public void zetPropertyKaarten3(List<Kaart> kaarten){
+        try (FileOutputStream out = new
+                FileOutputStream("KaartenProperties3.properties")) {
+            Properties atts = new Properties();
+            for (int i=0;i<kaarten.size();i++){
+                atts.setProperty("WaardeKaart" + i,String.valueOf(kaarten.get(i).getWaarde()));
+                atts.setProperty("KleurKaart" + i,String.valueOf(kaarten.get(i).getKleur()));
+                atts.setProperty("kaart" + i,kaarten.get(i).getHorizontaleImageString());
+                atts.setProperty("kaartV" + i,kaarten.get(i).getVerticaleImageString());
+            }
+            atts.storeToXML(out, "KaartenProperties3.properties");
+        } catch (IOException e) {
+            System.out.println("Fout bij aanmaken properties-bestand");
+        }
+    }
+
+    public Kleur vraagPropertyKleur3(int kaartNummer){
+        Kleur kaartKleur = Kleur.harten;
+        try (FileInputStream in = new
+                FileInputStream("KaartenProperties3.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            if (atts.getProperty("KleurKaart" + kaartNummer).equals("ruiten")){
+                kaartKleur = Kleur.ruiten;
+            } else if (atts.getProperty("KleurKaart" + kaartNummer).equals("klaveren")){
+                kaartKleur = Kleur.klaveren;
+            } else if (atts.getProperty("KleurKaart" + kaartNummer).equals("schoppen")){
+                kaartKleur = Kleur.schoppen;
+            }
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return kaartKleur;
+    }
+
+    public int vraagPropertyWaarde3(int kaartNummer){
+        int kaartWaarde = 0;
+        try (FileInputStream in = new
+                FileInputStream("KaartenProperties3.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            kaartWaarde = Integer.valueOf(atts.getProperty("WaardeKaart" + kaartNummer));
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return kaartWaarde;
+    }
+
+    public String vraagPropertyKaartImgString3(int kaartNummer,Boolean horizontaal){
+        String imgString = "";
+        try (FileInputStream in = new
+                FileInputStream("KaartenProperties3.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            if (horizontaal){
+                imgString = atts.getProperty("kaart" + kaartNummer);
+            } else {
+                imgString = atts.getProperty("kaartV" + kaartNummer);
+            }
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return imgString;
+    }
+
+    public void zetPropertyKaarten4(List<Kaart> kaarten){
+        try (FileOutputStream out = new
+                FileOutputStream("KaartenProperties4.properties")) {
+            Properties atts = new Properties();
+            for (int i=0;i<kaarten.size();i++){
+                atts.setProperty("WaardeKaart" + i,String.valueOf(kaarten.get(i).getWaarde()));
+                atts.setProperty("KleurKaart" + i,String.valueOf(kaarten.get(i).getKleur()));
+                atts.setProperty("kaart" + i,kaarten.get(i).getHorizontaleImageString());
+                atts.setProperty("kaartV" + i,kaarten.get(i).getVerticaleImageString());
+            }
+            atts.storeToXML(out, "KaartenProperties4.properties");
+        } catch (IOException e) {
+            System.out.println("Fout bij aanmaken properties-bestand");
+        }
+    }
+
+    public Kleur vraagPropertyKleur4(int kaartNummer){
+        Kleur kaartKleur = Kleur.harten;
+        try (FileInputStream in = new
+                FileInputStream("KaartenProperties4.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            if (atts.getProperty("KleurKaart" + kaartNummer).equals("ruiten")){
+                kaartKleur = Kleur.ruiten;
+            } else if (atts.getProperty("KleurKaart" + kaartNummer).equals("klaveren")){
+                kaartKleur = Kleur.klaveren;
+            } else if (atts.getProperty("KleurKaart" + kaartNummer).equals("schoppen")){
+                kaartKleur = Kleur.schoppen;
+            }
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return kaartKleur;
+    }
+
+    public int vraagPropertyWaarde4(int kaartNummer){
+        int kaartWaarde = 0;
+        try (FileInputStream in = new
+                FileInputStream("KaartenProperties4.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            kaartWaarde = Integer.valueOf(atts.getProperty("WaardeKaart" + kaartNummer));
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return kaartWaarde;
+    }
+
+    public String vraagPropertyKaartImgString4(int kaartNummer,Boolean horizontaal){
+        String imgString = "";
+        try (FileInputStream in = new
+                FileInputStream("KaartenProperties4.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            if (horizontaal){
+                imgString = atts.getProperty("kaart" + kaartNummer);
+            } else {
+                imgString = atts.getProperty("kaartV" + kaartNummer);
+            }
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return imgString;
+    }
+
+    public void zetPropertyKaartAantal1(int aantalKaarten){
+        try (FileOutputStream out = new
+                FileOutputStream("KaartListProperties1.properties")) {
+            Properties atts = new Properties();
+            atts.setProperty("aantalKaartenSpeler1", String.valueOf(aantalKaarten));
+
+            atts.storeToXML(out, "KaartenProperties1.properties");
+        } catch (IOException e) {
+            System.out.println("Fout bij aanmaken properties-bestand");
+        }
+    }
+
+    public void zetPropertyKaartAantal2(int aantalKaarten){
+        try (FileOutputStream out = new
+                FileOutputStream("KaartListProperties2.properties")) {
+            Properties atts = new Properties();
+            atts.setProperty("aantalKaartenSpeler2", String.valueOf(aantalKaarten));
+
+            atts.storeToXML(out, "KaartenProperties2.properties");
+        } catch (IOException e) {
+            System.out.println("Fout bij aanmaken properties-bestand");
+        }
+    }
+
+    public void zetPropertyKaartAantal3(int aantalKaarten){
+        try (FileOutputStream out = new
+                FileOutputStream("KaartListProperties3.properties")) {
+            Properties atts = new Properties();
+            atts.setProperty("aantalKaartenSpeler3", String.valueOf(aantalKaarten));
+
+            atts.storeToXML(out, "KaartenProperties3.properties");
+        } catch (IOException e) {
+            System.out.println("Fout bij aanmaken properties-bestand");
+        }
+    }
+
+    public void zetPropertyKaartAantal4(int aantalKaarten){
+        try (FileOutputStream out = new
+                FileOutputStream("KaartListProperties4.properties")) {
+            Properties atts = new Properties();
+            atts.setProperty("aantalKaartenSpeler4", String.valueOf(aantalKaarten));
+
+            atts.storeToXML(out, "KaartenProperties4.properties");
+        } catch (IOException e) {
+            System.out.println("Fout bij aanmaken properties-bestand");
+        }
+    }
+
+    public int vraagPropertyKaartAantal1(){
+        int kaartAantal = 0;
+        try (FileInputStream in = new
+                FileInputStream("KaartListProperties1.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            kaartAantal = Integer.valueOf(atts.getProperty("aantalKaartenSpeler1"));
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return kaartAantal;
+    }
+
+    public int vraagPropertyKaartAantal2(){
+        int kaartAantal = 0;
+        try (FileInputStream in = new
+                FileInputStream("KaartListProperties2.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            kaartAantal = Integer.valueOf(atts.getProperty("aantalKaartenSpeler2"));
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return kaartAantal;
+    }
+
+    public int vraagPropertyKaartAantal3(){
+        int kaartAantal = 0;
+        try (FileInputStream in = new
+                FileInputStream("KaartListProperties3.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            kaartAantal = Integer.valueOf(atts.getProperty("aantalKaartenSpeler3"));
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return kaartAantal;
+    }
+
+    public int vraagPropertyKaartAantal4(){
+        int kaartAantal = 0;
+        try (FileInputStream in = new
+                FileInputStream("KaartListProperties4.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            kaartAantal = Integer.valueOf(atts.getProperty("aantalKaartenSpeler4"));
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return kaartAantal;
+    }
+
+    public int vraagPropertyKaartAantal(){
+        int kaartAantal = 0;
+        try (FileInputStream in = new
+                FileInputStream("KaartListProperties.properties")) {
+            Properties atts = new Properties();
+            atts.loadFromXML(in);
+            kaartAantal = Integer.valueOf(atts.getProperty("aantalKaarten"));
+        } catch (IOException e) {
+            System.out.println("Fout bij het ophalen van properties");
+        }
+        return kaartAantal;
     }
 
     public boolean vraagPropertySpelGeladen(){

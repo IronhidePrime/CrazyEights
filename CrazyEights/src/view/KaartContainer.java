@@ -34,6 +34,10 @@ public class KaartContainer extends JLayeredPane {
         this.lblTrekstapel = lblTrekstapel;
     }
 
+    public List<KaartLabel> getKaartenSpeler() {
+        return kaartenSpeler;
+    }
+
     public void maakLists(int spelerNr) {
         /**
          * speler 0 kaarten altijd horizontaal
@@ -42,41 +46,87 @@ public class KaartContainer extends JLayeredPane {
          * als de speler een computer is moet de kaart omgedraaid zijn
          */
         kaartenSpeler = new LinkedList<>();
-        for (int i = 0; i < controller.getAantalKaartenSpeler(); i++) {
-            if (spelerNr == 0) {
-                KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller);
-                kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
-                if (controller.getSpelers().get(1) instanceof Computer) {
-                    kaartLabel.setImageString(kaartLabel.getHorizontale());
-                    revalidate();
-                    repaint();
+        if (controller.vraagPropertySpelGeladen()){
+                if (spelerNr == 0) {
+                    KaartLabel kaartLabel;
+                    for (int j=0;j<controller.vraagPropertyKaartAantal1();j++){
+                        kaartLabel = new KaartLabel(controller.getSpelerKaarten(0).get(j).getHorizontaleImageString(),controller.getSpelerKaarten(0).get(j).getVerticaleImageString(),controller);
+                        kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
+                        kaartenSpeler.add(kaartLabel);
+                    }
+                    kaartOverlap = 40;
+                    zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
+                    System.out.println(kaartenSpeler.size() + " AANTAL LABELS VOOR SPELEN");
                 }
-                kaartenSpeler.add(kaartLabel);
-            }
-            if (controller.getSpelers().get(spelerNr) instanceof Mens) {
                 if (spelerNr == 1) {
+                    KaartLabel kaartLabel;
+                    for (int j=0;j<controller.vraagPropertyKaartAantal2();j++){
+                        kaartLabel = new KaartLabel(controller.getSpelerKaarten(1).get(j).getHorizontaleImageString(),controller.getSpelerKaarten(1).get(j).getVerticaleImageString(),controller);
+                        kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
+                        kaartenSpeler.add(kaartLabel);
+                    }
+                    kaartOverlap = 40;
+                    zetBreedte(kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte, 100);
+                }
+
+                if (spelerNr == 2) {
+                    KaartLabel kaartLabel;
+                    for (int j=0;j<controller.vraagPropertyKaartAantal3();j++){
+                        kaartLabel = new KaartLabel(controller.getSpelerKaarten(2).get(j).getHorizontaleImageString(),controller.getSpelerKaarten(2).get(j).getVerticaleImageString(),controller);
+                        kaartLabel.setImageString(kaartLabel.getOmgedraaidV());
+                        kaartenSpeler.add(kaartLabel);
+                    }
+                    kaartOverlap = 40;
+                    zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
+                }
+                if (spelerNr == 3) {
+                    KaartLabel kaartLabel;
+                    for (int j=0;j<controller.vraagPropertyKaartAantal2();j++){
+                        kaartLabel = new KaartLabel(controller.getSpelerKaarten(3).get(j).getHorizontaleImageString(),controller.getSpelerKaarten(3).get(j).getVerticaleImageString(),controller);
+                        kaartLabel.setImageString(kaartLabel.getOmgedraaidV());
+                        kaartenSpeler.add(kaartLabel);
+                    }
+                    kaartOverlap = 40;
+                    zetBreedte(100, kaartOverlap * (kaartenSpeler.size() - 1) + kaartBreedte);
+                }
+        } else {
+            for (int i = 0; i < controller.getAantalKaartenSpeler(); i++) {
+                if (spelerNr == 0) {
                     KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller);
                     kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
+                    if (controller.getSpelers().get(1) instanceof Computer) {
+                        kaartLabel.setImageString(kaartLabel.getHorizontale());
+                        revalidate();
+                        repaint();
+                    }
                     kaartenSpeler.add(kaartLabel);
-                    revalidate();
-                    repaint();
                 }
-                if (spelerNr == 2 || spelerNr == 3) {
-                    KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller);
-                    kaartLabel.setImageString(kaartLabel.getOmgedraaidV());
-                    kaartenSpeler.add(kaartLabel);
-                    revalidate();
-                    repaint();
-                }
-            } else if (controller.getSpelers().get(spelerNr) instanceof Computer) {
 
-                Kaart kaart = controller.getSpelerKaarten(spelerNr).get(i);
-                KaartLabel kaartLabel = new KaartLabel(kaart.getHorizontaleImageString(), kaart.getVerticaleImageString(), controller);
-                kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
-                if (spelerNr == 2 || spelerNr == 3) {
-                    kaartLabel.setImageString(kaartLabel.getOmgedraaidV());
+                if (controller.getSpelers().get(spelerNr) instanceof Mens) {
+                    if (spelerNr == 1) {
+                        KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller);
+                        kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
+                        kaartenSpeler.add(kaartLabel);
+                        revalidate();
+                        repaint();
+                    }
+                    if (spelerNr == 2 || spelerNr == 3) {
+                        KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller);
+                        kaartLabel.setImageString(kaartLabel.getOmgedraaidV());
+                        kaartenSpeler.add(kaartLabel);
+                        revalidate();
+                        repaint();
+                    }
+                } else if (controller.getSpelers().get(spelerNr) instanceof Computer) {
+
+                    Kaart kaart = controller.getSpelerKaarten(spelerNr).get(i);
+                    KaartLabel kaartLabel = new KaartLabel(kaart.getHorizontaleImageString(), kaart.getVerticaleImageString(), controller);
+                    kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
+                    if (spelerNr == 2 || spelerNr == 3) {
+                        kaartLabel.setImageString(kaartLabel.getOmgedraaidV());
+                    }
+                    kaartenSpeler.add(kaartLabel);
                 }
-                kaartenSpeler.add(kaartLabel);
             }
         }
         try {
@@ -95,9 +145,51 @@ public class KaartContainer extends JLayeredPane {
         }
     }
 
+    public void tekenKaartLabelsGeladenSpel(int spelerNr){
+        int aantal = 0;
+        switch (spelerNr) {
+            case 0: aantal = controller.vraagPropertyKaartAantal1();
+                    break;
+            case 1: aantal = controller.vraagPropertyKaartAantal2();
+                    break;
+            case 2: aantal = controller.vraagPropertyKaartAantal3();
+                    break;
+            case 3: aantal = controller.vraagPropertyKaartAantal4();
+                    break;
+        }
+
+        kaartOverlap = 0;
+        for (int j = 0; j < aantal; j++) {
+            kaartenSpeler.get(j).setBounds(kaartOverlap, 0, kaartBreedte, 100);
+            add(kaartenSpeler.get(j), new Integer(j));
+            kaartOverlap += 40;
+        }
+    }
+
     public void tekenKaartLabelsVerticaal() {
         kaartOverlap = 0;
         for (int j = 0; j < controller.getAantalKaartenSpeler(); j++) {
+            kaartenSpeler.get(j).setBounds(0, kaartOverlap, 100, kaartBreedte);
+            this.add(kaartenSpeler.get(j), new Integer(j));
+            kaartOverlap += 40;
+        }
+    }
+
+    public void tekenKaartLabelsVerticaalGeladenSpel(int spelerNr){
+        int aantal = 0;
+        switch (spelerNr) {
+            case 0: aantal = controller.vraagPropertyKaartAantal1();
+                break;
+            case 1: aantal = controller.vraagPropertyKaartAantal2();
+                break;
+            case 2: aantal = controller.vraagPropertyKaartAantal3();
+                break;
+            case 3: aantal = controller.vraagPropertyKaartAantal4();
+                break;
+        }
+
+        kaartOverlap = 0;
+        for (int j = 0; j < aantal; j++) {
             kaartenSpeler.get(j).setBounds(0, kaartOverlap, 100, kaartBreedte);
             this.add(kaartenSpeler.get(j), new Integer(j));
             kaartOverlap += 40;
@@ -148,6 +240,7 @@ public class KaartContainer extends JLayeredPane {
 
                         if (spelerNr == 0) {
                             hertekenKaartenHorizontaal();
+                            System.out.println(kaartenSpeler.size() + " AANTAL LABELS NA SPELEN");
                             for (KaartLabel kaartLabel1 : kaartenSpeler) {
                                 if (controller.getSpelers().get(1) instanceof Computer) {
                                     kaartLabel1.setImageString(kaartLabel1.getHorizontale());
@@ -181,6 +274,22 @@ public class KaartContainer extends JLayeredPane {
                         repaint();
 
                         controller.speelKaart(teSpelenKaart, spelerNr);
+                        if (spelerNr==0){
+                            controller.zetPropertyKaartAantal1(controller.getSpelerKaarten(spelerNr).size());
+                            controller.zetPropertyKaarten1(controller.getSpelerKaarten(spelerNr));
+                        }
+                        if (spelerNr==1){
+                            controller.zetPropertyKaartAantal2(controller.getSpelerKaarten(spelerNr).size());
+                            controller.zetPropertyKaarten2(controller.getSpelerKaarten(spelerNr));
+                        }
+                        if (spelerNr==2){
+                            controller.zetPropertyKaartAantal3(controller.getSpelerKaarten(spelerNr).size());
+                            controller.zetPropertyKaarten2(controller.getSpelerKaarten(spelerNr));
+                        }
+                        if (spelerNr==3){
+                            controller.zetPropertyKaartAantal3(controller.getSpelerKaarten(spelerNr).size());
+                            controller.zetPropertyKaarten2(controller.getSpelerKaarten(spelerNr));
+                        }
                         System.out.println("bovenste kaart op aflegstapel is" + controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
                         if (teSpelenKaart.getWaarde() == 8){
                             String[] keuzes = { "Harten", "Ruiten", "Klaveren", "Schoppen" };
@@ -204,15 +313,6 @@ public class KaartContainer extends JLayeredPane {
                             }
                             System.out.println("na kleur verandere is de bovenste kaart " + controller.getSpelbord().getAflegstapel().getBovensteKaart());
                         }
-/*
-                        if (teSpelenKaart.getWaarde() == 1) {
-                            if  (speelRichting == 0) {
-                                speelRichting++;
-                            } else {
-                                speelRichting--;
-                            }
-                            controller.veranderSpeelRichting(spelerNr, speelRichting);
-                        } else */
                         if (teSpelenKaart.getWaarde() == 12) {
                             controller.beeindigBeurtDame(spelerNr);
                             if (spelerNr+1 >= controller.getAantalSpelers()){
@@ -229,9 +329,6 @@ public class KaartContainer extends JLayeredPane {
                             } else {
                                 controller.zetPropertySpelerBeurtNr(spelerNr + 1);
                             }
-                            if (spelerNr==0){
-                                controller.zetPropertyKaarten(controller.getSpelerKaarten(0));
-                            }
                         }
 
                         if (controller.getSpelers().get(1) instanceof Computer) {
@@ -247,6 +344,23 @@ public class KaartContainer extends JLayeredPane {
                     }
                 }
             });
+        }
+        //zet properties van aantal kaarten voor begin situatie
+        if (spelerNr==0){
+            controller.zetPropertyKaartAantal1(controller.getSpelerKaarten(spelerNr).size());
+            controller.zetPropertyKaarten1(controller.getSpelerKaarten(spelerNr));
+        }
+        if (spelerNr==1){
+            controller.zetPropertyKaartAantal2(controller.getSpelerKaarten(spelerNr).size());
+            controller.zetPropertyKaarten2(controller.getSpelerKaarten(spelerNr));
+        }
+        if (spelerNr == 2) {
+            controller.zetPropertyKaartAantal3(controller.getSpelerKaarten(spelerNr).size());
+            controller.zetPropertyKaarten3(controller.getSpelerKaarten(spelerNr));
+        }
+        if (spelerNr == 3) {
+            controller.zetPropertyKaartAantal4(controller.getSpelerKaarten(spelerNr).size());
+            controller.zetPropertyKaarten4(controller.getSpelerKaarten(spelerNr));
         }
     }
 
@@ -273,7 +387,22 @@ public class KaartContainer extends JLayeredPane {
                     KaartLabel lblGetrokkenKaart = new KaartLabel(getrokkenKaart.getHorizontaleImageString(), getrokkenKaart.getVerticaleImageString(), controller);
                     lblGetrokkenKaart.setImageString(getrokkenKaart.getHorizontaleImageString());
                     controller.getSpelerKaarten(spelerNr).add(getrokkenKaart);
-                    controller.zetPropertyKaarten(controller.getSpelerKaarten(0));
+                    if (spelerNr==0){
+                        controller.zetPropertyKaartAantal1(controller.getSpelerKaarten(spelerNr).size());
+                        controller.zetPropertyKaarten1(controller.getSpelerKaarten(spelerNr));
+                    }
+                    if (spelerNr==1){
+                        controller.zetPropertyKaartAantal2(controller.getSpelerKaarten(spelerNr).size());
+                        controller.zetPropertyKaarten2(controller.getSpelerKaarten(spelerNr));
+                    }
+                    if (spelerNr == 2) {
+                        controller.zetPropertyKaartAantal3(controller.getSpelerKaarten(spelerNr).size());
+                        controller.zetPropertyKaarten3(controller.getSpelerKaarten(spelerNr));
+                    }
+                    if (spelerNr == 3) {
+                        controller.zetPropertyKaartAantal4(controller.getSpelerKaarten(spelerNr).size());
+                        controller.zetPropertyKaarten4(controller.getSpelerKaarten(spelerNr));
+                    }
 
                     kaartenSpeler.add(lblGetrokkenKaart);
 
@@ -314,7 +443,9 @@ public class KaartContainer extends JLayeredPane {
                     removeAll();
                     kaartOverlap = 0;
                     if (spelerNr == 1) {
-                        hertekenKaartenHorizontaal();
+                        if (!controller.vraagPropertySpelGeladen()){
+                            hertekenKaartenHorizontaal();
+                        }
                     }
 
                     if (spelerNr == 2 || spelerNr == 3) {

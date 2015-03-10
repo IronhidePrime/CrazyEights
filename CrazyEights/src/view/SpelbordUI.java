@@ -8,7 +8,6 @@ import model.Speler;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
@@ -29,8 +28,6 @@ public class SpelbordUI extends JFrame {
 
     private JPanel[] pnlSpelerContainer;
     private JLabel[] lblSpelerNaam;
-
-    private JLabel lblStatus;
 
     private List<Speler> spelers;
 
@@ -55,10 +52,14 @@ public class SpelbordUI extends JFrame {
         System.out.println(controller.vraagPropertySpelGeladen());
         if (controller.vraagPropertySpelGeladen()){
             System.out.println("beurt resetten");
-            for (Speler speler: spelers){
-                speler.setAanBeurt(false);
+            if (controller.vraagBeurtProperty() == controller.vraagPropertySpelersAantal()){
+                controller.zetPropertySpelerBeurtNr(0);
+            } else {
+                for (Speler speler: spelers){
+                    speler.setAanBeurt(false);
+                }
+                spelers.get(controller.vraagBeurtProperty()).setAanBeurt(true);
             }
-            spelers.get(controller.vraagBeurtProperty()).setAanBeurt(true);
         }
         aantalSpelers = controller.getAantalSpelers();
 
@@ -92,12 +93,6 @@ public class SpelbordUI extends JFrame {
         lblTrekstapel = new TrekStapelLabel();
         lblTrekstapel.setPreferredSize(new Dimension(100, 140));
 
-        lblStatus = new JLabel();
-        lblStatus.setFont(new Font("Serif", Font.BOLD, 20));
-        lblStatus.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblStatus.setText("Speler aan beurt: " + controller.getSpelerNaamAanBeurt());
-        lblStatus.setForeground(Color.BLACK);
-
         lblSpelerNaam = new JLabel[aantalSpelers];
         lblSpelersAfbeelding = new SpelerAfbeelding[aantalSpelers];
 
@@ -106,7 +101,12 @@ public class SpelbordUI extends JFrame {
          */
         pnlSpelerContainer = new JPanel[aantalSpelers];
         pnlKaartContainer = new JPanel[aantalSpelers];
-        lpnlkaartContainer = new KaartContainer[aantalSpelers];
+
+        if (controller.vraagPropertySpelGeladen()){
+            lpnlkaartContainer = new KaartContainer[controller.vraagPropertySpelersAantal()];
+        } else {
+            lpnlkaartContainer = new KaartContainer[aantalSpelers];
+        }
 
         achtergrond = new AchtergrondLabel();
         stapelContainer = new StapelContainer();
@@ -142,10 +142,9 @@ public class SpelbordUI extends JFrame {
         super.add(achtergrond, BorderLayout.CENTER);
         achtergrond.add(stapelContainer,BorderLayout.CENTER);
 
-        super.add(lblStatus, BorderLayout.AFTER_LAST_LINE);
 
         if (controller.getSpelers().get(1) instanceof Mens) {
-            super.add(btnDraaiOm, BorderLayout.BEFORE_FIRST_LINE);
+            super.add(btnDraaiOm, BorderLayout.LINE_END);
         }
 
         /**
@@ -154,6 +153,23 @@ public class SpelbordUI extends JFrame {
          * 3. voor elke speler panel met zijn kaarten aanmaken (layerdPane in Panel steken)
          *    voor 3 & 4 spelers (verticaal) is de preferredSize van de layeredPane verschillend van speler 1 & 2 (horizontaal)
          */
+
+        if (controller.vraagPropertySpelGeladen()){
+            for (int i=0;i<controller.vraagPropertySpelersAantal();i++){
+                lpnlkaartContainer[i] = new KaartContainer(controller,lblAflegstapel, lblTrekstapel);
+                pnlKaartContainer[i] = new JPanel();
+                pnlKaartContainer[i].setOpaque(false);
+            }
+            System.out.println(lpnlkaartContainer.length + " is het aantal layeredkaartcontainers");
+
+        } else  {
+            for (int i=0;i<aantalSpelers;i++){
+                lpnlkaartContainer[i] = new KaartContainer(controller,lblAflegstapel, lblTrekstapel);
+                pnlKaartContainer[i] = new JPanel();
+                pnlKaartContainer[i].setOpaque(false);
+            }
+        }
+
         for (int i = 0; i < aantalSpelers; i++) {
             //1
             lblSpelerNaam[i] = new JLabel();
@@ -169,11 +185,6 @@ public class SpelbordUI extends JFrame {
             pnlSpelerContainer[i].setLayout(new BorderLayout());
             pnlSpelerContainer[i].setOpaque(false);
             pnlSpelerContainer[i].add(lblSpelersAfbeelding[i], BorderLayout.CENTER);
-
-            //3
-            lpnlkaartContainer[i] = new KaartContainer(controller,lblAflegstapel, lblTrekstapel, lblStatus);
-            pnlKaartContainer[i] = new JPanel();
-            pnlKaartContainer[i].setOpaque(false);
 
         }
         if (aantalSpelers >= 2) {
@@ -203,14 +214,27 @@ public class SpelbordUI extends JFrame {
          * aantal kaarten per speler hangt af van het aantal spelers (2 spelers -> 7 kaarten, 3 of 4 spelers -> 5 kaarten)
          */
 
-        for (int i=0; i<aantalSpelers;i++){
-            lpnlkaartContainer[i].maakLists(i);
-            if (i== 0 || i == 1){
-                lpnlkaartContainer[i].tekenKaartLabels();
-            }
+        if (controller.vraagPropertySpelGeladen()){
+            for (int i=0;i<controller.vraagPropertySpelersAantal();i++){
+                lpnlkaartContainer[i].maakLists(i);
+                if (i==0 || i==1){
+                    lpnlkaartContainer[i].tekenKaartLabelsGeladenSpel(i);
+                }
 
-            if (i == 2  || i == 3){
-                lpnlkaartContainer[i].tekenKaartLabelsVerticaal();
+                if (i == 2 || i == 3){
+                    lpnlkaartContainer[i].tekenKaartLabelsVerticaalGeladenSpel(i);
+                }
+            }
+        } else {
+            for (int i=0; i<aantalSpelers;i++){
+                lpnlkaartContainer[i].maakLists(i);
+                if (i== 0 || i == 1){
+                    lpnlkaartContainer[i].tekenKaartLabels();
+                }
+
+                if (i == 2  || i == 3){
+                    lpnlkaartContainer[i].tekenKaartLabelsVerticaal();
+                }
             }
         }
     }

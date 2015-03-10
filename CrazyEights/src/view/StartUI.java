@@ -173,7 +173,7 @@ public class StartUI extends JFrame {
                 dispose();
                 controller.zetSpelGeladenBoolean(true);
                 System.out.println("laad spel");
-                System.out.println(controller.vraagPropertySpelGeladen() + " boolean geladen");
+                System.out.println(controller.vraagPropertySpelGeladen());
 
                 for (int i=0;i<controller.vraagPropertySpelersAantal();i++){
                     if (!controller.vraagPropertyMultiplayer()){
@@ -200,13 +200,6 @@ public class StartUI extends JFrame {
                     }
                 }
                 new SpelbordUI(controller);
-            }
-        });
-
-        btnSpelregels.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new SpelregelsWindow();
             }
         });
     }
