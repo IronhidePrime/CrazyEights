@@ -457,6 +457,17 @@ public class KaartContainer extends JLayeredPane {
                 imgString = controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString();
                 lblAflegStapel.setImageString(imgString);
                 kaartenSpeler.remove(kaartenSpeler.size() - 1);
+
+                if (controller.getSpelerKaarten(spelerNr).size() == 0) {
+                    JOptionPane.showMessageDialog(null, "Je hebt verloren");
+                    int keuze = JOptionPane.showOptionDialog(null, "Nog een keer spelen?", "Einde spel!", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Ja", "Nee"}, "Ja");
+                    if (keuze == 0) {
+                        controller.herstartSpel();
+                    } else {
+                        //TODO: spelbordUI sluiten
+                    }
+                }
+
                 try {
                     remove(kaartenSpeler.size() - 1);
                     removeAll();
@@ -476,34 +487,49 @@ public class KaartContainer extends JLayeredPane {
                     System.out.println("negeer");
                 }
 
-                if (teSpelenKaart.getWaarde() == 8){
-                    String [] kleurKeuze = {"harten","ruiten","klaveren","schoppen"};
+                if (teSpelenKaart.getWaarde() == 8) {
+                    String[] kleurKeuze = {"harten", "ruiten", "klaveren", "schoppen"};
                     Random random = new Random();
-                    int kleurKeuzeIndex = random.nextInt(3);
+                    int kleurKeuzeIndex = random.nextInt(4);
                     System.out.println("computer heeft een 8 gespeeld");
                     System.out.println("HIER KLEUR VERANDEREN");
                     lblAflegStapel.setImageString("images/" + kleurKeuze[kleurKeuzeIndex] + "/" + kleurKeuze[kleurKeuzeIndex] + "8.png");
                     System.out.println(lblAflegStapel.getImageString() + "na veranderen kleur");
 
-                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8,Kleur.values()[kleurKeuzeIndex],"images/"+kleurKeuze[kleurKeuzeIndex]+"/"+kleurKeuze[kleurKeuzeIndex]+"8.png",""));
+                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.values()[kleurKeuzeIndex], "images/" + kleurKeuze[kleurKeuzeIndex] + "/" + kleurKeuze[kleurKeuzeIndex] + "8.png", ""));
                     System.out.println("bovenste kaart na verandering door computer" + controller.getSpelbord().getAflegstapel().getBovensteKaart());
+                }
+
+                if (controller.getSpeelRichting() == 0) {
+                    if (teSpelenKaart.getWaarde() == 1) {
+                        controller.setSpeelRichting(1);
+                        controller.speelRichting(spelerNr);
+                        JOptionPane.showMessageDialog(null, "Er is van spelrichting veranderd");
+                    } else if (teSpelenKaart.getWaarde() == 12) {
+                        controller.beeindigBeurtDame(spelerNr);
+                        JOptionPane.showMessageDialog(null, "De volgende speler wordt overgeslagen");
+                    } else {
+                        controller.beeindigBeurt(spelerNr);
+                    }
+                } else {
+                    if (teSpelenKaart.getWaarde() == 1) {
+                        controller.setSpeelRichting(0);
+                        controller.speelRichting(spelerNr);
+                        JOptionPane.showMessageDialog(null, "Er is van spelrichting veranderd");
+                    } else if (teSpelenKaart.getWaarde() == 12) {
+                        controller.beeindigBeurtDame(spelerNr);
+                        JOptionPane.showMessageDialog(null, "De volgende speler wordt overgeslagen");
+                    } else {
+                        controller.speelRichting(spelerNr);
+                    }
                 }
             } else {
                 computerTrekEvent(spelerNr);
                 revalidate();
                 repaint();
             }
-
-            if (controller.getSpelerKaarten(spelerNr).size() == 0) {
-                JOptionPane.showMessageDialog(null, "Je hebt verloren");
-                int keuze = JOptionPane.showConfirmDialog(null, "Nog een keer spelen?");
-                if (keuze == JOptionPane.YES_OPTION) {
-                    controller.herstartSpel();
-                }
-            }
-            controller.beeindigBeurt(spelerNr);
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
