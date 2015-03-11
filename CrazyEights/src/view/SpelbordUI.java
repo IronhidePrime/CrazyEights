@@ -210,7 +210,15 @@ public class SpelbordUI extends JFrame {
             lblSpelerNaam[i].setHorizontalAlignment(SwingConstants.CENTER);
             lblSpelerNaam[i].setForeground(Color.WHITE);
 
-            lblSpelersAfbeelding[i] = new SpelerAfbeelding();
+            if (i==0) {
+                lblSpelersAfbeelding[i] = new SpelerAfbeelding("/view/images/spelerIcon.png");
+            } else if (i==1) {
+                lblSpelersAfbeelding[i] = new SpelerAfbeelding("/view/images/spelers/hans.jpg");
+            } else if (i==2) {
+                lblSpelersAfbeelding[i] = new SpelerAfbeelding("/view/images/spelers/eddy.JPG");
+            } else if (i==3) {
+                lblSpelersAfbeelding[i] = new SpelerAfbeelding("/view/images/spelers/kristiaan.jpg");
+            }
             lblSpelersAfbeelding[i].setPreferredSize(new Dimension(150, 100));
 
             //2

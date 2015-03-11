@@ -4,8 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SpelerAfbeelding extends JLabel {
+    private String imageString;
+
+    public SpelerAfbeelding (String imageString) {
+        this.imageString = imageString;
+    }
     protected void paintComponent(Graphics g) {
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/view/images/spelerIcon.png"));
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource(imageString));
         Image image = imageIcon.getImage();
         super.paintComponent(g);
         int width = (this.getWidth() - image.getWidth(null)) / 2;
