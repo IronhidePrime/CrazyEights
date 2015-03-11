@@ -1,6 +1,9 @@
 package view;
 
 import controller.Controller;
+import model.Computer;
+import model.Mens;
+import model.Speler;
 
 
 import javax.imageio.ImageIO;
@@ -123,8 +126,6 @@ public class StartUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                controller.zetSpelGeladenBoolean(false);
-                System.out.println("nieuw spel");
 
                 /**
                  * Namen van de spelers opvragen
@@ -135,13 +136,15 @@ public class StartUI extends JFrame {
                 for (int i=0; i<aantalSpelers; i++) {
                     if (chkMultiplayer.isSelected()) {
                         namenSpelers[i] = checkGeldigheidNaam(i);
-                        controller.zetPropertySpelerBord(aantalSpelers,true);
+                        //controller.zetPropertySpelerBord(aantalSpelers,true);
+                        controller.setMultiplayer(true);
                         controller.maakMens(namenSpelers[i]);
                     } else {
                         if (i==0) {
+                            controller.setMultiplayer(false);
                             namenSpelers[i] = checkGeldigheidNaam(i);
-                            controller.zetPropertySpelerBord(aantalSpelers, false);
-                            controller.zetPropertySpelersSingle(namenSpelers[i]);
+                            //controller.zetPropertySpelerBord(aantalSpelers, false);
+                            //controller.zetPropertySpelersSingle(namenSpelers[i]);
                             controller.maakMens(namenSpelers[i]);
                         } else if (i==1) {
                             controller.maakComputer("Eddy");
@@ -152,14 +155,41 @@ public class StartUI extends JFrame {
                         }
                     }
                 }
+                /*
                 if (controller.vraagPropertyMultiplayer()){
                     controller.zetPropertySpelersMulti(namenSpelers);
                 }
+                */
+                controller.setSpelGeladen(false);
                 new SpelbordUI(controller);
             }
         });
 
         btnLaden.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+                for (int i=0;i<controller.vraagPropertyAantalSpelers();i++){
+                    if (!controller.vraagIsMultiplayer()){
+                        if (i==0) {
+                            controller.maakMens(controller.vraagSpelerNaamProperty(0));
+                        } else if (i==1) {
+                            controller.maakComputer("Eddy");
+                        } else if (i==2) {
+                            controller.maakComputer("Hans");
+                        } else if (i==3) {
+                            controller.maakComputer("Dirk");
+                        }
+                    } else {
+                        controller.maakMens(controller.vraagSpelerNaamProperty(i));
+                    }
+                }
+                controller.setSpelGeladen(true);
+                new SpelbordUI(controller);
+            }
+        });
+
+      /*  btnLaden.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -193,11 +223,11 @@ public class StartUI extends JFrame {
                 }
                 new SpelbordUI(controller);
             }
-        });
+        }); */
         btnSpelregels.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SpelregelsWindow();
+                //new SpelregelsWindow();
             }
         });
     }

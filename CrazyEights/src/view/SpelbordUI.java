@@ -52,7 +52,10 @@ public class SpelbordUI extends JFrame {
         this.controller = controller;
         controller.startSpel();
         spelers = controller.getSpelers();
-        System.out.println(controller.vraagPropertySpelGeladen());
+
+        System.out.println("spel geladen?" + controller.isSpelGeladen());
+
+        /*
         if (controller.vraagPropertySpelGeladen()) {
             System.out.println("beurt resetten");
 
@@ -61,9 +64,11 @@ public class SpelbordUI extends JFrame {
             }
             spelers.get(controller.vraagBeurtProperty()).setAanBeurt(true);
         }
+        */
 
 
         aantalSpelers = controller.getAantalSpelers();
+        System.out.println("aantal spelers is" + aantalSpelers);
         maakComponenten();
         maakLayout();
         behandelEvents();
@@ -112,11 +117,18 @@ public class SpelbordUI extends JFrame {
         pnlSpelerContainer = new JPanel[aantalSpelers];
         pnlKaartContainer = new JPanel[aantalSpelers];
 
-        if (controller.vraagPropertySpelGeladen()) {
-            lpnlkaartContainer = new KaartContainer[controller.vraagPropertySpelersAantal()];
+        if (controller.isSpelGeladen()){
+            lpnlkaartContainer = new KaartContainer[controller.vraagPropertyAantalSpelers()];
         } else {
             lpnlkaartContainer = new KaartContainer[aantalSpelers];
         }
+
+        /*
+        if (controller.vraagPropertySpelGeladen()) {
+            lpnlkaartContainer = new KaartContainer[controller.vraagPropertySpelersAantal()];
+        } else {*/
+
+        //}
 
         achtergrond = new AchtergrondLabel();
         stapelContainer = new StapelContainer();
@@ -166,7 +178,7 @@ public class SpelbordUI extends JFrame {
          *    voor 3 & 4 spelers (verticaal) is de preferredSize van de layeredPane verschillend van speler 1 & 2 (horizontaal)
          */
 
-        if (controller.vraagPropertySpelGeladen()) {
+        /*if (controller.vraagPropertySpelGeladen()) {
             for (int i = 0; i < controller.vraagPropertySpelersAantal(); i++) {
                 lpnlkaartContainer[i] = new KaartContainer(controller, lblAflegstapel, lblTrekstapel, lblStatus);
                 pnlKaartContainer[i] = new JPanel();
@@ -174,6 +186,14 @@ public class SpelbordUI extends JFrame {
             }
             System.out.println(lpnlkaartContainer.length + " is het aantal layeredkaartcontainers");
 
+        } else { */
+
+        if (controller.isSpelGeladen()){
+            for (int i=0;i<controller.vraagPropertyAantalSpelers();i++){
+                lpnlkaartContainer[i] = new KaartContainer(controller, lblAflegstapel, lblTrekstapel, lblStatus);
+                pnlKaartContainer[i] = new JPanel();
+                pnlKaartContainer[i].setOpaque(false);
+            }
         } else {
             for (int i = 0; i < aantalSpelers; i++) {
                 lpnlkaartContainer[i] = new KaartContainer(controller, lblAflegstapel, lblTrekstapel, lblStatus);
@@ -181,6 +201,7 @@ public class SpelbordUI extends JFrame {
                 pnlKaartContainer[i].setOpaque(false);
             }
         }
+        //}
 
         for (int i = 0; i < aantalSpelers; i++) {
             //1
@@ -226,8 +247,20 @@ public class SpelbordUI extends JFrame {
          * aantal kaarten per speler hangt af van het aantal spelers (2 spelers -> 7 kaarten, 3 of 4 spelers -> 5 kaarten)
          */
 
-        if (controller.vraagPropertySpelGeladen()) {
+       /* if (controller.vraagPropertySpelGeladen()) {
             for (int i = 0; i < controller.vraagPropertySpelersAantal(); i++) {
+                lpnlkaartContainer[i].maakLists(i);
+                if (i == 0 || i == 1) {
+                    lpnlkaartContainer[i].tekenKaartLabelsGeladenSpel(i);
+                }
+
+                if (i == 2 || i == 3) {
+                    lpnlkaartContainer[i].tekenKaartLabelsVerticaalGeladenSpel(i);
+                }
+            }
+        } else {*/
+        if (controller.isSpelGeladen()){
+            for (int i=0; i<controller.vraagPropertyAantalSpelers();i++){
                 lpnlkaartContainer[i].maakLists(i);
                 if (i == 0 || i == 1) {
                     lpnlkaartContainer[i].tekenKaartLabelsGeladenSpel(i);
@@ -310,6 +343,15 @@ public class SpelbordUI extends JFrame {
                 for (int i = 0; i < spelers.size(); i++) {
                     lpnlkaartContainer[i].draaiKaartenOm(i);
                 }
+            }
+        });
+
+        super.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                System.out.println("window closed");
+                controller.zetSpelBordProperties();
             }
         });
     }
