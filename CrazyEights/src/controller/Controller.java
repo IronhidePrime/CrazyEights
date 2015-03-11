@@ -28,6 +28,7 @@ public class Controller {
 
     private boolean spelGeladen = false;
     private boolean isMultiplayer;
+    private boolean spelGedaan = false;
 
     public Controller() {
         this.spelbord = new Spelbord();
@@ -48,6 +49,14 @@ public class Controller {
 
     public void setMultiplayer(boolean isMultiplayer) {
         this.isMultiplayer = isMultiplayer;
+    }
+
+    public boolean isSpelGedaan() {
+        return spelGedaan;
+    }
+
+    public void setSpelGedaan(boolean spelGedaan) {
+        this.spelGedaan = spelGedaan;
     }
 
     /**
@@ -105,13 +114,10 @@ public class Controller {
      */
     public void startSpel() {
         //1
-
-        //if (!vraagPropertySpelGeladen()){
         if (!spelGeladen){
             kaartenUitdelen();
             System.out.println("nieuw spel, kaarten gewoon verdelen");
         } else {
-            //kaartenUitdelen();
             for (int i=0; i<vraagPropertyAantalSpelers();i++){
                 getSpelerKaarten(i).removeAll(getSpelerKaarten(i));
                 for (int j=0; j<vraagPropertyAantalKaarten(i);j++){
@@ -119,38 +125,6 @@ public class Controller {
                 }
             }
         }
-
-        //} else {
-           /* for (int i=0; i<vraagPropertySpelersAantal();i++){
-                getSpelerKaarten(i).removeAll(getSpelerKaarten(i));
-                if (i==0){
-                    for (int j=0;j<vraagPropertyKaartAantal1();j++){
-                        getSpelerKaarten(0).add(new Kaart(vraagPropertyWaarde1(j),vraagPropertyKleur1(j),vraagPropertyKaartImgString1(j,true),vraagPropertyKaartImgString1(j,false)));
-                    }
-                    System.out.println("Kaart objecten speler 1 aangemaakt");
-                    System.out.println("er zitten nu " + getSpelerKaarten(0).size() + " kaarten in");
-                } else if (i==1){
-                    for (int j=0;j<vraagPropertyKaartAantal2();j++){
-                        getSpelerKaarten(1).add(new Kaart(vraagPropertyWaarde2(j),vraagPropertyKleur2(j),vraagPropertyKaartImgString2(j, true),vraagPropertyKaartImgString2(j, false)));
-                    }
-                    System.out.println("Kaart objecten speler 2 aangemaakt");
-                    System.out.println("er zitten nu " + getSpelerKaarten(1).size() + " kaarten in");
-                } else if (i==2){
-                    for (int j=0;j<vraagPropertyKaartAantal3();j++){
-                        getSpelerKaarten(2).add(new Kaart(vraagPropertyWaarde3(j),vraagPropertyKleur3(j),vraagPropertyKaartImgString3(j, true),vraagPropertyKaartImgString3(j, false)));
-                    }
-                    System.out.println("Kaart objecten speler 3 aangemaakt");
-                    System.out.println("er zitten nu " + getSpelerKaarten(2).size() + " kaarten in");
-                } else if (i==3){
-                    for (int j=0;j<vraagPropertyKaartAantal4();j++){
-                        getSpelerKaarten(3).add(new Kaart(vraagPropertyWaarde4(j),vraagPropertyKleur4(j),vraagPropertyKaartImgString4(j, true),vraagPropertyKaartImgString4(j, false)));
-                    }
-                    System.out.println("Kaart objecten speler 2 aangemaakt");
-                    System.out.println("er zitten nu " + getSpelerKaarten(3).size() + " kaarten in");
-                }
-            }
-        }*/
-
         //2
         beginKaart();
 
@@ -348,6 +322,11 @@ public class Controller {
                     atts.setProperty("naamSpeler"+ i, getSpelerNaam(i));
                 }
             }
+            atts.setProperty("legKaartStringH", String.valueOf(getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString()));
+            atts.setProperty("legKaartStringV", String.valueOf(getSpelbord().getAflegstapel().getBovensteKaart().getVerticaleImageString()));
+            atts.setProperty("legKaartWaarde", String.valueOf(getSpelbord().getAflegstapel().getBovensteKaart().getWaarde()));
+            atts.setProperty("legKaartKleur", String.valueOf(getSpelbord().getAflegstapel().getBovensteKaart().getKleur()));
+
             atts.setProperty("SpelerIntAanBeurt", String.valueOf(getSpelerNrAanBeurt()));
             atts.storeToXML(out, "SpelerBordProperties.properties");
         } catch (IOException e) {

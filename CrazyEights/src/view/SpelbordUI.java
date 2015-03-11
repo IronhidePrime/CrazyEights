@@ -190,13 +190,13 @@ public class SpelbordUI extends JFrame {
 
         if (controller.isSpelGeladen()){
             for (int i=0;i<controller.vraagPropertyAantalSpelers();i++){
-                lpnlkaartContainer[i] = new KaartContainer(controller, lblAflegstapel, lblTrekstapel, lblStatus);
+                lpnlkaartContainer[i] = new KaartContainer(controller, lblAflegstapel, lblTrekstapel, lblStatus,this);
                 pnlKaartContainer[i] = new JPanel();
                 pnlKaartContainer[i].setOpaque(false);
             }
         } else {
             for (int i = 0; i < aantalSpelers; i++) {
-                lpnlkaartContainer[i] = new KaartContainer(controller, lblAflegstapel, lblTrekstapel, lblStatus);
+                lpnlkaartContainer[i] = new KaartContainer(controller, lblAflegstapel, lblTrekstapel, lblStatus,this);
                 pnlKaartContainer[i] = new JPanel();
                 pnlKaartContainer[i].setOpaque(false);
             }

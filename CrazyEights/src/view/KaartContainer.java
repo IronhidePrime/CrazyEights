@@ -24,14 +24,17 @@ public class KaartContainer extends JLayeredPane {
     private TrekStapelLabel lblTrekstapel;
     private Robot robot;
     private JLabel lblStatus;
+    private JFrame jframe;
 
 
-    public KaartContainer(Controller controller, AflegStapelLabel lblAflegStapel, TrekStapelLabel lblTrekstapel, JLabel lblStatus) {
+    public KaartContainer(Controller controller, AflegStapelLabel lblAflegStapel, TrekStapelLabel lblTrekstapel, JLabel lblStatus, JFrame jframe) {
         this.controller = controller;
         this.setPreferredSize(new Dimension(new Dimension(kaartOverlap * (controller.getAantalKaartenSpeler() - 1) + kaartBreedte, 100)));
         this.setOpaque(false);
         this.lblAflegStapel = lblAflegStapel;
         this.lblTrekstapel = lblTrekstapel;
+        this.jframe = jframe;
+
 
         this.lblStatus = lblStatus;
     }
@@ -190,12 +193,14 @@ public class KaartContainer extends JLayeredPane {
                         kaartenSpeler.remove(kaartLabel);
                         remove(kaartLabel);
 
-                        if (controller.getSpelerKaarten(spelerNr).size() == 0) {
+                        if (controller.getSpelerKaarten(spelerNr).size() == 0 && !controller.isSpelGedaan()) {
                             String felicitaties = "Speler " + controller.getSpelerNaamAanBeurt() + " heeft gewonnen! PROFICIAT!";
                             JOptionPane.showMessageDialog(null, felicitaties, "We hebben een winnaar!!!", JOptionPane.DEFAULT_OPTION);
                             int keuze = JOptionPane.showOptionDialog(null, "Nog een keer spelen?", "Einde spel!", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[] {"Ja", "Nee"}, "Ja");
                             if (keuze == 0) {
                                 controller.herstartSpel();
+                                controller.setSpelGedaan(true);
+                                jframe.dispose();
                             } else {
                                 System.exit(0);
                             }
@@ -239,7 +244,7 @@ public class KaartContainer extends JLayeredPane {
 
                         controller.speelKaart(teSpelenKaart, spelerNr);
                         System.out.println("bovenste kaart op aflegstapel is" + controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
-                        if (teSpelenKaart.getWaarde() == 8){
+                        if (teSpelenKaart.getWaarde() == 8 && !controller.isSpelGedaan()){
                             String[] keuzes = { "Harten", "Ruiten", "Klaveren", "Schoppen" };
                             System.out.println("KAART IS EEN 8");
                             int keuze = JOptionPane.showOptionDialog(null, "In welke kleur wil je veranderen?", "verander kleur",
@@ -265,10 +270,10 @@ public class KaartContainer extends JLayeredPane {
                             if (teSpelenKaart.getWaarde() == 1) {
                                 controller.setSpeelRichting(1);
                                 controller.speelRichting(spelerNr);
-                                if (controller.getAantalSpelers() > 2) {
+                                if (controller.getAantalSpelers() > 2 && !controller.isSpelGedaan()) {
                                     JOptionPane.showMessageDialog(null, "Er is van spelrichting veranderd", "Richting veranderd", JOptionPane.DEFAULT_OPTION);
                                 }
-                            } else if (teSpelenKaart.getWaarde() == 12) {
+                            } else if (teSpelenKaart.getWaarde() == 12 && !controller.isSpelGedaan()) {
                                 controller.beeindigBeurtDame(spelerNr);
                                 JOptionPane.showMessageDialog(null, "De volgende speler wordt overgeslagen", "Volgende speler overslaan", JOptionPane.DEFAULT_OPTION);
                             } else {
@@ -278,10 +283,10 @@ public class KaartContainer extends JLayeredPane {
                             if (teSpelenKaart.getWaarde() == 1) {
                                 controller.setSpeelRichting(0);
                                 controller.speelRichting(spelerNr);
-                                if (controller.getAantalSpelers() > 2) {
+                                if (controller.getAantalSpelers() > 2 && !controller.isSpelGedaan()) {
                                     JOptionPane.showMessageDialog(null, "Er is van spelrichting veranderd");
                                 }
-                            } else if (teSpelenKaart.getWaarde() == 12) {
+                            } else if (teSpelenKaart.getWaarde() == 12 && !controller.isSpelGedaan()) {
                                 controller.beeindigBeurtDame(spelerNr);
                                 JOptionPane.showMessageDialog(null, "De volgende speler wordt overgeslagen");
                             } else {
@@ -290,7 +295,7 @@ public class KaartContainer extends JLayeredPane {
                         }
                         lblStatus.setText("Speler aan beurt: " + controller.getSpelerNaamAanBeurt());
 
-                        if (controller.getSpelers().get(1) instanceof Computer) {
+                        if (controller.getSpelers().get(1) instanceof Computer && !controller.isSpelGedaan()) {
                             JOptionPane.showMessageDialog(null, "computers gaan nu hun kaarten spelen");
                             robot.mouseMove(getX() + 500, getY() + 700);
                             robot.mouseRelease(InputEvent.BUTTON1_MASK);
@@ -365,11 +370,12 @@ public class KaartContainer extends JLayeredPane {
                 lblAflegStapel.setImageString(imgString);
                 kaartenSpeler.remove(kaartenSpeler.size() - 1);
 
-                if (controller.getSpelerKaarten(spelerNr).size() == 0) {
+                if (controller.getSpelerKaarten(spelerNr).size() == 0 && !controller.isSpelGedaan()) {
                     JOptionPane.showMessageDialog(null, "Je hebt verloren");
                     int keuze = JOptionPane.showOptionDialog(null, "Nog een keer spelen?", "Einde spel!", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new String[]{"Ja", "Nee"}, "Ja");
                     if (keuze == 0) {
                         controller.herstartSpel();
+                        jframe.dispose();
                     } else {
                         System.exit(0);
                     }
@@ -409,21 +415,21 @@ public class KaartContainer extends JLayeredPane {
                     if (teSpelenKaart.getWaarde() == 1) {
                         controller.setSpeelRichting(1);
                         controller.speelRichting(spelerNr);
-                        if (controller.getAantalSpelers() > 2) {
+                        if (controller.getAantalSpelers() > 2 && !controller.isSpelGedaan()) {
                             JOptionPane.showMessageDialog(null, "Er is van spelrichting veranderd", "Richting veranderd", JOptionPane.DEFAULT_OPTION);
                         }
-                    } else if (teSpelenKaart.getWaarde() == 12) {
+                    } else if (teSpelenKaart.getWaarde() == 12 && !controller.isSpelGedaan()) {
                         controller.beeindigBeurtDame(spelerNr);
                         JOptionPane.showMessageDialog(null, "De volgende speler wordt overgeslagen");
                     } else {
                         controller.beeindigBeurt(spelerNr);
                     }
                 } else {
-                    if (teSpelenKaart.getWaarde() == 1) {
+                    if (teSpelenKaart.getWaarde() == 1 && !controller.isSpelGedaan()) {
                         controller.setSpeelRichting(0);
                         controller.speelRichting(spelerNr);
                         JOptionPane.showMessageDialog(null, "Er is van spelrichting veranderd");
-                    } else if (teSpelenKaart.getWaarde() == 12) {
+                    } else if (teSpelenKaart.getWaarde() == 12 && !controller.isSpelGedaan()) {
                         controller.beeindigBeurtDame(spelerNr);
                         JOptionPane.showMessageDialog(null, "De volgende speler wordt overgeslagen");
                     } else {

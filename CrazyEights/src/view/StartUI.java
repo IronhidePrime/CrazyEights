@@ -189,41 +189,6 @@ public class StartUI extends JFrame {
             }
         });
 
-      /*  btnLaden.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                controller.zetSpelGeladenBoolean(true);
-                System.out.println("laad spel");
-                System.out.println(controller.vraagPropertySpelGeladen());
-
-                for (int i = 0; i < controller.vraagPropertySpelersAantal(); i++) {
-                    if (!controller.vraagPropertyMultiplayer()) {
-                        if (i == 0) {
-                            controller.maakMens(controller.vraagProperySpelerNaamSingle());
-                        } else if (i == 1) {
-                            controller.maakComputer("Eddy");
-                        } else if (i == 2) {
-                            controller.maakComputer("Hans");
-                        } else if (i == 3) {
-                            controller.maakComputer("Dirk");
-                        }
-                    } else {
-                        controller.maakMens("");
-                        if (i == 0) {
-                            controller.getSpelers().get(0).setNaam(controller.vraagProperySpelerNaamMulti()[0]);
-                        } else if (i == 1) {
-                            controller.getSpelers().get(1).setNaam(controller.vraagProperySpelerNaamMulti()[1]);
-                        } else if (i == 2) {
-                            controller.getSpelers().get(2).setNaam(controller.vraagProperySpelerNaamMulti()[2]);
-                        } else if (i == 3) {
-                            controller.getSpelers().get(3).setNaam(controller.vraagProperySpelerNaamMulti()[3]);
-                        }
-                    }
-                }
-                new SpelbordUI(controller);
-            }
-        }); */
         btnSpelregels.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
