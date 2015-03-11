@@ -124,6 +124,7 @@ public class Controller {
                     getSpelerKaarten(i).add(new Kaart(vraagPropertyKaartWaarde(i,j),vraagPropertyKaartKleur(i,j),vraagPropertyKaartImgString(i,j,false),vraagPropertyKaartImgString(i,j,true)));
                 }
             }
+            verwijderBestaandeKaarten();
         }
         //2
         beginKaart();
@@ -132,6 +133,24 @@ public class Controller {
 
         getSpelers().get(0).setAanBeurt(true);
 
+    }
+
+    public void verwijderBestaandeKaarten(){
+        List<Kaart> trekStapelKaarten =  getSpelbord().getTrekstapel().getKaarten();
+        List<Kaart> teVerwijderenKaarten = new ArrayList<Kaart>();
+        System.out.println("aantal kaarten voor verwijderen van bestaande kaarten" + trekStapelKaarten.size());
+        for (int i=0; i<vraagPropertyAantalSpelers();i++){
+            for (Kaart kaart: getSpelerKaarten(i)){
+                for (Kaart trekStapelKaart: trekStapelKaarten){
+                    if (kaart.getHorizontaleImageString().equals(trekStapelKaart.getHorizontaleImageString())){
+                      teVerwijderenKaarten.add(trekStapelKaart);
+                        System.out.println("te verwijderen kaart is" + trekStapelKaart.getHorizontaleImageString());
+                    }
+                }
+            }
+        }
+        trekStapelKaarten.removeAll(teVerwijderenKaarten);
+        System.out.println("aantal kaarten na verwijderen van bestaande kaarten" + trekStapelKaarten.size());
     }
 
     public void herstartSpel(){
@@ -322,11 +341,6 @@ public class Controller {
                     atts.setProperty("naamSpeler"+ i, getSpelerNaam(i));
                 }
             }
-            atts.setProperty("legKaartStringH", String.valueOf(getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString()));
-            atts.setProperty("legKaartStringV", String.valueOf(getSpelbord().getAflegstapel().getBovensteKaart().getVerticaleImageString()));
-            atts.setProperty("legKaartWaarde", String.valueOf(getSpelbord().getAflegstapel().getBovensteKaart().getWaarde()));
-            atts.setProperty("legKaartKleur", String.valueOf(getSpelbord().getAflegstapel().getBovensteKaart().getKleur()));
-
             atts.setProperty("SpelerIntAanBeurt", String.valueOf(getSpelerNrAanBeurt()));
             atts.storeToXML(out, "SpelerBordProperties.properties");
         } catch (IOException e) {
