@@ -5,9 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-/**
- * Created by sander on 9/03/2015.
- */
 public class SpelProperties {
     public static void main(String[] args) {
         writeProperties();

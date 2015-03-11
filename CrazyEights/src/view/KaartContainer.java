@@ -238,7 +238,7 @@ public class KaartContainer extends JLayeredPane {
                             if (keuze == 0) {
                                 controller.herstartSpel();
                             } else {
-                                //TODO: spelbordUI sluiten
+                                System.exit(0);
                             }
                         }
 
@@ -345,6 +345,8 @@ public class KaartContainer extends JLayeredPane {
                                 controller.speelRichting(spelerNr);
                             }
                         }
+
+                        controller.zetPropertySpelerBeurtNr(controller.getSpelerNrAanBeurt());
 
                         lblStatus.setText("Speler aan beurt: " + controller.getSpelerNaamAanBeurt());
 
@@ -464,7 +466,7 @@ public class KaartContainer extends JLayeredPane {
                     if (keuze == 0) {
                         controller.herstartSpel();
                     } else {
-                        //TODO: spelbordUI sluiten
+                        System.exit(0);
                     }
                 }
 
@@ -504,7 +506,9 @@ public class KaartContainer extends JLayeredPane {
                     if (teSpelenKaart.getWaarde() == 1) {
                         controller.setSpeelRichting(1);
                         controller.speelRichting(spelerNr);
-                        JOptionPane.showMessageDialog(null, "Er is van spelrichting veranderd");
+                        if (controller.getAantalSpelers() > 2) {
+                            JOptionPane.showMessageDialog(null, "Er is van spelrichting veranderd", "Richting veranderd", JOptionPane.DEFAULT_OPTION);
+                        }
                     } else if (teSpelenKaart.getWaarde() == 12) {
                         controller.beeindigBeurtDame(spelerNr);
                         JOptionPane.showMessageDialog(null, "De volgende speler wordt overgeslagen");
@@ -523,6 +527,7 @@ public class KaartContainer extends JLayeredPane {
                         controller.speelRichting(spelerNr);
                     }
                 }
+                controller.zetPropertySpelerBeurtNr(controller.getSpelerNrAanBeurt());
 
                 if (!controller.getSpelers().get(0).getAanBeurt()) {
                     robot.mouseMove(getX() + 500, getY() + 700);
@@ -540,7 +545,6 @@ public class KaartContainer extends JLayeredPane {
 
 
     public void computerTrekEvent(int spelerNr) {
-        //TODO: kaart trekken -> kaartlabel met getrokken kaart, set imageString omgedraaid
         if (controller.getSpelers().get(spelerNr) instanceof Computer) {
 
             if (controller.getSpelbord().getTrekstapel().getKaarten().size() == 1) {

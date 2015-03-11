@@ -13,7 +13,7 @@ public class SplashWindow extends JWindow {
         pack();
         setVisible(true);
         try {
-            Thread.sleep(3000); // 3 sec pauzeren
+            Thread.sleep(5000); // 3 sec pauzeren
         } catch (InterruptedException e) {
             // doe niets
         }
