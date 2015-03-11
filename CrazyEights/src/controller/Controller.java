@@ -319,9 +319,14 @@ public class Controller {
 
     public void vulTrekStapel(){
         Kaart bovensteKaart = getSpelbord().getAflegstapel().getBovensteKaart();
-        getSpelbord().getTrekstapel().getKaarten().addAll(getSpelbord().getAflegstapel().getKaarten());
+        System.out.println("bovenste kaart is " + bovensteKaart.getHorizontaleImageString());
+        List<Kaart> kaartenAflegStapel = getSpelbord().getAflegstapel().getKaarten();
+        Set<Kaart> kaartSet = new HashSet<>(kaartenAflegStapel);
         getSpelbord().getAflegstapel().getKaarten().removeAll(getSpelbord().getAflegstapel().getKaarten());
         getSpelbord().getAflegstapel().getKaarten().add(bovensteKaart);
+        getSpelbord().getTrekstapel().getKaarten().addAll(kaartSet);
+
+
         Collections.shuffle(getSpelbord().getTrekstapel().getKaarten());
     }
 
