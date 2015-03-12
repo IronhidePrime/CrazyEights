@@ -75,11 +75,9 @@ public class SpelbordUI extends JFrame {
         super.setVisible(true);
 
         BufferedImage image = null;
-        try
-        {
+        try {
             image = ImageIO.read(getClass().getResource("/view/images/icon.png"));
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -117,7 +115,7 @@ public class SpelbordUI extends JFrame {
         pnlSpelerContainer = new JPanel[aantalSpelers];
         pnlKaartContainer = new JPanel[aantalSpelers];
 
-        if (controller.isSpelGeladen()){
+        if (controller.isSpelGeladen()) {
             lpnlkaartContainer = new KaartContainer[controller.vraagPropertyAantalSpelers()];
         } else {
             lpnlkaartContainer = new KaartContainer[aantalSpelers];
@@ -188,15 +186,15 @@ public class SpelbordUI extends JFrame {
 
         } else { */
 
-        if (controller.isSpelGeladen()){
-            for (int i=0;i<controller.vraagPropertyAantalSpelers();i++){
-                lpnlkaartContainer[i] = new KaartContainer(controller, lblAflegstapel, lblTrekstapel, lblStatus,this);
+        if (controller.isSpelGeladen()) {
+            for (int i = 0; i < controller.vraagPropertyAantalSpelers(); i++) {
+                lpnlkaartContainer[i] = new KaartContainer(controller, lblAflegstapel, lblTrekstapel, lblStatus, this);
                 pnlKaartContainer[i] = new JPanel();
                 pnlKaartContainer[i].setOpaque(false);
             }
         } else {
             for (int i = 0; i < aantalSpelers; i++) {
-                lpnlkaartContainer[i] = new KaartContainer(controller, lblAflegstapel, lblTrekstapel, lblStatus,this);
+                lpnlkaartContainer[i] = new KaartContainer(controller, lblAflegstapel, lblTrekstapel, lblStatus, this);
                 pnlKaartContainer[i] = new JPanel();
                 pnlKaartContainer[i].setOpaque(false);
             }
@@ -210,14 +208,20 @@ public class SpelbordUI extends JFrame {
             lblSpelerNaam[i].setHorizontalAlignment(SwingConstants.CENTER);
             lblSpelerNaam[i].setForeground(Color.WHITE);
 
-            if (i==0) {
+
+            if (i == 0) {
                 lblSpelersAfbeelding[i] = new SpelerAfbeelding("/view/images/spelerIcon.png");
-            } else if (i==1) {
-                lblSpelersAfbeelding[i] = new SpelerAfbeelding("/view/images/spelers/hans.jpg");
-            } else if (i==2) {
-                lblSpelersAfbeelding[i] = new SpelerAfbeelding("/view/images/spelers/eddy.JPG");
-            } else if (i==3) {
-                lblSpelersAfbeelding[i] = new SpelerAfbeelding("/view/images/spelers/kristiaan.jpg");
+            }
+            if (controller.getSpelers().get(1) instanceof Computer) {
+                if (i == 1) {
+                    lblSpelersAfbeelding[i] = new SpelerAfbeelding("/view/images/spelers/hans.jpg");
+                } else if (i == 2) {
+                    lblSpelersAfbeelding[i] = new SpelerAfbeelding("/view/images/spelers/eddy.JPG");
+                } else if (i == 3) {
+                    lblSpelersAfbeelding[i] = new SpelerAfbeelding("/view/images/spelers/kristiaan.jpg");
+                }
+            } else {
+                lblSpelersAfbeelding[i] = new SpelerAfbeelding("/view/images/spelerIcon.png");
             }
             lblSpelersAfbeelding[i].setPreferredSize(new Dimension(150, 100));
 
@@ -228,13 +232,18 @@ public class SpelbordUI extends JFrame {
             pnlSpelerContainer[i].add(lblSpelersAfbeelding[i], BorderLayout.CENTER);
 
         }
-        if (aantalSpelers >= 2) {
+
+        if (aantalSpelers >= 2)
+
+        {
             pnlKaartContainer[0].add(lpnlkaartContainer[0]);
             pnlKaartContainer[1].add(lpnlkaartContainer[1]);
             tweeSpelersContainerLayOut();
         }
 
-        if (aantalSpelers >= 3) {
+        if (aantalSpelers >= 3)
+
+        {
             //voor panel verticaal te centreren -> gridbaglayout
             pnlKaartContainer[2].setLayout(new GridBagLayout());
             pnlKaartContainer[2].add(lpnlkaartContainer[2], new GridBagConstraints());
@@ -242,7 +251,9 @@ public class SpelbordUI extends JFrame {
             derdeSpelerContainerLayOut();
         }
 
-        if (aantalSpelers == 4) {
+        if (aantalSpelers == 4)
+
+        {
             //voor panel verticaal te centreren -> gridbaglayout
             pnlKaartContainer[3].setLayout(new GridBagLayout());
             pnlKaartContainer[3].add(lpnlkaartContainer[3], new GridBagConstraints());
@@ -267,8 +278,10 @@ public class SpelbordUI extends JFrame {
                 }
             }
         } else {*/
-        if (controller.isSpelGeladen()){
-            for (int i=0; i<controller.vraagPropertyAantalSpelers();i++){
+        if (controller.isSpelGeladen())
+
+        {
+            for (int i = 0; i < controller.vraagPropertyAantalSpelers(); i++) {
                 lpnlkaartContainer[i].maakLists(i);
                 if (i == 0 || i == 1) {
                     lpnlkaartContainer[i].tekenKaartLabelsGeladenSpel(i);
@@ -278,7 +291,9 @@ public class SpelbordUI extends JFrame {
                     lpnlkaartContainer[i].tekenKaartLabelsVerticaalGeladenSpel(i);
                 }
             }
-        } else {
+        } else
+
+        {
             for (int i = 0; i < aantalSpelers; i++) {
                 lpnlkaartContainer[i].maakLists(i);
                 if (i == 0 || i == 1) {
@@ -290,6 +305,7 @@ public class SpelbordUI extends JFrame {
                 }
             }
         }
+
     }
 
     /**

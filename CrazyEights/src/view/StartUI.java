@@ -147,11 +147,11 @@ public class StartUI extends JFrame {
                             //controller.zetPropertySpelersSingle(namenSpelers[i]);
                             controller.maakMens(namenSpelers[i]);
                         } else if (i==1) {
-                            controller.maakComputer("Hans");
+                            controller.maakComputer("Hans En Grietje");
                         } else if (i==2) {
                             controller.maakComputer("Supper Eddy");
                         } else if (i==3) {
-                            controller.maakComputer("Kristiaan");
+                            controller.maakComputer("Badass Kristiaan");
                         }
                     }
                 }
