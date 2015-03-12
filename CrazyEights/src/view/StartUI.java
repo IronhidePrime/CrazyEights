@@ -147,11 +147,11 @@ public class StartUI extends JFrame {
                             //controller.zetPropertySpelersSingle(namenSpelers[i]);
                             controller.maakMens(namenSpelers[i]);
                         } else if (i==1) {
-                            controller.maakComputer("Eddy");
+                            controller.maakComputer("Hans En Grietje");
                         } else if (i==2) {
-                            controller.maakComputer("Hans");
+                            controller.maakComputer("Supper Eddy");
                         } else if (i==3) {
-                            controller.maakComputer("Dirk");
+                            controller.maakComputer("Badass Kristiaan");
                         }
                     }
                 }
@@ -174,11 +174,11 @@ public class StartUI extends JFrame {
                         if (i==0) {
                             controller.maakMens(controller.vraagSpelerNaamProperty(0));
                         } else if (i==1) {
-                            controller.maakComputer("Eddy");
-                        } else if (i==2) {
                             controller.maakComputer("Hans");
+                        } else if (i==2) {
+                            controller.maakComputer("Supper Eddy");
                         } else if (i==3) {
-                            controller.maakComputer("Dirk");
+                            controller.maakComputer("Kristiaan");
                         }
                     } else {
                         controller.maakMens(controller.vraagSpelerNaamProperty(i));
