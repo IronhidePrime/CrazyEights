@@ -1,9 +1,6 @@
 package view;
 
 import controller.Controller;
-import model.Computer;
-import model.Mens;
-import model.Speler;
 
 
 import javax.imageio.ImageIO;
@@ -192,7 +189,7 @@ public class StartUI extends JFrame {
         btnSpelregels.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //new SpelregelsWindow();
+                new SpelRegelsWindow();
             }
         });
     }
