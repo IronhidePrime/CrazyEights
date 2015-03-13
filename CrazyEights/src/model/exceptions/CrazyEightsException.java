@@ -1,7 +1,7 @@
 package model.exceptions;
 
-/**
- * Created by Ironhide on 13/03/2015.
- */
-public class CrazyEightsException {
+public class CrazyEightsException extends Exception {
+    public CrazyEightsException(String message) {
+        super(message);
+    }
 }

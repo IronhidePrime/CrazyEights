@@ -1,6 +1,8 @@
-package view;
+package view.gui;
 
 import controller.Controller;
+import view.labels.LogoLabel;
+import view.windows.SpelRegelsWindow;
 
 
 import javax.imageio.ImageIO;
@@ -37,10 +39,12 @@ public class StartUI extends JFrame {
         super.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         super.setSize(600,600);
         super.setLocationRelativeTo(null);
+
         maakComponenten();
         maakLayout();
         behandelEvents();
         super.setVisible(true);
+
         this.controller = new Controller();
 
         BufferedImage image = null;
@@ -73,7 +77,7 @@ public class StartUI extends JFrame {
 
     public void maakLayout(){
         /**
-         * Panel voor de titel vanboven weer te geven
+         * panel voor de titel vanboven weer te geven
          */
         JPanel pnlTitel = new JPanel();
         pnlTitel.setBorder(new EmptyBorder(20,0,0,0));
@@ -83,7 +87,7 @@ public class StartUI extends JFrame {
         super.add(pnlTitel, BorderLayout.NORTH);
 
         /**
-         * Panel voor logo en combobox/checkbox, start mooi in het midden weer te geven
+         * panel voor logo en combobox/checkbox, start mooi in het midden weer te geven
          */
         JPanel pnlCenter = new JPanel();
         pnlCenter.setLayout(new GridLayout(1, 2, 30, 0));
@@ -106,7 +110,7 @@ public class StartUI extends JFrame {
         super.add(pnlCenter, BorderLayout.CENTER);
 
         /**
-         * Panel voor spelregels, info en highscores ondereen weer te geven
+         * panel voor spelregels, laad spel en highscores ondereen weer te geven
          */
         JPanel pnlBottomContainer = new JPanel();
         pnlBottomContainer.setLayout(new GridLayout(1,3,10,0));
@@ -119,29 +123,29 @@ public class StartUI extends JFrame {
     }
 
     public void behandelEvents() {
+        /**
+         * sluit de startUI en opent het spelbordUI
+         */
         btnDeal.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
 
                 /**
-                 * Namen van de spelers opvragen
-                 * Doorgeven aan controller -> spelbord
+                 * namen van de spelers opvragen
+                 * doorgeven aan controller -> spelbord
                  */
                 aantalSpelers = cboSpelers.getSelectedIndex() + 2;
                 String[] namenSpelers = new String[aantalSpelers];
                 for (int i=0; i<aantalSpelers; i++) {
                     if (chkMultiplayer.isSelected()) {
                         namenSpelers[i] = checkGeldigheidNaam(i);
-                        //controller.zetPropertySpelerBord(aantalSpelers,true);
                         controller.setMultiplayer(true);
                         controller.maakMens(namenSpelers[i]);
                     } else {
                         if (i==0) {
                             controller.setMultiplayer(false);
                             namenSpelers[i] = checkGeldigheidNaam(i);
-                            //controller.zetPropertySpelerBord(aantalSpelers, false);
-                            //controller.zetPropertySpelersSingle(namenSpelers[i]);
                             controller.maakMens(namenSpelers[i]);
                         } else if (i==1) {
                             controller.maakComputer("Hans En Grietje");
@@ -152,16 +156,15 @@ public class StartUI extends JFrame {
                         }
                     }
                 }
-                /*
-                if (controller.vraagPropertyMultiplayer()){
-                    controller.zetPropertySpelersMulti(namenSpelers);
-                }
-                */
                 controller.setSpelGeladen(false);
                 new SpelbordUI(controller);
             }
         });
 
+        /**
+         * laad het vorige spel
+         * gaat de properties van het vorige spel opvragen
+         */
         btnLaden.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -171,11 +174,11 @@ public class StartUI extends JFrame {
                         if (i==0) {
                             controller.maakMens(controller.vraagSpelerNaamProperty(0));
                         } else if (i==1) {
-                            controller.maakComputer("Hans");
+                            controller.maakComputer("Hans En Grietje");
                         } else if (i==2) {
                             controller.maakComputer("Supper Eddy");
                         } else if (i==3) {
-                            controller.maakComputer("Kristiaan");
+                            controller.maakComputer("Badass Kristiaan");
                         }
                     } else {
                         controller.maakMens(controller.vraagSpelerNaamProperty(i));
@@ -186,6 +189,9 @@ public class StartUI extends JFrame {
             }
         });
 
+        /**
+         * opent een window met de spelregels in
+         */
         btnSpelregels.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -194,6 +200,10 @@ public class StartUI extends JFrame {
         });
     }
 
+    /**
+     * methode voor foutafhandeling
+     * gaat kijken of er een geldige naam is ingegeven (1 t.e.m. 10 karakters)
+     */
     public String checkGeldigheidNaam(int spelerNr) {
         boolean juisteNaam = false;
         String spelersNaam = "";

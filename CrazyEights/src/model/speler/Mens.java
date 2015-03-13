@@ -1,7 +1,5 @@
 package model.speler;
 
-import model.speler.Speler;
-
 /**
  * mens erft van speler
  * geen extra eigenschappen

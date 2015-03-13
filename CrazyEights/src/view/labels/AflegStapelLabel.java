@@ -1,18 +1,18 @@
-package view;
-
-import controller.Controller;
+package view.labels;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * label die telkens de kaart gaat weergeven die vanboven op de aflegstapel ligt
+ */
 public class AflegStapelLabel extends JLabel {
     private String imageString;
-    private Controller controller;
 
-    public AflegStapelLabel(String imageString, Controller controller) {
+    public AflegStapelLabel(String imageString) {
         this.imageString = imageString;
-        this.controller = controller;
     }
+
     @Override
     protected void paintComponent(Graphics g) {
         ImageIcon imageIcon = new ImageIcon(getClass().getResource(imageString));

@@ -1,7 +1,10 @@
 package model.io;
 
-/**
- * Created by Ironhide on 13/03/2015.
- */
-public class HighScores {
+public class HighScores implements Comparable<HighScores> {
+
+
+    @Override
+    public int compareTo(HighScores o) {
+        return 0;
+    }
 }

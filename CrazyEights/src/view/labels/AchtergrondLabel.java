@@ -1,10 +1,10 @@
-package view;
+package view.labels;
 
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by Ironhide on 4/03/2015.
+ * achtergrond van het spelbord
  */
 public class AchtergrondLabel extends JPanel {
     @Override

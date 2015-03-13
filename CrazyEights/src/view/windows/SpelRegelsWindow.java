@@ -1,4 +1,6 @@
-package view;
+package view.windows;
+
+import view.labels.LogoLabel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,10 +16,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+/**
+ * window dat  de spelregels toont
+ */
 public class SpelRegelsWindow extends JDialog {
-    private JPanel pnlComponentContainer;
     private JTextArea txtSpelregels;
-    private JLabel lblCrazyLogo;
     private JButton btnOK;
 
     public SpelRegelsWindow() {
@@ -40,7 +43,7 @@ public class SpelRegelsWindow extends JDialog {
     }
 
     public void maakComponenten() {
-        pnlComponentContainer = new JPanel(new BorderLayout());
+        JPanel pnlComponentContainer = new JPanel(new BorderLayout());
         pnlComponentContainer.setBorder(new EmptyBorder(10,10,0,10));
         txtSpelregels = new JTextArea();
         txtSpelregels.setOpaque(false);
@@ -52,7 +55,7 @@ public class SpelRegelsWindow extends JDialog {
         pnlComponentContainer.add(txtSpelregels, BorderLayout.CENTER);
         vulTextArea(getSpelregels());
 
-        lblCrazyLogo = new LogoLabel();
+        JLabel lblCrazyLogo = new LogoLabel();
         lblCrazyLogo.setPreferredSize(new Dimension(250,250));
         pnlComponentContainer.add(lblCrazyLogo, BorderLayout.NORTH);
 
@@ -62,6 +65,9 @@ public class SpelRegelsWindow extends JDialog {
         super.add(pnlComponentContainer);
     }
 
+    /**
+     * leest het spelregels bestand uit
+     */
     public List<String> getSpelregels() {
         Path spelregels = Paths.get("spelregels.txt");
         List<String> zinnen= null;
@@ -74,6 +80,9 @@ public class SpelRegelsWindow extends JDialog {
         return zinnen;
     }
 
+    /**
+     * gaat de textarea opvullen
+     */
     public void vulTextArea(List<String> zinnen) {
         for (String zin : zinnen) {
             txtSpelregels.append(zin + "\n");

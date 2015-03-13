@@ -1,28 +1,29 @@
-package view;
-
-import controller.Controller;
+package view.labels;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * gaat een kaart weergeven
+ * de imageString die gebruikt wordt hangt af van de positie waar de kaart wordt getekend
+ * onderaan of bovenaan zal deze imageString horizontaal moeten zijn
+ * links of rechts zal deze imageString verticaal moeten zijn
+ * speler niet aan de beurt? kaartLabel omdraaien
+ */
 public class KaartLabel extends JLabel{
     private String imageString;
-    private Controller controller;
-
 
     private String horizontale;
     private String verticale;
     private String omgedraaidH;
     private String omgedraaidV;
 
-    public KaartLabel(String horizontale, String verticale, Controller controller) {
+    public KaartLabel(String horizontale, String verticale) {
         this.horizontale = horizontale;
         this.verticale = verticale;
 
         this.omgedraaidH = "/view/images/kaartAchterkant.png";
         this.omgedraaidV = "/view/images/kaartAchterkantV.png";
-
-        this.controller = controller;
     }
 
     @Override

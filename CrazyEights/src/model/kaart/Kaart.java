@@ -1,31 +1,24 @@
 package model.kaart;
 
-import model.kaart.Kleur;
-
 /**
  * kaart heeft verschillende eigenschappen
  * de imageStrings dienen om een juiste afbeelding voor deze kaart te kunnen tonen (zowel horizontaal als verticaal)
  */
 public class Kaart {
     private int waarde;
-    private boolean isBeeldKant;
     private Kleur kleur;
     private String horizontaleImageString;
     private String verticaleImageString;
 
-    public Kaart(int waarde,Kleur kleur, String HorizontaleImageString, String VerticaleImageString){
+    public Kaart(int waarde, Kleur kleur, String horizontaleImageString, String verticaleImageString){
         this.waarde = waarde;
         this.kleur = kleur;
-        this.horizontaleImageString = HorizontaleImageString;
-        this.verticaleImageString = VerticaleImageString;
+        this.horizontaleImageString = horizontaleImageString;
+        this.verticaleImageString = verticaleImageString;
     }
 
     public int getWaarde() {
         return waarde;
-    }
-
-    public void setBeeldKant(boolean isBeeldKant) {
-        this.isBeeldKant = isBeeldKant;
     }
 
     public Kleur getKleur() {

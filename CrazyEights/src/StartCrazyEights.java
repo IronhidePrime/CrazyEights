@@ -1,5 +1,5 @@
-import view.SplashWindow;
-import view.StartUI;
+import view.windows.SplashWindow;
+import view.gui.StartUI;
 
 public class StartCrazyEights {
 

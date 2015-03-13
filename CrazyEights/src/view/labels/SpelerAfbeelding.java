@@ -1,8 +1,11 @@
-package view;
+package view.labels;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * afbeelding voor de speler
+ */
 public class SpelerAfbeelding extends JLabel {
     private String imageString;
 

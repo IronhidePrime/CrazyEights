@@ -1,10 +1,13 @@
-package view;
+package view.containers;
 
 import controller.Controller;
 import model.speler.Computer;
 import model.kaart.Kaart;
 import model.kaart.Kleur;
 import model.speler.Mens;
+import view.labels.AflegStapelLabel;
+import view.labels.KaartLabel;
+import view.labels.TrekStapelLabel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,10 +42,6 @@ public class KaartContainer extends JLayeredPane {
         this.lblStatus = lblStatus;
     }
 
-    public List<KaartLabel> getKaartenSpeler() {
-        return kaartenSpeler;
-    }
-
     public void maakLists(int spelerNr) {
         /**
          * speler 0 kaarten altijd horizontaal
@@ -55,7 +54,7 @@ public class KaartContainer extends JLayeredPane {
         if (controller.isSpelGeladen()){
             KaartLabel kaartLabel;
             for (int i=0; i<controller.vraagPropertyAantalKaarten(spelerNr);i++){
-                kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(),controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(),controller);
+                kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(),controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString());
                 if (spelerNr == 0 || spelerNr == 1){
                     if (controller.vraagIsMultiplayer()){
                         kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
@@ -79,7 +78,7 @@ public class KaartContainer extends JLayeredPane {
         } else {
             for (int i = 0; i < controller.getAantalKaartenSpeler(); i++) {
                 if (spelerNr == 0) {
-                    KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller);
+                    KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString());
                     kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
                     if (controller.getSpelers().get(1) instanceof Computer) {
                         kaartLabel.setImageString(kaartLabel.getHorizontale());
@@ -91,14 +90,14 @@ public class KaartContainer extends JLayeredPane {
 
                 if (controller.getSpelers().get(spelerNr) instanceof Mens) {
                     if (spelerNr == 1) {
-                        KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller);
+                        KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString());
                         kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
                         kaartenSpeler.add(kaartLabel);
                         revalidate();
                         repaint();
                     }
                     if (spelerNr == 2 || spelerNr == 3) {
-                        KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString(), controller);
+                        KaartLabel kaartLabel = new KaartLabel(controller.getSpelerKaarten(spelerNr).get(i).getHorizontaleImageString(), controller.getSpelerKaarten(spelerNr).get(i).getVerticaleImageString());
                         kaartLabel.setImageString(kaartLabel.getOmgedraaidV());
                         kaartenSpeler.add(kaartLabel);
                         revalidate();
@@ -107,7 +106,7 @@ public class KaartContainer extends JLayeredPane {
                 } else if (controller.getSpelers().get(spelerNr) instanceof Computer) {
 
                     Kaart kaart = controller.getSpelerKaarten(spelerNr).get(i);
-                    KaartLabel kaartLabel = new KaartLabel(kaart.getHorizontaleImageString(), kaart.getVerticaleImageString(), controller);
+                    KaartLabel kaartLabel = new KaartLabel(kaart.getHorizontaleImageString(), kaart.getVerticaleImageString());
                     kaartLabel.setImageString(kaartLabel.getOmgedraaidH());
                     if (spelerNr == 2 || spelerNr == 3) {
                         kaartLabel.setImageString(kaartLabel.getOmgedraaidV());
@@ -251,16 +250,16 @@ public class KaartContainer extends JLayeredPane {
                                     0, JOptionPane.INFORMATION_MESSAGE, null, keuzes, null);
                             System.out.println("Keuze is" + keuze);
                             switch (keuze) {
-                                case 0: lblAflegStapel.setImageString("images/harten/harten8.png");
+                                case 0: lblAflegStapel.setImageString("/view/images/harten/harten8.png");
                                         controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.harten,"images/harten/harten8.png","images/harten/verticaal/harten8.png"));
                                         break;
-                                case 1: lblAflegStapel.setImageString("images/ruiten/ruiten8.png");
+                                case 1: lblAflegStapel.setImageString("/view/images/ruiten/ruiten8.png");
                                         controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.ruiten,"images/ruiten/ruiten8.png","images/ruiten/verticaal/ruiten8.png"));
                                         break;
-                                case 2: lblAflegStapel.setImageString("images/klaveren/klaveren8.png");
+                                case 2: lblAflegStapel.setImageString("/view/images/klaveren/klaveren8.png");
                                         controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.klaveren,"images/klaveren/klaveren8.png","images/klaveren/verticaal/klaveren8.png"));
                                         break;
-                                case 3: lblAflegStapel.setImageString("images/schoppen/schoppen8.png");
+                                case 3: lblAflegStapel.setImageString("/view/images/schoppen/schoppen8.png");
                                         controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.schoppen,"images/schoppen/schoppen8.png","images/ruiten/verticaal/schoppen8.png"));
                                 break;
                             }
@@ -331,7 +330,7 @@ public class KaartContainer extends JLayeredPane {
                     System.out.println("DDDDDDDDDD");
                     getrokkenKaart = controller.getSpelbord().getTrekstapel().neemKaart();
                     System.out.println("getrokken kaart is" + getrokkenKaart.getHorizontaleImageString());
-                    KaartLabel lblGetrokkenKaart = new KaartLabel(getrokkenKaart.getHorizontaleImageString(), getrokkenKaart.getVerticaleImageString(), controller);
+                    KaartLabel lblGetrokkenKaart = new KaartLabel(getrokkenKaart.getHorizontaleImageString(), getrokkenKaart.getVerticaleImageString());
                     controller.getSpelerKaarten(spelerNr).add(getrokkenKaart);
 
                     kaartenSpeler.add(lblGetrokkenKaart);
@@ -404,7 +403,7 @@ public class KaartContainer extends JLayeredPane {
                     int kleurKeuzeIndex = random.nextInt(4);
                     System.out.println("computer heeft een 8 gespeeld");
                     System.out.println("HIER KLEUR VERANDEREN");
-                    lblAflegStapel.setImageString("images/" + kleurKeuze[kleurKeuzeIndex] + "/" + kleurKeuze[kleurKeuzeIndex] + "8.png");
+                    lblAflegStapel.setImageString("/view/images/" + kleurKeuze[kleurKeuzeIndex] + "/" + kleurKeuze[kleurKeuzeIndex] + "8.png");
                     System.out.println(lblAflegStapel.getImageString() + "na veranderen kleur");
 
                     controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.values()[kleurKeuzeIndex], "images/" + kleurKeuze[kleurKeuzeIndex] + "/" + kleurKeuze[kleurKeuzeIndex] + "8.png", ""));
@@ -463,7 +462,7 @@ public class KaartContainer extends JLayeredPane {
             System.out.println("computer heeft een kaart getrokken ");
 
             if (spelerNr == 1) {
-                KaartLabel kaartLabel = new KaartLabel("/view/images/kaartAchterkant.png", "/view/images/kaartAchterkantV.png", controller);
+                KaartLabel kaartLabel = new KaartLabel("/view/images/kaartAchterkant.png", "/view/images/kaartAchterkantV.png");
                 kaartLabel.setImageString(kaartLabel.getHorizontale());
                 kaartenSpeler.add(kaartLabel);
 
@@ -473,7 +472,7 @@ public class KaartContainer extends JLayeredPane {
             }
 
             if (spelerNr == 2 || spelerNr == 3) {
-                KaartLabel kaartLabel = new KaartLabel("/view/images/kaartAchterkant.png", "/view/images/kaartAchterkantV.png", controller);
+                KaartLabel kaartLabel = new KaartLabel("/view/images/kaartAchterkant.png", "/view/images/kaartAchterkantV.png");
                 kaartLabel.setImageString(kaartLabel.getVerticale());
                 kaartenSpeler.add(kaartLabel);
 

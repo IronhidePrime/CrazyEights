@@ -1,8 +1,11 @@
-package view;
+package view.labels;
 
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * label voor het Crazy Eights logo (eigen design)
+ */
 public class LogoLabel extends JLabel {
     @Override
     protected void paintComponent(Graphics g) {

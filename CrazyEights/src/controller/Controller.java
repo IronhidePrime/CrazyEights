@@ -6,8 +6,8 @@ import model.spelbord.Spelbord;
 import model.speler.Computer;
 import model.speler.Mens;
 import model.speler.Speler;
-import view.SpelbordUI;
-import view.StartUI;
+import view.gui.SpelbordUI;
+import view.gui.StartUI;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,18 +16,15 @@ import java.util.*;
 
 public class Controller {
     /**
-     * Constanten die gebruikt worden
+     * constanten die gebruikt worden
      */
     private static final int KAARTEN_2_SPELERS = 7;
     private static final int KAARTEN_MEER_SPELERS = 5;
-
-    private SpelbordUI spelbordUI;
 
     private Spelbord spelbord;
     private List<Speler> spelers;
 
     private int speelRichting = 0;
-
 
     private boolean spelGeladen = false;
     private boolean isMultiplayer;
@@ -161,23 +158,10 @@ public class Controller {
     }
 
     /**
-     * spel is ten einde wanneer een van de spelers erin slaagt om al zijn kaarten te hebben afgelegd
-     */
-    public boolean eindeSpel() {
-        for (Speler speler : spelers) {
-            if (speler.getKaarten().size() == 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * kaart van de aflegstapel waarop men de eerste kaart moet leggen wanneer het spel begint
      */
     public void beginKaart() {
         Kaart beginkaart = spelbord.getTrekstapel().neemKaart();
-        beginkaart.setBeeldKant(true);
         spelbord.getAflegstapel().legKaart(beginkaart);
     }
 
@@ -203,20 +187,6 @@ public class Controller {
         }
     }
 
-    public boolean checkOfKaartKanSpelen(int spelerNr){
-        Boolean mogelijkeKaart = false;
-        for (int i=0; i<getSpelerKaarten(spelerNr).size();i++){
-            if (speelKaartMogelijk(getSpelerKaarten(spelerNr).get(i))){
-                System.out.println("Speler, je kan een kaart spelen");
-                mogelijkeKaart = true;
-                break;
-            } else {
-                System.out.println("je kan geen enkele kaart spelen, jammer");
-            }
-        }
-        return mogelijkeKaart;
-    }
-
     public int getAantalKaartenSpeler(){
         if(getAantalSpelers()==2){
             return KAARTEN_2_SPELERS;
@@ -225,6 +195,9 @@ public class Controller {
         }
     }
 
+    /**
+     * zet de volgende speler aan de beurt
+     */
     public void beeindigBeurt(int spelerNr){
         getSpelers().get(spelerNr).setAanBeurt(false);
         if (spelerNr+1 == getSpelers().size()){
@@ -234,6 +207,11 @@ public class Controller {
         }
     }
 
+    /**
+     * bij een dame wordt de beurt van de volgende speler overgeslagen
+     * deze methode houdt ook rekening in welke speelrichting wordt gespeeld zodat de juiste speler wordt overslagen
+     afhankelijk van de speelrichting
+     */
     public void beeindigBeurtDame (int spelerNr) {
         if (speelRichting == 0) {
             getSpelers().get(spelerNr).setAanBeurt(false);
@@ -274,6 +252,10 @@ public class Controller {
         }
     }
 
+    /**
+     * bij een haas wordt van speelrichting veranderd
+     * afhankelijk van het aantal spelers wie er aan de beurt komt
+     */
     public void speelRichting (int spelerNr) {
         if (speelRichting == 0) {
             beeindigBeurt(spelerNr);
@@ -319,7 +301,10 @@ public class Controller {
         return spelers.get(getSpelerNrAanBeurt()).getNaam();
     }
 
-
+    /**
+     * gaat de trekstapel terug opvullen wanneer deze leeg is
+     * neemt kaarten van de aflegstapel en voegt deze aan de trekstapel toe
+     */
     public void vulTrekStapel(){
         Kaart bovensteKaart = getSpelbord().getAflegstapel().getBovensteKaart();
         System.out.println("bovenste kaart is " + bovensteKaart.getHorizontaleImageString());
@@ -328,7 +313,6 @@ public class Controller {
         getSpelbord().getAflegstapel().getKaarten().removeAll(getSpelbord().getAflegstapel().getKaarten());
         getSpelbord().getAflegstapel().getKaarten().add(bovensteKaart);
         getSpelbord().getTrekstapel().getKaarten().addAll(kaartSet);
-
 
         Collections.shuffle(getSpelbord().getTrekstapel().getKaarten());
     }
