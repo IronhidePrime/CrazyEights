@@ -1,10 +1,13 @@
-package model;
+package model.speler;
 
-import java.util.ArrayList;
+import model.kaart.Kaart;
+
 import java.util.LinkedList;
 import java.util.List;
 
-
+/**
+ * speler heeft een naam, lijst van kaarten en een eigenschap voor te kijken of de betreffende speler aan de beurt is
+ */
 public class Speler {
     protected String naam;
     protected List<Kaart> kaarten;
@@ -12,7 +15,7 @@ public class Speler {
 
     public Speler(String naam) {
         this.naam = naam;
-        kaarten = new ArrayList<>();
+        kaarten = new LinkedList<>();
     }
 
     public void setAanBeurt(boolean isAanBeurt) {
@@ -37,9 +40,5 @@ public class Speler {
 
     public List<Kaart> getKaarten() {
         return kaarten;
-    }
-
-    public void setNaam(String naam) {
-        this.naam = naam;
     }
 }

@@ -1,11 +1,14 @@
 package controller;
 
-import model.*;
-import view.KaartLabel;
+import model.kaart.Kaart;
+import model.kaart.Kleur;
+import model.spelbord.Spelbord;
+import model.speler.Computer;
+import model.speler.Mens;
+import model.speler.Speler;
 import view.SpelbordUI;
 import view.StartUI;
 
-import javax.swing.*;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;

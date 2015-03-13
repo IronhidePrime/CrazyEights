@@ -1,10 +1,10 @@
 package view;
 
 import controller.Controller;
-import model.Computer;
-import model.Kaart;
-import model.Kleur;
-import model.Mens;
+import model.speler.Computer;
+import model.kaart.Kaart;
+import model.kaart.Kleur;
+import model.speler.Mens;
 
 import javax.swing.*;
 import java.awt.*;

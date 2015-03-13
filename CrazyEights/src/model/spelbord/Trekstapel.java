@@ -1,14 +1,16 @@
-package model;
+package model.spelbord;
+
+import model.kaart.Kaart;
+import model.kaart.Kleur;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+  * hierin zitten alle beginkaarten (52), na het uitdelen wordt dit de stapel waarvan kaarten kunnen genomen worden (trekstapel)
+ */
 public class Trekstapel  {
-    /**
-     Hierin zitten alle beginkaarten (52), na het uitdelen wordt dit de stapel waarvan kaarten kunnen genomen worden (trekstapel)
-    */
-
 
     private List<Kaart> kaarten;
 
@@ -39,16 +41,12 @@ public class Trekstapel  {
         }
     }
 
-        /**
-         * Stapel schudden voor het spel te starten
-         */
-
     private void schudStapel() {
         Collections.shuffle(kaarten);
     }
 
     /**
-     * Er wordt een kaart genomen van de stapel en deze wordt 'verwijderd' uit de trekstapel
+     * er wordt een kaart genomen van de stapel en deze wordt 'verwijderd' uit de trekstapel
      */
     public Kaart neemKaart() {
         Kaart kaart = getBovensteKaart();
@@ -62,9 +60,6 @@ public class Trekstapel  {
         return kaart;
     }
 
-    /**
-     * TEST METHODE
-     */
     public List<Kaart> getKaarten() {
         return kaarten;
     }

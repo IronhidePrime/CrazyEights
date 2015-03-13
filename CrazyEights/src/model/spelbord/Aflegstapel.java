@@ -1,8 +1,13 @@
-package model;
+package model.spelbord;
+
+import model.kaart.Kaart;
 
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * aflegstapel heeft een lijst van kaarten waarop moet gespeeld worden
+ */
 public class Aflegstapel {
     private List<Kaart> kaarten;
 
