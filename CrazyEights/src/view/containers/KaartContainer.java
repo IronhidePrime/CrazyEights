@@ -205,19 +205,19 @@ public class KaartContainer extends JLayeredPane {
                             switch (keuze) {
                                 case 0:
                                     lblAflegStapel.setImageString("/view/images/harten/harten8.png");
-                                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.harten, "images/harten/harten8.png", "images/harten/verticaal/harten8.png"));
+                                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.harten, "/view/images/harten/harten8.png", "/view/images/harten/verticaal/harten8.png"));
                                     break;
                                 case 1:
                                     lblAflegStapel.setImageString("/view/images/ruiten/ruiten8.png");
-                                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.ruiten, "images/ruiten/ruiten8.png", "images/ruiten/verticaal/ruiten8.png"));
+                                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.ruiten, "/view/images/ruiten/ruiten8.png", "/view/images/ruiten/verticaal/ruiten8.png"));
                                     break;
                                 case 2:
                                     lblAflegStapel.setImageString("/view/images/klaveren/klaveren8.png");
-                                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.klaveren, "images/klaveren/klaveren8.png", "images/klaveren/verticaal/klaveren8.png"));
+                                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.klaveren, "/view/images/klaveren/klaveren8.png", "/view/images/klaveren/verticaal/klaveren8.png"));
                                     break;
                                 case 3:
                                     lblAflegStapel.setImageString("/view/images/schoppen/schoppen8.png");
-                                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.schoppen, "images/schoppen/schoppen8.png", "images/ruiten/verticaal/schoppen8.png"));
+                                    controller.getSpelbord().getAflegstapel().legKaart(new Kaart(8, Kleur.schoppen, "/view/images/schoppen/schoppen8.png", "/view/images/ruiten/verticaal/schoppen8.png"));
                                     break;
                             }
                         }
@@ -306,6 +306,7 @@ public class KaartContainer extends JLayeredPane {
                      */
                     if (controller.getSpelbord().getTrekstapel().getKaarten().size() == 1) {
                         controller.vulTrekStapel();
+                        lblAflegStapel.setImageString(controller.getSpelbord().getAflegstapel().getBovensteKaart().getHorizontaleImageString());
                     }
 
                     /**

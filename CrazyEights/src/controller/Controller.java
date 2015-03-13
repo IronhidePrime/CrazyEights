@@ -301,12 +301,23 @@ public class Controller {
      */
     public void vulTrekStapel(){
         Kaart bovensteKaart = getSpelbord().getAflegstapel().getBovensteKaart();
-        List<Kaart> kaartenAflegStapel = getSpelbord().getAflegstapel().getKaarten();
-        Set<Kaart> kaartSet = new HashSet<>(kaartenAflegStapel);
+        Set<Kaart> kaartSet = new TreeSet<Kaart>(new Comparator<Kaart>() {
+            @Override
+            public int compare(Kaart o1, Kaart o2) {
+                if (o1.getHorizontaleImageString().equals(o2.getHorizontaleImageString())){
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+        });
+        //dubbele kaarten er uithalen, dit zijn 8 kaarten die werden aangemaakt bij veranderen van kleur
+        kaartSet.addAll(getSpelbord().getAflegstapel().getKaarten());
         getSpelbord().getAflegstapel().getKaarten().removeAll(getSpelbord().getAflegstapel().getKaarten());
         getSpelbord().getAflegstapel().getKaarten().add(bovensteKaart);
-        getSpelbord().getTrekstapel().getKaarten().addAll(kaartSet);
 
+
+        getSpelbord().getTrekstapel().getKaarten().addAll(kaartSet);
         Collections.shuffle(getSpelbord().getTrekstapel().getKaarten());
     }
 
