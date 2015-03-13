@@ -34,11 +34,6 @@ public class KaartLabel extends JLabel{
             g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
         }
 
-    public String getImageString() {
-        return imageString;
-    }
-
-
     public void setImageString(String imageString) {
         this.imageString = imageString;
     }

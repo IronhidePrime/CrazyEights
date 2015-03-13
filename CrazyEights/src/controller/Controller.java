@@ -116,7 +116,6 @@ public class Controller {
         //1
         if (!spelGeladen){
             kaartenUitdelen();
-            System.out.println("nieuw spel, kaarten gewoon verdelen");
         } else {
             for (int i=0; i<vraagPropertyAantalSpelers();i++){
                 getSpelerKaarten(i).removeAll(getSpelerKaarten(i));
@@ -130,27 +129,22 @@ public class Controller {
         beginKaart();
 
         //3
-
         getSpelers().get(0).setAanBeurt(true);
-
     }
 
     public void verwijderBestaandeKaarten(){
         List<Kaart> trekStapelKaarten =  getSpelbord().getTrekstapel().getKaarten();
         List<Kaart> teVerwijderenKaarten = new ArrayList<Kaart>();
-        System.out.println("aantal kaarten voor verwijderen van bestaande kaarten" + trekStapelKaarten.size());
         for (int i=0; i<vraagPropertyAantalSpelers();i++){
             for (Kaart kaart: getSpelerKaarten(i)){
                 for (Kaart trekStapelKaart: trekStapelKaarten){
                     if (kaart.getHorizontaleImageString().equals(trekStapelKaart.getHorizontaleImageString())){
                       teVerwijderenKaarten.add(trekStapelKaart);
-                        System.out.println("te verwijderen kaart is" + trekStapelKaart.getHorizontaleImageString());
                     }
                 }
             }
         }
         trekStapelKaarten.removeAll(teVerwijderenKaarten);
-        System.out.println("aantal kaarten na verwijderen van bestaande kaarten" + trekStapelKaarten.size());
     }
 
     public void herstartSpel(){
@@ -307,7 +301,6 @@ public class Controller {
      */
     public void vulTrekStapel(){
         Kaart bovensteKaart = getSpelbord().getAflegstapel().getBovensteKaart();
-        System.out.println("bovenste kaart is " + bovensteKaart.getHorizontaleImageString());
         List<Kaart> kaartenAflegStapel = getSpelbord().getAflegstapel().getKaarten();
         Set<Kaart> kaartSet = new HashSet<>(kaartenAflegStapel);
         getSpelbord().getAflegstapel().getKaarten().removeAll(getSpelbord().getAflegstapel().getKaarten());

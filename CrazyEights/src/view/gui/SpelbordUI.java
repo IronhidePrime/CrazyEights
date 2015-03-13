@@ -238,11 +238,11 @@ public class SpelbordUI extends JFrame {
             for (int i = 0; i < aantalSpelers; i++) {
                 lpnlkaartContainer[i].maakLists(i);
                 if (i == 0 || i == 1) {
-                    lpnlkaartContainer[i].tekenKaartLabels();
+                    lpnlkaartContainer[i].hertekenKaartenHorizontaal();
                 }
 
                 if (i == 2 || i == 3) {
-                    lpnlkaartContainer[i].tekenKaartLabelsVerticaal();
+                    lpnlkaartContainer[i].hertekenKaartenVerticaal();
                 }
             }
         }
