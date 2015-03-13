@@ -69,7 +69,7 @@ public class SpelRegelsWindow extends JDialog {
      * leest het spelregels bestand uit
      */
     public List<String> getSpelregels() {
-        Path spelregels = Paths.get("spelregels.txt");
+        Path spelregels = Paths.get("/resources/spelregels.txt");
         List<String> zinnen= null;
 
         try {

@@ -25,7 +25,6 @@ public class StartUI extends JFrame {
     private JCheckBox chkMultiplayer;
 
     private JButton btnDeal;
-    private JButton btnHighscores;
     private JButton btnLaden;
     private JButton btnSpelregels;
 
@@ -70,7 +69,6 @@ public class StartUI extends JFrame {
         chkMultiplayer = new JCheckBox("Multiplayer");
 
         btnDeal = new JButton("Start");
-        btnHighscores = new JButton("Highscores");
         btnLaden = new JButton("Laad spel");
         btnSpelregels = new JButton("Spelregels");
     }
@@ -118,7 +116,6 @@ public class StartUI extends JFrame {
         btnSpelregels.setPreferredSize(new Dimension(0,50));
         pnlBottomContainer.add(btnSpelregels);
         pnlBottomContainer.add(btnLaden);
-        pnlBottomContainer.add(btnHighscores);
         super.add(pnlBottomContainer, BorderLayout.SOUTH);
     }
 
